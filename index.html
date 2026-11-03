@@ -103,6 +103,10 @@ nav em{position:absolute;top:0;right:22%;background:var(--bad);color:#fff;font-s
 </head>
 <body>
 <div id="app"></div>
+<script>/*dbg*/
+window.addEventListener('error',function(e){try{var d=document.createElement('div');d.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99999;background:#b8392f;color:#fff;padding:10px;font:12px monospace;white-space:pre-wrap';d.textContent='JS-ошибка: '+e.message+' (строка '+e.lineno+')';document.body.appendChild(d)}catch(_){}});
+</script>
+
 <script>
 const I={};
 // [название, цена, категория(p/c/r), мин. уровень, слот (для деталей), тир (для деталей)]
