@@ -236,6 +236,7 @@ function save(){
   scheduleCloudSave();
 }
 let S=load();if(S){S.chat=S.chat||{};S.pc=S.pc||1;S.own=S.own||0;S.bm=S.bm||[];S.sl=S.sl||[];S.bd=S.bd||{};S.cap=S.cap||8;S.ach=S.ach||{};S.dr=S.dr||{};S.dd=S.dd||{};S.cn=S.cn||0;S.t0=S.t0||Date.now();S.skx=S.skx||0;S.pv=S.pv||0;S.tx=S.tx||[];S.done=S.done||[];S.pend=S.pend||[]}
+try{if(S&&!localStorage.getItem(KEY+'_bak'))localStorage.setItem(KEY+'_bak',JSON.stringify(S))}catch(e){} // страховочная копия сохранения перед обновлением
 const lvl=()=>Math.floor((1+Math.sqrt(1+S.exp/12.5+1e-9))/2); // ур.2=100, ур.3=300, ур.4=600, ур.5=1000, ур.6=1500, ур.8=2800 опыта
 const mult=k=>(S.ev&&S.ev.c===I[k][2]?S.ev.m:1)*(S.dr[k]||1);
 const base=d=>(d.bv||I[d.key][1])*mult(d.key);
@@ -589,6 +590,7 @@ const PGV=[
 const SKT=[0,5,14,30,60],PGL=['> Подключение приставки по USB…','> Бэкап оригинальной прошивки…','> Установка модуля Алисы…','> Настройка голосовых навыков…','> Проверка работы…'];
 const skLv=()=>{const x=S.skx||0;let l=1;SKT.forEach((t,i)=>{if(x>=t)l=i+1});return l};
 const pgP=v=>Math.max(.15,Math.min(.97,v[6]+(skLv()-v[5])*.06+(S.pc-1)*.02)),pgT=v=>Math.max(6,Math.round(pcT()*v[4]));
+const raFl=v=>(1-pgP(v))*.5; // риск сбоя записи при ручной прошивке
 const busy=()=>S.inv.some(x=>x.ul||x.pu);
 const okP=d=>I[d.key][2]==='t'&&!d.pg&&!d.pu&&!d.broke&&!d.sale&&d.defs.every(x=>x.fx&&!x.fake);
 const pgN=()=>S.inv.filter(okP).length;
@@ -607,11 +609,11 @@ function pcPg(){
   const log=run?PGL.slice(0,Math.min(5,Math.floor(w/20)+1)).join('\n')+'\n█':(S.pgr||'> Ожидание приставки…');
   const T=S.inv.filter(d=>I[d.key][2]==='t'&&!d.pg&&!d.broke&&!d.sale),ok=T.filter(d=>d.pu||okP(d)),bad=T.length-ok.length;
   const need=sk<v[5];
-  return`<div class="mut">🧠 Навык программирования: <b>ур. ${sk} / 5</b> (${x}${nx!=null?' / '+nx:''} оп.). Растёт с каждой прошивкой, выше навык, выше шанс успеха. Одновременно работает одна задача.</div>
+  return`<div class="mut">🧠 Навык программирования: <b>ур. ${sk} / 5</b> (${x}${nx!=null?' / '+nx:''} оп.). Растёт с каждой прошивкой: выше навык — меньше риск сбоя и шире окно переподключения кабеля. Прошивка ручная: загрузчик, образ, запись, привязка.</div>
 <div class="flt" style="padding:8px 0">${PGV.map((p,i)=>`<span class="ch ${sel===i?'on':''}" data-a="pgv" data-i="${i}">${p[0]} ${p[1]}</span>`).join('')}</div>
-<div class="mut"><b>${v[1]}</b>: ${v[9]}<br>Цена приставки <b>+${Math.round(v[2]*100)}%</b> · софт ${f(v[3])} · шанс <b>${Math.round(pgP(v)*100)}%</b> · ${pgT(v)} сек${v[8]?' · при сбое ~'+Math.round(v[8]*100)+'% «кирпич»':''}${need?'<br><b style="color:#ff6b6b">🔒 Нужен навык: ур. '+v[5]+'</b>':''}</div>
+<div class="mut"><b>${v[1]}</b>: ${v[9]}<br>Цена приставки <b>+${Math.round(v[2]*100)}%</b> · софт ${f(v[3])} · запись ~${pgT(v)} сек · риск сбоя записи ~<b>${Math.round(raFl(v)*100)}%</b>${v[8]?' · при сбое ~'+Math.round(v[8]*100)+'% «кирпич»':''}${need?'<br><b style="color:#ff6b6b">🔒 Нужен навык: ур. '+v[5]+'</b>':''}</div>
 <div class="term">${esc(log)}</div>`+
-  (ok.length?ok.map(d=>`<div class="df"><span>${nm(d)}<br><span class="mut">сейчас ${f(val(d))} → после ~${f(val({...d,pg:v[2]}))}</span></span>${d.pu?`<div class="bar" style="width:90px"><i id="pgb" style="width:${w}%"></i></div>`:`<button class="b" data-a="pgrun" data-i="${d.id}" ${busy()||need?'disabled':''}>▶ Прошить</button>`}</div>`).join(''):'<div class="empty" style="padding:18px">Нет готовых приставок.<br>Купите смарт-приставку на рынке (🏷 фильтр «Приставки») и почините все дефекты.</div>')+
+  (ok.length?ok.map(d=>`<div class="df"><span>${nm(d)}<br><span class="mut">сейчас ${f(val(d))} → после ~${f(val({...d,pg:v[2]}))}</span></span>${d.pu?`<div class="bar" style="width:90px"><i id="pgb" style="width:${w}%"></i></div>`:`<button class="b" data-a="pgrun" data-i="${d.id}" ${busy()||need?'disabled':''}>🔧 Root Алисы</button>`}</div>`).join(''):'<div class="empty" style="padding:18px">Нет готовых приставок.<br>Купите смарт-приставку на рынке (🏷 фильтр «Приставки») и почините все дефекты.</div>')+
   (bad>0?`<div class="mut" style="margin-top:8px">🔧 Ещё ${bad} шт. на складе требуют ремонта дефектов перед прошивкой.</div>`:'')}
 function vPc(){
   if(!S.own)return`<div class="c"><h3>🖥 Свой ПК</h3><div class="mut">Нужен для разблокировки заблокированных iPhone и открывает чёрный рынок. Можно купить готовый или собрать из комплектующих ниже.</div><div class="price" style="margin:8px 0">${f(PCBUY)}</div><div class="acts"><button class="b" data-a="pcbuy">Купить ПК</button></div></div>`+pcBuild();
@@ -860,8 +862,7 @@ document.addEventListener('click',e=>{
   else if(a==='send'){const l=S.mk.find(x=>x.id===i),v=($('#cin')||{}).value;if(l&&v&&v.trim())ask(l,v.trim())}
   else if(a==='unl'){rfOpen(i);return}
   else if(a==='pgv'){S.pv=i}
-  else if(a==='pgrun'){const d=S.inv.find(x=>x.id===i),v=PGV[S.pv||0];
-    if(d&&okP(d)){if(!S.own)toast('Сначала купите ПК');else if(busy())toast('ПК занят другой задачей');else if(skLv()<v[5])toast('Нужен навык программирования: ур. '+v[5]);else if(!lose(v[3])){d.pt=pgT(v);d.pu=Date.now()+d.pt*1000;d.pv=S.pv||0}}}
+  else if(a==='pgrun'){raOpen(i);return}
   else if(a==='pcup'){if(S.own&&S.pc<6&&!lose(pcCost())){S.pc++;toast('🖥 ПК улучшен до ур. '+S.pc)}}
   else if(a==='pcbuy'){if(!S.own&&!lose(PCBUY)){S.own=1;S.pc=1;toast('🖥 ПК куплен')}}
   else if(a==='bmb'){const l=(S.bm||[]).find(x=>x.id===i);if(l&&S.own&&!full(1)&&!lose(l.price)){S.bm=S.bm.filter(x=>x!==l);
@@ -899,7 +900,7 @@ function rfId(d){const n=nm(d),m={'iPhone 8':'10,1','iPhone 11':'12,1','iPhone 1
   for(const k of Object.keys(m).sort((a,b)=>b.length-a.length))if(n.includes(k))return'iPhone'+m[k];
   const h=hs(n);return'iPhone'+(16+h%4)+','+(1+h%5)}
 function rfOpen(id){
-  const d=S.inv.find(x=>x.id===id);if(!d||!d.lock||RF)return;
+  const d=S.inv.find(x=>x.id===id);if(!d||!d.lock||RF||RA)return;
   if(!S.own)return toast('Сначала купите ПК');if(busy())return toast('ПК занят другой задачей');
   const i1=rfId(d),m=i1.match(/iPhone(\d+),(\d+)/),M=+m[1],N=m[2],sv=['16.7','17.6','18.3'][hs(nm(d))%3],[a,b]=sv.split('.').map(Number);
   const F=[{n:`${i1}_${a}.${b+1}_beta2_Restore.ipsw`,t:'бета ⚠',k:'beta'},{n:`iPhone${M-1},${N}_${sv}_Restore.ipsw`,t:'подписана',k:'wrong'},{n:`${i1}_${sv}_Restore.ipsw`,t:'подписана',k:'ok'},{n:`${i1}_${a-1}.7_Restore.ipsw`,t:'не подписана',k:'old'}].sort(()=>Math.random()-.5);
@@ -950,6 +951,80 @@ function rfT(){const R=RF;if(!R)return;const n=Date.now(),B=x=>{const b=$('#rfb'
       else if(R.fw.k==='beta'&&R.fp>=.85&&!R.bc){R.bc=1;if(Math.random()<.5){R.fail='Бета-сборка не прошла проверку (ошибка 4005)';rfR()}}
       if(R.fp>=1&&!R.fail){R.st=4;R.msg='';R.log.push('✔ Восстановление завершено');rfR()}
     }else if(n-R.et>3500+400*S.pc){R.fail='Кабель не переподключён вовремя (ошибка 4013)';rfR()}}}
+
+/* ===== Root Алисы (загрузчик → образ → запись → привязка) ===== */
+let RA=null;
+const RANET=['Alisa_Setup_Guest','Alisa_Setup_5G','Alisa-Setup-5G','TP-LINK_7C21'];
+const RALOG=['Reading partition table… done','Unlocking bootloader… done','Backup boot.img (16384 KB)… done','Writing system.img (1402 MB)…','Writing vendor.img… done','Patching init scripts… done','Installing Alice module… done','Installing voice skills… done','Verifying vbmeta…','Rebooting device… done'];
+const sc=x=>String(x/1000).replace('.',',');
+function raOpen(id){
+  const d=S.inv.find(x=>x.id===id),v=PGV[S.pv||0];
+  if(!d||RA||RF||!okP(d))return;
+  if(!S.own)return toast('Сначала купите ПК');
+  if(busy())return toast('ПК занят другой задачей');
+  if(skLv()<v[5])return toast('Нужен навык программирования: ур. '+v[5]);
+  const sel=S.pv||0,code=d.key,tag=['lite','pro','max'][sel],h=hs(nm(d)),ver=['4.2','5.1','6.0'][h%3],[a,b]=ver.split('.').map(Number);
+  const others=Object.keys(I).filter(k=>I[k][2]==='t'&&k!==code),oth=others.length?others[h%others.length]:'tvxx';
+  const F=[{n:`${code}_alice_${tag}_v${a}.${b+1}_beta.img`,t:'бета ⚠',k:'beta'},{n:`${oth}_alice_${tag}_v${ver}.img`,t:'подписан',k:'wrong'},{n:`${code}_alice_${tag}_v${ver}.img`,t:'подписан',k:'ok'},{n:`${code}_alice_${tag}_v${a-1}.9.img`,t:'не подписан',k:'old'}].sort(()=>Math.random()-.5);
+  RA={d,sel,code,ver,F,iv:0};raReset();
+  const el=document.createElement('div');el.id='rf';document.body.appendChild(el);
+  el.addEventListener('click',raC);el.addEventListener('input',e=>{if(e.target.id==='rfin')RA.in=e.target.value});
+  RA.iv=setInterval(raT,100);raR()}
+function raReset(){const R=RA;Object.assign(R,{st:1,p:0,v:0,ph:'idle',t:0,msg:'',fp:0,n:0,cab:1,ev:0,bc:0,vb:0,fail:'',brick:0,net:'',in:'',ok:0,done:0,fw:null,t1:3000+500*R.sel,t2:2000+500*R.sel,code4:String(100000+Math.floor(Math.random()*899999)),log:['$ adb devices','Подключено: '+R.code+', Alice '+R.ver]})}
+function raX(){if(!RA)return;clearInterval(RA.iv);const e=$('#rf');if(e)e.remove();RA=null;render()}
+const raMsg=R=>R.ok?'✔ Режим загрузчика включён':R.msg||({idle:'Нажми обе кнопки',both:'Держи обе кнопки…',rel:'Отпусти ПИТАНИЕ! RESET – держи',hold:'Держи RESET…'})[R.ph];
+function raPh(R){const s3=R.st===3,g='#7dff9b',c=x=>x?g:'#8890a8',cut=s3&&!R.cab;
+  return`<svg viewBox="0 0 200 150" class="rfp"><rect x="26" y="34" width="148" height="70" rx="12" fill="#0d1224" stroke="#8890a8" stroke-width="4"/><rect x="36" y="44" width="86" height="50" rx="6" fill="${s3?'#000':'#1b2547'}"/>`+
+  (s3?`<rect x="46" y="68" width="66" height="4" rx="2" fill="#333"/><rect x="46" y="68" width="${66*R.fp}" height="4" rx="2" fill="#eee"/>`:`<text x="79" y="74" text-anchor="middle" font-size="12" font-weight="700" fill="${R.ok?g:'#8890a8'}">${R.ok?'FASTBOOT':'ALISA'}</text>`)+
+  `<circle cx="146" cy="54" r="6" fill="${c(R.ok||(s3&&R.cab)||(R.p&&!s3))}"/><circle cx="146" cy="76" r="4" fill="${c(R.v&&!s3)}"/><text x="146" y="94" text-anchor="middle" font-size="8" fill="#8890a8">RESET</text><path d="M100 104V134H60" stroke="${cut?'#ff5a5a':'#8890a8'}" stroke-width="3" fill="none" ${cut?'stroke-dasharray="4 9"':''}/></svg>`}
+function raR(){const R=RA,el=$('#rf');if(!R||!el)return;const v=PGV[R.sel];
+  const T=['','режим загрузчика','выбор образа','запись','привязка Алисы'][R.st],
+  H=['',`Зажми <b>ПИТАНИЕ</b> и <b>RESET</b> вместе на ${sc(R.t1)} сек. Потом отпусти ПИТАНИЕ, а RESET держи ещё ${sc(R.t2)} сек.`,`Найди образ именно для <b>${R.code}</b> (${v[1]}), который подписан производителем.`,'Идёт запись. Если кабель отойдёт, быстро нажми «Переподключить».','Подключись к сети с наклейки и введи код привязки с экрана ТВ.'][R.st];
+  let b='';
+  if(R.st===1)b=raPh(R)+`<div class="rfbar"><i id="rfb"></i></div><div class="rfm" id="rfm">${raMsg(R)}</div><div class="rfbt"><button data-r="p" class="${R.p?'on':''}">⏻ Питание</button><button data-r="v" class="${R.v?'on':''}">RESET</button></div><div class="rfs">Кнопки нажимаются тапом и залипают</div>`;
+  else if(R.st===2)b=`<div class="rfid">${R.code}<small>${nm(R.d)} · ${v[1]}</small></div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}`+R.F.map((f,i)=>`<button class="rff" data-r="fw" data-i="${i}">📦 ${f.n}<span class="${f.k==='old'?'bad':f.k==='beta'?'wr':'ok'}">${f.t}</span></button>`).join('')+`<div class="rfs">Софт: ${f(v[3])} за запись подходящего образа</div>`;
+  else if(R.st===3)b=`<div class="rfban">${R.code} · ${v[1]} — образ подписан ✅</div>`+raPh(R)+(R.fail?`<div class="rfe">${R.brick?'💥 Приставка превратилась в кирпич. ':'❌ '}${R.fail}</div><div class="rfbt">${R.brick?'':'<button data-r="again">↻ Заново</button>'}<button data-r="x">Закрыть</button></div>`:`<div class="rfbar"><i id="rfb" style="width:${R.fp*100}%"></i></div><div class="rfm" style="${R.cab?'':'color:#ff7b7b'}">${R.cab?'Не отключай приставку…':'⚠ Кабель отошёл!'}</div>${R.cab?'':'<div class="rfbt"><button class="on" data-r="cab">🔌 Переподключить кабель</button></div>'}`);
+  else if(R.done)b=`<div class="rfid">🤖<small>${nm(R.d)}: ${v[1]} установлена</small></div><div class="rfm">Цена выросла на ${Math.round(v[2]*100)}%. Приставка готова к продаже.</div><div class="rfbt"><button class="on" data-r="x">Готово</button></div>`;
+  else b=`<div class="rfwf"><b>Выберите сеть Wi-Fi</b>${RANET.map((n,i)=>`<button data-r="net" data-i="${i}" class="${R.net===n?'on':''}">📶 ${n}</button>`).join('')}<div class="rfst">Наклейка на приставке:<br><b>Alisa_Setup_5G</b></div><div class="rfst">На экране ТВ:<br><b>Код привязки: ${R.code4.slice(0,3)} ${R.code4.slice(3)}</b></div></div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}<input id="rfin" inputmode="numeric" placeholder="Код привязки" value="${esc(R.in||'')}"><div class="rfbt"><button class="on" data-r="act">Привязать Алису</button></div>`;
+  el.innerHTML=`<div class="rfh"><span>Root Алисы · ${esc(nm(R.d))}</span><button data-r="x">✕</button></div><h4>Шаг ${R.st} из 4 · ${T}</h4><p>${H}</p>${b}<pre class="rfl" id="rfl">${esc(R.log.slice(-7).join('\n'))}</pre>`}
+function raFail(R,msg){if(R.fail)return;const v=PGV[R.sel],d=R.d;R.fail=msg;R.log.push('✗ '+msg);S.skx=(S.skx||0)+1;
+  if(Math.random()<v[8]){R.brick=1;d.broke=1;d.offer=0;S.pgr='💥 '+nm(d)+': приставка превратилась в кирпич';toast('💥 Сбой прошивки: '+nm(d)+' превратилась в кирпич')}
+  else S.pgr='❌ '+nm(d)+': сбой, приставка цела, деньги потрачены';
+  save();raR()}
+function raDone(R){if(R.done)return;const d=R.d,v=PGV[R.sel],lv0=skLv();
+  if(!S.inv.includes(d)){raX();return}
+  d.pg=v[2];d.pgn=v[1];d.pv=R.sel;d.offer=0;d.pu=0;S.skx=(S.skx||0)+v[7];
+  S.pgr='✅ '+nm(d)+': '+v[1]+' установлена, цена +'+Math.round(v[2]*100)+'%';R.done=1;
+  toast('🤖 '+v[1]+' на '+nm(d)+': цена +'+Math.round(v[2]*100)+'% · '+gain(RI(8,14)+v[7]));
+  if(skLv()>lv0)toast('🧠 Навык программирования: ур. '+skLv());
+  save();raR()}
+function raC(e){const t=e.target.closest('[data-r]');if(!t||!RA)return;const R=RA,r=t.dataset.r,i=+t.dataset.i,v=PGV[R.sel];
+  if(r==='x')raX();
+  else if(r==='p'||r==='v'){if(R.st===1&&!R.ok){R[r]=R[r]?0:1;raR()}}
+  else if(r==='fw'){const fw=R.F[i];
+    if(fw.k==='wrong'){R.msg='Образ от '+fw.n.split('_')[0]+'… не для этой модели 😬';R.log.push('✗ Образ от другой модели — запись прервана')}
+    else if(fw.k==='old'){R.msg='Эта версия не подписана — загрузчик откажет (ошибка 0x3194)';R.log.push('✗ Образ не подписан')}
+    else{if(lose(v[3]))return;save();R.fw=fw;R.st=3;R.msg='';R.log=['Образ: '+fw.n]}
+    raR()}
+  else if(r==='cab'){R.cab=1;R.log.push('✔ Кабель переподключён');raR()}
+  else if(r==='net'){R.net=RANET[i];raR()}
+  else if(r==='again'){raReset();raR()}
+  else if(r==='act'){const n=R.net==='Alisa_Setup_5G',p=(R.in||'').replace(/\D/g,'')===R.code4;
+    if(!n||!p){R.msg=!n?'Не та сеть — выбери Alisa_Setup_5G 😬':'Неверный код — смотри на экран ТВ';R.log.push('✗ Привязка не удалась');raR();return}
+    raDone(R)}}
+function raT(){const R=RA;if(!R)return;const n=Date.now(),B=x=>{const b=$('#rfb');if(b)b.style.width=x*100+'%'},rs=m=>{R.ph='idle';R.p=R.v=0;R.msg=m;raR()},v=PGV[R.sel],mm=()=>{const m=$('#rfm');if(m)m.textContent=raMsg(R)};
+  if(R.st===1&&!R.ok){
+    if(R.ph==='idle'){if(R.p&&R.v){R.ph='both';R.t=n;R.msg='';mm()}}
+    else if(R.ph==='both'){if(!(R.p&&R.v))rs('Рано отпустил — начни заново');else{const e=(n-R.t)/R.t1;B(Math.min(1,e));if(e>=1){R.ph='rel';R.t=n;B(1);mm()}}}
+    else if(R.ph==='rel'){if(!R.v)rs('RESET отпущен — заново');else if(!R.p){R.ph='hold';R.t=n;B(0);mm()}else if(n-R.t>5000)rs('Слишком долго держал ПИТАНИЕ — заново')}
+    else if(R.ph==='hold'){if(!R.v)rs('RESET отпущен — заново');else{const e=(n-R.t)/R.t2;B(Math.min(1,e));if(e>=1){R.ok=1;R.log.push('✔ Устройство в режиме загрузчика');raR();setTimeout(()=>{if(RA===R){R.st=2;R.msg='';raR()}},900)}}}
+  }else if(R.st===3&&!R.fail){
+    if(R.cab){R.fp=Math.min(1,R.fp+.1/pgT(v));B(R.fp);const k=Math.floor(R.fp*RALOG.length);let ch=0;while(R.n<k){R.log.push(RALOG[R.n++]);ch=1}if(ch){const l=$('#rfl');if(l)l.textContent=R.log.slice(-7).join('\n')}
+      if(R.fp>=.45&&!R.ev){R.ev=1;R.cab=0;R.et=n;R.log.push('✗ USB-кабель отключён!');raR();return}
+      if(R.fw.k==='beta'&&R.fp>=.85&&!R.bc){R.bc=1;if(Math.random()<.5){raFail(R,'Бета-сборка не прошла проверку (ошибка 0x4005)');return}}
+      if(R.fp>=.9&&!R.vb){R.vb=1;if(R.fw.k!=='beta'&&Math.random()<raFl(v)){raFail(R,'Проверка vbmeta не пройдена (ошибка 0x1F)');return}}
+      if(R.fp>=1&&!R.fail){R.st=4;R.msg='';R.log.push('✔ Запись завершена');raR()}
+    }else if(n-R.et>3000+400*S.pc+200*skLv())raFail(R,'Кабель не переподключён вовремя (ошибка 0xE4)')}}
 
 if(!S){S=fresh();regen()}
 if(!S.mk.some(x=>I[x.dev.key]&&I[x.dev.key][1]>=1e6))elite(1);
