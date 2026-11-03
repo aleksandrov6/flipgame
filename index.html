@@ -99,6 +99,43 @@ nav em{position:absolute;top:0;right:22%;background:var(--bad);color:#fff;font-s
 .rfst{position:static;background:#ffdc5e;color:#000;padding:10px 12px;border-radius:6px;margin:0 0 10px;font:700 14px/1.5 system-ui,sans-serif;box-shadow:0 4px 10px rgba(0,0,0,.25)}#rf .rfst,#rf .rfst *{color:#000}.rfst b{font-size:17px;font-weight:900;letter-spacing:.3px}#rf .rfwf>b{color:#000}.rfst small{display:block;font-weight:600;font-size:12px;opacity:.8}
 #rfin{width:100%;margin-top:10px;padding:13px;border-radius:12px;border:1px solid #2a3a30;background:#0d1511;color:#e9fff0;font:inherit}
 .rfl{background:#05080c;border:1px solid #1a251e;border-radius:12px;padding:10px;margin:12px 0 0;color:#4ade80;font:12px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;min-height:70px}
+
+/* --- иконки, профиль, ремонт --- */
+.toast{z-index:60}
+.top{position:relative}
+.pb{position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;border:2px solid rgba(255,255,255,.35);background:rgba(255,255,255,.2);color:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.pb.on{background:#fff;color:var(--ac)}
+.pb svg,nav button i svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.pb svg{width:22px;height:22px;stroke-width:2}
+nav button i{display:grid;place-items:center;width:50px;height:30px;margin:0 auto 2px;border-radius:15px;transition:.2s}
+nav button i svg{width:23px;height:23px;stroke-width:1.9}
+nav button.on i{background:rgba(47,123,255,.15)}
+.dki i.ic{width:62px;height:62px;border-radius:19px;background:var(--g);box-shadow:0 8px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.4)}
+.dki i.ic svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ic.bm{--g:linear-gradient(145deg,#5a5f78,#15161e)}.ic.ul{--g:linear-gradient(145deg,#34d399,#059669)}.ic.up{--g:linear-gradient(145deg,#60a5fa,#2563eb)}.ic.bd{--g:linear-gradient(145deg,#fbbf24,#ea580c)}.ic.pg{--g:linear-gradient(145deg,#f472b6,#9333ea)}
+#rp{position:fixed;inset:0;z-index:40;background:#0b0f16;color:#e8edf7;overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px));font:14px/1.4 system-ui,sans-serif}
+.rph{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:16px}
+.rph button{width:36px;height:36px;border:0;border-radius:12px;background:#222a3a;color:#fff;font-size:16px}
+.rpb{display:block;width:100%;margin:8px 0;border:0;border-radius:12px;background:#2f7bff;color:#fff;font:inherit;font-weight:700;padding:12px}.rpb.ok{background:#16a05a}.rpb.g{background:#222a3a}
+.rpm{text-align:center;color:#9aa6bd;margin:4px 0 8px}
+.rpw{position:relative;width:min(56vw,210px);margin:10px auto;transition:.55s}.rpw.off{transform:translateY(-46px) rotate(-10deg);opacity:0}
+.rpw svg,.rpi svg{display:block;width:100%;filter:drop-shadow(0 10px 14px rgba(0,0,0,.5))}
+.rps{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;padding:0;border-radius:50%;border:2px solid #555d70;background:radial-gradient(circle,#d3d8e2,#7d8598);transition:.35s}
+.rps::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:2px;margin:-1px 0 0 -7px;background:#333}
+.rps.out{transform:translateY(-36px) scale(.4) rotate(200deg);opacity:0;pointer-events:none}
+.rpi{width:min(60vw,230px);margin:10px auto;animation:rpin .5s}
+@keyframes rpin{from{opacity:0;transform:scale(.92)}}
+.rpp{cursor:pointer;transform-box:fill-box;transform-origin:center}
+.rpp rect{fill:#1b2233;stroke:#46506a;stroke-width:2}
+.rpp text{fill:#cfd6e6;font:600 11px system-ui,sans-serif;pointer-events:none}
+.rpp.bad rect{fill:#3a1518;stroke:#ff4d4d;animation:pul .8s ease-in-out infinite alternate}
+.rpp.good rect{stroke:#7dff9b}.rpp.sel rect{stroke:#ffd24a;stroke-width:3.5;animation:none}
+.rpp .crk{fill:none;stroke:#ff9a9a;stroke-width:2;pointer-events:none}
+.rpp.swap{animation:rpswap .75s}.rpp.shake{animation:rpsh .45s}
+@keyframes rpswap{0%{transform:none;opacity:1}35%{transform:translateY(-44px);opacity:0}65%{transform:translateY(44px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes rpsh{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+.rpn{background:#131a27;border:1px solid #24304a;border-radius:14px;padding:12px;margin:8px 0}
+.rpc{display:block;width:100%;text-align:left;border:1px solid #46506a;background:#1b2233;color:#e8edf7;border-radius:12px;padding:10px;font:inherit;margin:6px 0}.rpc.bad{border-color:#ff4d4d;background:#3a1518}.rpc.good{border-color:#7dff9b}.rpc.sel{border-color:#ffd24a}
 </style>
 </head>
 <body>
@@ -108,6 +145,8 @@ window.addEventListener('error',function(e){if(!e.lineno||e.message==='Script er
 </script>
 
 <script>
+const ICP={search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',box:'<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',chat:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>',case:'<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 13h18M8 8V5h8v3"/>',pc:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',bm:'<path d="M5 21V10a7 7 0 0 1 14 0v11l-3-2-2 2-2-2-2 2-2-2z"/><circle cx="9.5" cy="10" r="1"/><circle cx="14.5" cy="10" r="1"/>',ul:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/>',up:'<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',bd:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/>',pg:'<rect x="4" y="8" width="16" height="12" rx="3"/><path d="M12 8V5M9 13v1M15 13v1M9 17h6"/><circle cx="12" cy="4" r="1"/>'};
+const IC=k=>`<svg viewBox="0 0 24 24">${ICP[k]||''}</svg>`;
 const I={};
 // [название, цена, категория(p/c/r), мин. уровень, слот (для деталей), тир (для деталей)]
 const ad=(k,n,p,c,l,s,t)=>{I[k]=[n,p,c,l,s,t]};
@@ -180,7 +219,7 @@ const f=n=>Math.round(n).toLocaleString('ru-RU')+' ₽';
 const R=(a,b)=>a+Math.random()*(b-a),RI=(a,b)=>Math.floor(R(a,b+1)),P=a=>a[RI(0,a.length-1)],r100=n=>Math.round(n/100)*100;
 const KEY='perekup_miniapp_v59';
 // ⚖️ НАСТРОЙКИ СЛОЖНОСТИ (меняйте цифры здесь)
-const BAL={fee:.04,refresh:3e5,sellLo:.97,sellHi:1.15,buyLo:.8,buyHi:1.15,ordLo:1.03,ordHi:1.15,fixMul:1.3,bonus:1000};
+const BAL={fee:.04,refresh:3e5,sellLo:.97,sellHi:1.15,buyLo:.95,buyHi:1.12,ordLo:1.03,ordHi:1.15,fixMul:1.3,bonus:1000};
 let sheet=null,arm=false;
 function fresh(){const s={bal:30000,rep:100,exp:0,uid:0,inv:[],mk:[],lots:[],ord:[],ev:null,next:Date.now()+18e4,flt:'a',tab:'m',sold:0,earn:0,fixed:0,bonus:0,chat:{},pc:1,own:0,bm:[],sl:[],bd:{},cap:8,ach:{},dr:{},dd:{},cn:0,t0:Date.now(),skx:0,pv:0,tx:[],done:[],pend:[]};return s}
 function load(){try{const j=localStorage.getItem(KEY);if(j)return JSON.parse(j)}catch(e){}return null}
@@ -295,7 +334,7 @@ function navBadge(){const b=document.querySelector('nav button[data-i="s"]');if(
 function addBuyer(l,d,v){
   const mx=r100(v*R(BAL.buyLo,BAL.buyHi)*(v>=2e5?.96:1)),who=P(BUYN),b={id:++S.uid,who,mx,offer:0,msgs:[],st:'o',rd:0,un:1,cp:l.ask,sc:Math.random()<(rt(who)<4?.5:.04)?1:0};let t;
   if(l.ask<=mx*.98){b.offer=l.ask;t=P(['Беру за '+f(l.ask)+'! Можно сегодня забрать?','Здравствуйте! Цена '+f(l.ask)+' устраивает, беру.'])}
-  else{const o=Math.min(r100(mx*R(.72,.9)),l.ask);b.offer=o;t=P(['Здравствуйте! Ещё продаёте? Отдадите за '+f(o)+'?','Добрый день. Возьму за '+f(o)+', по рукам?','Привет! Дороговато, дам '+f(o)+'.'])}
+  else{const o=Math.min(r100(mx*R(.9,.97)),l.ask);b.offer=o;t=P(['Здравствуйте! Ещё продаёте? Отдадите за '+f(o)+'?','Добрый день. Возьму за '+f(o)+', по рукам?','Привет! Дороговато, дам '+f(o)+'.'])}
   b.msgs.push({me:0,t:t+(b.sc?' '+P(['Оплачу курьером после получения.','Отправлю курьера, переведу позже.','Деньги переведу, когда заберу.']):'')});l.bs.push(b);
   toast('💬 '+who+': '+t);
   if(S.tab==='s'||(sheet&&sheet.t==='bc'))render(1);else navBadge();
@@ -342,7 +381,7 @@ function chips0(d){
 }
 function hdr(){
   const left=Math.max(0,Math.ceil((S.next-Date.now())/1000));
-  return`<div class="top"><div class="row"><div><small>Баланс</small><div class="bal">${f(S.bal)}</div></div><div><span class="pill">⭐ ${S.rep}</span><span class="pill">🛠 ур. ${lvl()}</span></div></div><div class="mut" style="color:#fff;opacity:.8;margin-top:6px">⏱ Обновление рынка: <span id="cd">${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}</span></div></div>`+(S.ev?`<div class="ev">${S.ev.t}</div>`:'');
+  return`<div class="top"><button class="pb ${S.tab==='p'?'on':''}" data-a="tab" data-i="p" aria-label="Профиль">${IC('user')}</button><small>Баланс</small><div class="bal">${f(S.bal)}</div><div class="row" style="margin-top:8px"><div class="mut" style="color:#fff;opacity:.85">⏱ Обновление рынка: <span id="cd">${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}</span></div><div><span class="pill">⭐ ${S.rep}</span><span class="pill">🛠 ур. ${lvl()}</span></div></div></div>`+(S.ev?`<div class="ev">${S.ev.t}</div>`:'');
 }
 // ===== 🔍 ВИЗУАЛЬНЫЙ ОСМОТР: телефоны и ноутбуки, две стороны =====
 const BK='Разбита задняя крышка';
@@ -633,7 +672,7 @@ function vPc(){
   if(!S.own)return`<div class="c"><h3>🖥 Свой ПК</h3><div class="mut">Нужен для разблокировки заблокированных iPhone и открывает чёрный рынок. Можно купить готовый или собрать из комплектующих ниже.</div><div class="price" style="margin:8px 0">${f(PCBUY)}</div><div class="acts"><button class="b" data-a="pcbuy">Купить ПК</button></div></div>`+pcBuild();
   const A=[['bm','🕶','Чёрный рынок'],['ul','🔓','Разблокировка'],['up','⚙️','Апгрейд'],['bd','🔧','Сборка ПК'],['pg','🤖','Алиса']],run=S.inv.find(x=>x.ul||x.pu),lk=S.inv.filter(d=>d.lock).length,cur=A.find(x=>x[0]===S.pa);
   const body=cur?`<div class="win ${cur[0]==='bm'||cur[0]==='ul'||cur[0]==='pg'?'dark':''}"><div class="wt"><span>${cur[1]} ${cur[2]}</span><button data-a="pcapp" data-i="">✕</button></div><div class="wb">${cur[0]==='bm'?pcBm():cur[0]==='ul'?pcUl():cur[0]==='up'?pcUp():cur[0]==='pg'?pcPg():pcBuild()}</div></div>`
-   :`<div class="dki">${A.map(a=>`<button data-a="pcapp" data-i="${a[0]}"><i>${a[1]}</i>${a[2]}${a[0]==='ul'&&lk?`<em>${lk}</em>`:a[0]==='bm'&&(S.bm||[]).length?`<em>${S.bm.length}</em>`:a[0]==='pg'&&pgN()?`<em>${pgN()}</em>`:''}</button>`).join('')}</div>`;
+   :`<div class="dki">${A.map(a=>`<button data-a="pcapp" data-i="${a[0]}"><i class="ic ${a[0]}">${IC(a[0])}</i>${a[2]}${a[0]==='ul'&&lk?`<em>${lk}</em>`:a[0]==='bm'&&(S.bm||[]).length?`<em>${S.bm.length}</em>`:a[0]==='pg'&&pgN()?`<em>${pgN()}</em>`:''}</button>`).join('')}</div>`;
   return`<div class="dk">${body}<div class="tbar"><span>🪟 Мой ПК · ур. ${S.pc}</span><span>${run?'⏳ '+esc(nm(run)):'● свободен'}</span></div></div>`}
 function vSales(){
   if(!S.sl.length)return'<div class="empty">Ничего не продаётся.<br>Открой «Склад», выбери устройство и нажми «Выставить на продажу». Покупатели напишут сами и будут торговаться.</div>';
@@ -699,7 +738,7 @@ function vSheet(){
   if(sheet.t==='dev'){
     const d=S.inv.find(x=>x.id===sheet.id);if(!d)return'';
     const kn=d.defs.length===0||d.defs[0].k;
-    return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>${nm(d)}</h3><div class="mut">Оценка: ${f(val(d))} · куплено за ${f(d.paid)}</div>`+vwBlock(d,kn)+unlBlock(d)+pgBlock(d)+
+    return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>${nm(d)}</h3><div class="mut">Оценка: ${f(val(d))} · куплено за ${f(d.paid)}</div>`+vwBlock(d,kn)+unlBlock(d)+pgBlock(d)+rpBtn(d,kn)+
     (d.broke?'<div class="chips"><span class="ch bad">💥 Сломано, годится только на запчасти</span></div>':kn?d.defs.map((x,i)=>`<div class="df"><span ${vdAttr(d,x,i)}>${x.fake?'🚫 Подделка':x.n}<br><span class="mut">${x.fake?'ремонту не подлежит':f(x.c)}</span></span>${x.fx?'<span class="ch ok">Починено</span>':x.fake?'':`<button class="b" data-a="rep" data-i="${d.id}" data-j="${i}">🔧 Чинить</button>`}</div>`).join('')||'<div class="chips"><span class="ch ok">Всё исправно</span></div>':`<div class="chips">${chips(d)}</div><button class="b g" data-a="diag" data-i="${d.id}" style="width:100%">🔍 Диагностика ${f(Math.max(500,r100(val(d)*.002)))}</button>`)+
     `<div class="acts">${d.sale?'<button class="b g" data-a="tab" data-i="s">💬 Продаётся · к покупателям</button>':`<button class="b ok" data-a="sellopen" data-i="${d.id}">💬 Выставить на продажу</button>`}</div><div class="acts"><button class="b g" data-a="close">Закрыть</button></div></div></div>`;
   }
@@ -800,9 +839,9 @@ function vTr(){
   `<input id="tramt" inputmode="numeric" placeholder="Сумма, ₽" value="${sheet.amt||''}" style="${inp}"><div class="flt" style="padding:10px 0 4px">${[1000,5000,10000,50000].map(v=>`<span class="ch" data-a="trset" data-i="${v}">${f(v)}</span>`).join('')}</div><div class="acts"><button class="b ok" data-a="trgo">Отправить</button><button class="b g" data-a="close">Отмена</button></div></div></div>`}
 function render(k){
   const keep=k?['cin','pin','trid','tramt'].map(id=>{const e=document.getElementById(id);return e?[id,e.value,document.activeElement===e]:0}).filter(Boolean):[];
-  const T={m:vMarket,i:vInv,s:vSales,l:vLots,o:vOrd,p:vProf,c:vPc,a:vAdmin},N=[['m','🔎','Рынок'],['i','🧰','Склад'],['s','💬','Продажи'],['l','📦','Лоты'],['o','📋','Заказы'],['c','🖥','ПК'],['p','👤','Профиль']];
-  if(isAdm())N.push(['a','⚙️','Админ']);else if(S.tab==='a')S.tab='m';
-  $('#app').innerHTML=hdr()+T[S.tab]()+vSheet()+`<nav>${N.map(n=>`<button class="${S.tab===n[0]?'on':''}" data-a="tab" data-i="${n[0]}"><i>${n[1]}</i>${n[2]}${n[0]==='i'&&S.inv.length?`<em>${S.inv.length}</em>`:n[0]==='s'&&unread()?`<em>${unread()}</em>`:''}</button>`).join('')}</nav>`;
+  const T={m:vMarket,i:vInv,s:vSales,l:vLots,o:vOrd,p:vProf,c:vPc,a:vAdmin},N=[['m','search','Рынок'],['i','box','Склад'],['s','chat','Продажи'],['l','case','Лоты'],['c','pc','ПК']];if(S.tab==='o')S.tab='m';
+  if(isAdm())N.push(['a','gear','Админ']);else if(S.tab==='a')S.tab='m';
+  $('#app').innerHTML=hdr()+T[S.tab]()+vSheet()+`<nav>${N.map(n=>`<button class="${S.tab===n[0]?'on':''}" data-a="tab" data-i="${n[0]}"><i>${IC(n[1])}</i>${n[2]}${n[0]==='i'&&S.inv.length?`<em>${S.inv.length}</em>`:n[0]==='s'&&unread()?`<em>${unread()}</em>`:''}</button>`).join('')}</nav>`;
   save();const mg=$('#msgs');if(mg)mg.scrollTop=mg.scrollHeight;afterRender();
   keep.forEach(x=>{const e=document.getElementById(x[0]);if(e){e.value=x[1];if(x[2])e.focus()}});
 }
@@ -826,10 +865,8 @@ document.addEventListener('click',e=>{
   else if(a==='lot'){const l=S.lots.find(x=>x.id===i);if(l&&!full(l.items.length)&&!lose(l.price)){l.items.forEach(d=>{d.paid=Math.round(l.price/l.items.length);S.inv.push(d)});S.lots=S.lots.filter(x=>x!==l);toast('Открыто! Внутри предметов: '+l.items.length+', стоимость ~'+f(l.sum))}}
   else if(a==='dev')sheet={t:'dev',id:i};
   else if(a==='diag'){const d=S.inv.find(x=>x.id===i);if(d&&!lose(Math.max(500,r100(val(d)*.002)))){d.defs.forEach(x=>x.k=1);d.offer=0}}
-  else if(a==='rep'){const d=S.inv.find(x=>x.id===i),x=d&&d.defs[j];
-    if(x&&!lose(x.c)){const fail=Math.min(.65,Math.max(.06,.13+x.c/base(d)*.6-(lvl()-1)*.015));
-      if(Math.random()<fail){if(Math.random()<.3){d.broke=1;toast('💥 Критическая неудача: устройство сломано')}else toast('❌ Не получилось, деньги потрачены')}
-      else{x.fx=1;S.fixed++;toast('✅ Починено · '+gain(10))}d.offer=0}}
+  else if(a==='rep'){doRep(S.inv.find(x=>x.id===i),j)}
+  else if(a==='rpopen'){rpOpen(i);return}
   else if(a==='sellopen'){const d=S.inv.find(x=>x.id===i);if(d&&d.pu)toast('Идёт прошивка, подождите');else if(d&&!d.sale)sheet={t:'ask',id:i,p:0}}
   else if(a==='pset'){if(sheet&&sheet.t==='ask')sheet.p=i}
   else if(a==='sellgo'){const d=S.inv.find(x=>x.id===i),e=$('#pin'),p=e?parseInt(e.value.replace(/\D/g,''))||0:0;
@@ -908,6 +945,35 @@ document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.c
 document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*.9;dg.cx=dg.p?Math.max(-75,Math.min(75,dg.r-(e.clientY-dg.y)*.6)):0;dg.i.style.transform='rotateX('+dg.cx+'deg) rotateY('+dg.c+'deg)'});
 const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.p){if(g.c!=null){sheet.ang=g.c;sheet.rx=g.cx;sheet.from=null}}else if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
 document.addEventListener('pointerup',dgEnd);document.addEventListener('pointercancel',dgEnd);
+/* ===== Интерактивный ремонт телефона: винты → крышка → замена деталей ===== */
+const RPM={'Разбитый экран':['disp','Дисплей'],'Слабая батарея':['bat','Батарея'],'Не включается':['pmic','Плата питания'],'Проблема с платой':['mb','Материнская плата'],'Разбита задняя крышка':['cov','Задняя крышка'],'Залипает кнопка':['btn','Шлейф кнопок'],'Перегрев':['cool','Система охлаждения'],'Разбито стекло камеры':['cam','Стекло камеры'],'Сломана камера':['cam','Модуль камеры']};
+const failP=(d,x)=>Math.min(.65,Math.max(.06,.13+x.c/base(d)*.6-(lvl()-1)*.015));
+function doRep(d,j){const x=d&&d.defs[j];if(!x||x.fx||x.fake||d.broke)return 0;if(lose(x.c))return 0;d.offer=0;
+  if(Math.random()<failP(d,x)){if(Math.random()<.3){d.broke=1;toast('💥 Критическая неудача: устройство сломано');return 3}toast('❌ Не получилось, деньги потрачены');return 2}
+  x.fx=1;S.fixed++;toast('✅ Починено · '+gain(10));return 1}
+const rpBtn=(d,kn)=>kd(d.key)==='p'&&kn&&!d.broke&&!d.sale&&d.defs.some(x=>!x.fake)?`<button class="b" data-a="rpopen" data-i="${d.id}" style="width:100%;margin:8px 0">🔧 Открыть телефон и чинить</button>`:'';
+let RP=null;
+function rpOpen(id){const d=S.inv.find(x=>x.id===id);if(!d||RP||RF||RA)return;RP={d,pop:0,open:0,sc:[1,1,1,1],sel:'',an:'',res:0};
+  const el=document.createElement('div');el.id='rp';document.body.appendChild(el);el.addEventListener('click',rpC);rpR()}
+function rpX(){if(!RP)return;const e=$('#rp');if(e)e.remove();RP=null;render()}
+function rpR(){const R=RP,el=$('#rp');if(!R||!el)return;const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx),fix=k=>of(k).length&&!bad(k);
+  const left=d.defs.filter(x=>RPM[x.n]&&!x.fx).length;let body,pn='';
+  if(!R.open){const rem=R.sc.filter(Boolean).length;
+    body=`<div class="rpw${R.pop?' off':''}">${face(d,1,1,null)}${[[15,6],[85,6],[15,94],[85,94]].map((q,i)=>`<button class="rps${R.sc[i]?'':' out'}" data-q="sc" data-i="${i}" style="left:${q[0]}%;top:${q[1]}%"></button>`).join('')}</div><div class="rpm">${rem?'🔩 Выкрути винты, тапай по ним · осталось '+rem:'Винты сняты. Подцепи крышку'}</div>${rem?'':'<button class="rpb" data-q="pop">🪝 Снять заднюю крышку</button>'}`}
+  else{const part=(k,x,y,w,h,t)=>{const b=bad(k),sw=R.an===k;return`<g data-p="${k}" class="rpp${b?' bad':''}${fix(k)?' good':''}${R.sel===k?' sel':''}${sw&&R.res===1?' swap':''}${sw&&R.res===2?' shake':''}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9"/><text x="${x+w/2}" y="${y+h/2+4}" text-anchor="middle">${t}</text>${b?`<path class="crk" d="M${x+8} ${y+6}l${w/3} ${h/2}l${w/5} ${-h/4}l${w/3} ${h/2}"/>`:''}</g>`};
+    const cov=of('cov')[0];
+    body=`<div class="rpi"><svg viewBox="0 0 200 410"><rect x="10" y="8" width="180" height="394" rx="34" fill="#10141d" stroke="#555d70" stroke-width="2"/>${part('cam',22,22,64,64,'Камера')}${part('mb',96,22,82,62,'Плата')}${part('pmic',96,92,82,44,'Питание')}${part('cool',22,96,64,40,'Охлажд.')}${part('bat',22,148,156,150,'Батарея')}${part('btn',22,310,156,26,'Шлейф кнопок')}${part('disp',22,346,156,48,'Дисплей (шлейф)')}</svg></div>`+(cov?`<button class="rpc ${bad('cov')?'bad':'good'}${R.sel==='cov'?' sel':''}" data-p="cov">🧩 Задняя крышка (снята) · ${bad('cov')?'разбита, нужна замена':'заменена ✔'}</button>`:'');
+    const k=R.sel,x=k?of(k).find(y=>!y.fx):null;
+    pn=d.broke?'<div class="rpn">💥 Устройство сломано. Годится только на запчасти.</div>':!k?'<div class="rpn rpm">Тапни по детали. Красным мигают сломанные.</div>':x?`<div class="rpn"><b>${RPM[x.n][1]}</b> · ${x.n}<br>Новая деталь: <b>${f(x.c)}</b> · риск неудачи ~${Math.round(failP(d,x)*100)}%<button class="rpb" data-q="swap">🔧 Заменить деталь</button></div>`:`<div class="rpn">✔ Деталь исправна${of(k).length?' (заменена)':''}.</div>`}
+  el.innerHTML=`<div class="rph"><span>🔧 ${esc(nm(d))}</span><button data-q="x">✕</button></div><div class="rpm">Баланс: ${f(S.bal)}${R.open?' · сломано деталей: '+left:''}</div>${body}${pn}${R.open?`<button class="rpb ${left?'g':'ok'}" data-q="x">${left?'Закрыть крышку и выйти':'✅ Собрать телефон'}</button>`:''}`}
+function rpC(e){const R=RP;if(!R)return;const p=e.target.closest('[data-p]'),t=e.target.closest('[data-q]');
+  if(p){R.sel=p.dataset.p;R.an='';rpR();return}if(!t)return;const q=t.dataset.q,i=+t.dataset.i;
+  if(q==='x')rpX();
+  else if(q==='sc'){R.sc[i]=0;rpR()}
+  else if(q==='pop'){R.pop=1;rpR();setTimeout(()=>{if(RP===R){R.open=1;rpR()}},600)}
+  else if(q==='swap'){const d=R.d,j=d.defs.findIndex(x=>RPM[x.n]&&RPM[x.n][0]===R.sel&&!x.fx);if(j<0)return;
+    const r=doRep(d,j);if(!r)return;R.res=r;R.an=R.sel;save();render(1);rpR();setTimeout(()=>{R.an=''},900)}}
+
 /* ===== Перепрошивка iPhone (DFU → прошивка → прошивка → активация) ===== */
 let RF=null;
 const RFNET=['Masterskaya_5G_Guest','Masterskaya_5G','Masterskaya-5G','TP-LINK_BA34'];
@@ -925,6 +991,7 @@ function rfOpen(id){
   el.addEventListener('click',rfC);el.addEventListener('input',e=>{if(e.target.id==='rfin')RF.in=e.target.value});
   RF.iv=setInterval(rfT,100);rfR()}
 function rfReset(){const R=RF;Object.assign(R,{st:1,p:0,v:0,ph:'idle',t:0,msg:'',fp:0,n:0,cab:1,ev:0,bc:0,fail:'',net:'',in:'',ok:0,done:0,fw:null,pw:String(1e7+Math.floor(Math.random()*9e7)),log:['$ idevice connect','Подключено: '+R.i1+', iOS '+R.sv]})}
+function rfDone(R){if(R.done)return;const d=R.d;d.lock=0;d.offer=0;S.ulr='✅ '+nm(d)+': разблокирован, цена выросла';R.done=1;toast('🔓 Разблокирован: '+nm(d)+' · '+gain(15));save();rfR()}
 function rfX(){if(!RF)return;clearInterval(RF.iv);const e=$('#rf');if(e)e.remove();RF=null;render()}
 const rfMsg=R=>R.ok?'✔ Режим DFU включён':R.msg||({idle:'Нажми обе кнопки',both:'Держи обе кнопки…',rel:'Отпусти ПИТАНИЕ! Громкость – держи',hold:'Держи ГРОМКОСТЬ…'})[R.ph];
 function rfPh(R){const s3=R.st===3,g='#7dff9b',c=x=>x?g:'#8890a8',cut=s3&&!R.cab;
@@ -937,10 +1004,10 @@ function rfR(){const R=RF,el=$('#rf');if(!R||!el)return;
   let b='';
   if(R.st===1)b=rfPh(R)+`<div class="rfbar"><i id="rfb"></i></div><div class="rfm" id="rfm">${rfMsg(R)}</div><div class="rfbt"><button data-r="p" class="${R.p?'on':''}">⏻ Питание</button><button data-r="v" class="${R.v?'on':''}">Громкость –</button></div><div class="rfs">Кнопки нажимаются тапом и залипают</div>`;
   else if(R.st===2)b=`<div class="rfid">${R.i1}<small>${nm(R.d)}</small></div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}`+R.F.map((f,i)=>`<button class="rff" data-r="fw" data-i="${i}">📦 ${f.n}<span class="${f.k==='old'?'bad':f.k==='beta'?'wr':'ok'}">${f.t}</span></button>`).join('');
-  else if(R.st===3)b=`<div class="rfban">${R.i1} ${R.sv} — подписана ✅</div>`+rfPh(R)+(R.fail?`<div class="rfe">❌ ${R.fail}</div><div class="rfbt"><button data-r="again">↻ Заново</button><button data-r="x">Закрыть</button></div>`:`<div class="rfbar"><i id="rfb" style="width:${R.fp*100}%"></i></div><div class="rfm" style="${R.cab?'':'color:#ff7b7b'}">${R.cab?'Не отключай телефон…':'⚠ Кабель отошёл!'}</div>${R.cab?'':'<div class="rfbt"><button class="on" data-r="cab">🔌 Переподключить кабель</button></div>'}`);
+  else if(R.st===3&&!R.done)b=`<div class="rfban">${R.i1} ${R.sv} — подписана ✅</div>`+rfPh(R)+(R.fail?`<div class="rfe">❌ ${R.fail}</div><div class="rfbt"><button data-r="again">↻ Заново</button><button data-r="x">Закрыть</button></div>`:`<div class="rfbar"><i id="rfb" style="width:${R.fp*100}%"></i></div><div class="rfm" style="${R.cab?'':'color:#ff7b7b'}">${R.cab?'Не отключай телефон…':'⚠ Кабель отошёл!'}</div>${R.cab?'':'<div class="rfbt"><button class="on" data-r="cab">🔌 Переподключить кабель</button></div>'}`);
   else if(R.done)b=`<div class="rfid">🔓<small>${nm(R.d)} разблокирован</small></div><div class="rfm">Цена выросла. Телефон готов к продаже.</div><div class="rfbt"><button class="on" data-r="x">Готово</button></div>`;
-  else b=`<div class="rfwf"><div class="rfst">📌 Наклейка на коробке<br>Сеть Wi-Fi: <b>Masterskaya_5G</b><br>Пароль: <b>${R.pw.slice(0,4)} ${R.pw.slice(4)}</b><small>Выбери в списке ровно это название (без «Guest», дефисов и других)</small></div><b>Выберите сеть Wi-Fi</b>${RFNET.map((n,i)=>`<button data-r="net" data-i="${i}" class="${R.net===n?'on':''}">📶 ${n}</button>`).join('')}</div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}<input id="rfin" inputmode="numeric" placeholder="Пароль от Wi-Fi" value="${R.in||''}"><div class="rfbt"><button class="on" data-r="act">Активировать</button></div>`;
-  el.innerHTML=`<div class="rfh"><span>Перепрошивка · ${esc(nm(R.d))}</span><button data-r="x">✕</button></div><h4>Шаг ${R.st} из 4 · ${T}</h4><p>${H}</p>${b}<pre class="rfl" id="rfl">${esc(R.log.slice(-7).join('\n'))}</pre>`}
+  else b='';
+  el.innerHTML=`<div class="rfh"><span>Перепрошивка · ${esc(nm(R.d))}</span><button data-r="x">✕</button></div><h4>Шаг ${R.st} из 3 · ${T}</h4><p>${H}</p>${b}<pre class="rfl" id="rfl">${esc(R.log.slice(-7).join('\n'))}</pre>`}
 function rfC(e){const t=e.target.closest('[data-r]');if(!t||!RF)return;const R=RF,r=t.dataset.r,i=+t.dataset.i;
   if(r==='x')rfX();
   else if(r==='p'||r==='v'){if(R.st===1&&!R.ok){R[r]=R[r]?0:1;rfR()}}
@@ -961,11 +1028,11 @@ function rfT(){const R=RF;if(!R)return;const n=Date.now(),B=x=>{const b=$('#rfb'
     else if(R.ph==='both'){if(!(R.p&&R.v))rs('Рано отпустил — начни заново');else{const e=(n-R.t)/4000;B(Math.min(1,e));if(e>=1){R.ph='rel';R.t=n;B(1);const m=$('#rfm');if(m)m.textContent=rfMsg(R)}}}
     else if(R.ph==='rel'){if(!R.v)rs('Громкость отпущена — заново');else if(!R.p){R.ph='hold';R.t=n;B(0);const m=$('#rfm');if(m)m.textContent=rfMsg(R)}else if(n-R.t>5000)rs('Слишком долго держал ПИТАНИЕ — заново')}
     else if(R.ph==='hold'){if(!R.v)rs('Громкость отпущена — заново');else{const e=(n-R.t)/3000;B(Math.min(1,e));if(e>=1){R.ok=1;R.log.push('✔ Устройство в режиме DFU');rfR();setTimeout(()=>{if(RF===R){R.st=2;R.msg='';rfR()}},900)}}}
-  }else if(R.st===3&&!R.fail){
+  }else if(R.st===3&&!R.fail&&!R.done){
     if(R.cab){R.fp=Math.min(1,R.fp+.1/14);B(R.fp);const k=Math.floor(R.fp*RFLOG.length);let ch=0;while(R.n<k){R.log.push(RFLOG[R.n++]);ch=1}if(ch){const l=$('#rfl');if(l)l.textContent=R.log.slice(-7).join('\n')}
       if(R.fp>=.45&&!R.ev){R.ev=1;R.cab=0;R.et=n;R.log.push('✗ Кабель отключён!');rfR()}
       else if(R.fw.k==='beta'&&R.fp>=.85&&!R.bc){R.bc=1;if(Math.random()<.5){R.fail='Бета-сборка не прошла проверку (ошибка 4005)';rfR()}}
-      if(R.fp>=1&&!R.fail){R.st=4;R.msg='';R.log.push('✔ Восстановление завершено');rfR()}
+      if(R.fp>=1&&!R.fail){R.log.push('✔ Восстановление завершено');rfDone(R)}
     }else if(n-R.et>3500+400*S.pc){R.fail='Кабель не переподключён вовремя (ошибка 4013)';rfR()}}}
 
 /* ===== Root Алисы (загрузчик → образ → запись → привязка) ===== */
@@ -999,10 +1066,10 @@ function raR(){const R=RA,el=$('#rf');if(!R||!el)return;const v=PGV[R.sel];
   let b='';
   if(R.st===1)b=raPh(R)+`<div class="rfbar"><i id="rfb"></i></div><div class="rfm" id="rfm">${raMsg(R)}</div><div class="rfbt"><button data-r="p" class="${R.p?'on':''}">⏻ Питание</button><button data-r="v" class="${R.v?'on':''}">RESET</button></div><div class="rfs">Кнопки нажимаются тапом и залипают</div>`;
   else if(R.st===2)b=`<div class="rfid">${R.code}<small>${nm(R.d)} · ${v[1]}</small></div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}`+R.F.map((f,i)=>`<button class="rff" data-r="fw" data-i="${i}">📦 ${f.n}<span class="${f.k==='old'?'bad':f.k==='beta'?'wr':'ok'}">${f.t}</span></button>`).join('')+`<div class="rfs">Софт: ${f(v[3])} за запись подходящего образа</div>`;
-  else if(R.st===3)b=`<div class="rfban">${R.code} · ${v[1]} — образ подписан ✅</div>`+raPh(R)+(R.fail?`<div class="rfe">${R.brick?'💥 Приставка превратилась в кирпич. ':'❌ '}${R.fail}</div><div class="rfbt">${R.brick?'':'<button data-r="again">↻ Заново</button>'}<button data-r="x">Закрыть</button></div>`:`<div class="rfbar"><i id="rfb" style="width:${R.fp*100}%"></i></div><div class="rfm" style="${R.cab?'':'color:#ff7b7b'}">${R.cab?'Не отключай приставку…':'⚠ Кабель отошёл!'}</div>${R.cab?'':'<div class="rfbt"><button class="on" data-r="cab">🔌 Переподключить кабель</button></div>'}`);
+  else if(R.st===3&&!R.done)b=`<div class="rfban">${R.code} · ${v[1]} — образ подписан ✅</div>`+raPh(R)+(R.fail?`<div class="rfe">${R.brick?'💥 Приставка превратилась в кирпич. ':'❌ '}${R.fail}</div><div class="rfbt">${R.brick?'':'<button data-r="again">↻ Заново</button>'}<button data-r="x">Закрыть</button></div>`:`<div class="rfbar"><i id="rfb" style="width:${R.fp*100}%"></i></div><div class="rfm" style="${R.cab?'':'color:#ff7b7b'}">${R.cab?'Не отключай приставку…':'⚠ Кабель отошёл!'}</div>${R.cab?'':'<div class="rfbt"><button class="on" data-r="cab">🔌 Переподключить кабель</button></div>'}`);
   else if(R.done)b=`<div class="rfid">🤖<small>${nm(R.d)}: ${v[1]} установлена</small></div><div class="rfm">Цена выросла на ${Math.round(v[2]*100)}%. Приставка готова к продаже.</div><div class="rfbt"><button class="on" data-r="x">Готово</button></div>`;
-  else b=`<div class="rfwf"><div class="rfst">📌 Наклейка на приставке<br>Сеть Wi-Fi: <b>Alisa_Setup_5G</b><small>Выбери в списке ровно это название (подчёркивания, без «Guest» и дефисов)</small></div><div class="rfst">📺 На экране ТВ<br>Код привязки: <b>${R.code4.slice(0,3)} ${R.code4.slice(3)}</b></div><b>Выберите сеть Wi-Fi</b>${RANET.map((n,i)=>`<button data-r="net" data-i="${i}" class="${R.net===n?'on':''}">📶 ${n}</button>`).join('')}</div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}<input id="rfin" inputmode="numeric" placeholder="Код привязки" value="${esc(R.in||'')}"><div class="rfbt"><button class="on" data-r="act">Привязать Алису</button></div>`;
-  el.innerHTML=`<div class="rfh"><span>Root Алисы · ${esc(nm(R.d))}</span><button data-r="x">✕</button></div><h4>Шаг ${R.st} из 4 · ${T}</h4><p>${H}</p>${b}<pre class="rfl" id="rfl">${esc(R.log.slice(-7).join('\n'))}</pre>`}
+  else b='';
+  el.innerHTML=`<div class="rfh"><span>Root Алисы · ${esc(nm(R.d))}</span><button data-r="x">✕</button></div><h4>Шаг ${R.st} из 3 · ${T}</h4><p>${H}</p>${b}<pre class="rfl" id="rfl">${esc(R.log.slice(-7).join('\n'))}</pre>`}
 function raFail(R,msg){if(R.fail)return;const v=PGV[R.sel],d=R.d;R.fail=msg;R.log.push('✗ '+msg);S.skx=(S.skx||0)+1;
   if(Math.random()<v[8]){R.brick=1;d.broke=1;d.offer=0;S.pgr='💥 '+nm(d)+': приставка превратилась в кирпич';toast('💥 Сбой прошивки: '+nm(d)+' превратилась в кирпич')}
   else S.pgr='❌ '+nm(d)+': сбой, приставка цела, деньги потрачены';
@@ -1034,12 +1101,12 @@ function raT(){const R=RA;if(!R)return;const n=Date.now(),B=x=>{const b=$('#rfb'
     else if(R.ph==='both'){if(!(R.p&&R.v))rs('Рано отпустил — начни заново');else{const e=(n-R.t)/R.t1;B(Math.min(1,e));if(e>=1){R.ph='rel';R.t=n;B(1);mm()}}}
     else if(R.ph==='rel'){if(!R.v)rs('RESET отпущен — заново');else if(!R.p){R.ph='hold';R.t=n;B(0);mm()}else if(n-R.t>5000)rs('Слишком долго держал ПИТАНИЕ — заново')}
     else if(R.ph==='hold'){if(!R.v)rs('RESET отпущен — заново');else{const e=(n-R.t)/R.t2;B(Math.min(1,e));if(e>=1){R.ok=1;R.log.push('✔ Устройство в режиме загрузчика');raR();setTimeout(()=>{if(RA===R){R.st=2;R.msg='';raR()}},900)}}}
-  }else if(R.st===3&&!R.fail){
+  }else if(R.st===3&&!R.fail&&!R.done){
     if(R.cab){R.fp=Math.min(1,R.fp+.1/pgT(v));B(R.fp);const k=Math.floor(R.fp*RALOG.length);let ch=0;while(R.n<k){R.log.push(RALOG[R.n++]);ch=1}if(ch){const l=$('#rfl');if(l)l.textContent=R.log.slice(-7).join('\n')}
       if(R.fp>=.45&&!R.ev){R.ev=1;R.cab=0;R.et=n;R.log.push('✗ USB-кабель отключён!');raR();return}
       if(R.fw.k==='beta'&&R.fp>=.85&&!R.bc){R.bc=1;if(Math.random()<.5){raFail(R,'Бета-сборка не прошла проверку (ошибка 0x4005)');return}}
       if(R.fp>=.9&&!R.vb){R.vb=1;if(R.fw.k!=='beta'&&Math.random()<raFl(v)){raFail(R,'Проверка vbmeta не пройдена (ошибка 0x1F)');return}}
-      if(R.fp>=1&&!R.fail){R.st=4;R.msg='';R.log.push('✔ Запись завершена');raR()}
+      if(R.fp>=1&&!R.fail){R.log.push('✔ Запись завершена');raDone(R)}
     }else if(n-R.et>3000+400*S.pc+200*skLv())raFail(R,'Кабель не переподключён вовремя (ошибка 0xE4)')}}
 
 if(!S){S=fresh();regen()}
