@@ -255,7 +255,8 @@ function bub(x,w){const c=`max-width:78%;padding:8px 12px;border-radius:14px;bac
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const DEFR=[['Перегрев',.1],['Артефакты / ошибки',.2],['Повреждён разъём',.12],['Нестабильная работа',.15]];
 const DEFT=[['Не включается',.25],['Нет сигнала HDMI',.12],['Глючит Wi‑Fi',.1],['Перегрев',.1],['Проблема с платой',.3],['Нет пульта',.04],['Царапины корпуса',.04]];
-const dpool=k=>I[k][2]==='r'?DEFR:I[k][2]==='t'?DEFT:kd(k)==='d'?DEFC:kd(k)==='p'?DEFP:DEF;
+const PHD=['Разбитый экран','Разбита задняя крышка','Разбито стекло камеры','Сломана камера'];
+const dpool=k=>I[k][2]==='r'?DEFR:I[k][2]==='t'?DEFT:kd(k)==='d'?DEFC:kd(k)==='p'?DEFP:DEF.filter(x=>!PHD.includes(x[0]));
 const DEF=[['Разбитый экран',.12],['Слабая батарея',.06],['Не включается',.25],['Проблема с платой',.3],['Царапины корпуса',.04],['Разбита задняя крышка',.07],['Залипает кнопка',.03],['Перегрев',.1]];
 const SELL=['Алексей','Марина','Дмитрий','Ольга','Игорь','Света','Павел'];
 const EVS=[{t:'📈 Ажиотаж на телефоны: цены +15%',c:'p',m:1.15},{t:'📉 Падение цен на комплектующие: −15%',c:'r',m:.85},{t:'💻 Сезон студентов: ноутбуки и ПК +12%',c:'c',m:1.12},{t:'📉 Спад спроса: телефоны −12%',c:'p',m:.88},{t:'🧾 Проверка налоговой: ноутбуки и ПК −10%',c:'c',m:.9},{t:'📺 Ажиотаж на смарт-приставки: цены +15%',c:'t',m:1.15},{t:'📉 Спад спроса: смарт-приставки −12%',c:'t',m:.88}];
@@ -327,7 +328,7 @@ function save(){
   try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
   scheduleCloudSave();
 }
-let S=load();if(S){S.chat=S.chat||{};S.pc=S.pc||1;S.own=S.own||0;S.bm=S.bm||[];S.sl=S.sl||[];S.bd=S.bd||{};S.cap=S.cap||8;S.ach=S.ach||{};S.dr=S.dr||{};S.dd=S.dd||{};S.cn=S.cn||0;S.t0=S.t0||Date.now();S.skx=S.skx||0;S.pv=S.pv||0;S.tx=S.tx||[];S.done=S.done||[];S.pend=S.pend||[]}
+let S=load();if(S){try{const _ph=['Разбитый экран','Разбита задняя крышка','Разбито стекло камеры','Сломана камера'];[...(S.inv||[]),...(S.mk||[]).map(m=>m&&m.dev)].forEach(d=>{if(d&&d.key&&I[d.key]&&I[d.key][2]!=='p'&&d.defs)d.defs=d.defs.filter(x=>!_ph.includes(x.n))})}catch(e){}S.chat=S.chat||{};S.pc=S.pc||1;S.own=S.own||0;S.bm=S.bm||[];S.sl=S.sl||[];S.bd=S.bd||{};S.cap=S.cap||8;S.ach=S.ach||{};S.dr=S.dr||{};S.dd=S.dd||{};S.cn=S.cn||0;S.t0=S.t0||Date.now();S.skx=S.skx||0;S.pv=S.pv||0;S.tx=S.tx||[];S.done=S.done||[];S.pend=S.pend||[]}
 try{if(S&&!localStorage.getItem(KEY+'_bak'))localStorage.setItem(KEY+'_bak',JSON.stringify(S))}catch(e){} // страховочная копия сохранения перед обновлением
 const lvl=()=>Math.floor((1+Math.sqrt(1+S.exp/12.5+1e-9))/2); // ур.2=100, ур.3=300, ур.4=600, ур.5=1000, ур.6=1500, ур.8=2800 опыта
 const mult=k=>(S.ev&&S.ev.c===I[k][2]?S.ev.m:1)*(S.dr[k]||1);
@@ -337,7 +338,7 @@ function mk(key){
   let defs=[];
   if(Math.random()<.06)defs=[{n:'Подделка',c:0,fake:1,k:0,fx:0}];
   else defs=dpool(key).slice().sort(()=>Math.random()-.5).slice(0,n).map(x=>({n:x[0],c:r100(I[key][1]*x[1]),k:0,fx:0}));
-  if(kd(key)==='p'&&!defs.some(x=>x.fake))DEFP.forEach(x=>{const q={'Разбитый экран':.3,'Разбита задняя крышка':.25,'Сломана камера':.2}[x[0]];if(q&&Math.random()<q&&!defs.some(y=>y.n===x[0]))defs.push({n:x[0],c:r100(I[key][1]*x[1]),k:0,fx:0})});
+  if(I[key][2]==='p'&&!defs.some(x=>x.fake))DEFP.forEach(x=>{const q={'Разбитый экран':.3,'Разбита задняя крышка':.25,'Сломана камера':.2}[x[0]];if(q&&Math.random()<q&&!defs.some(y=>y.n===x[0]))defs.push({n:x[0],c:r100(I[key][1]*x[1]),k:0,fx:0})});
   return{id:++S.uid,key,defs,paid:0,broke:0,offer:0,lock:LK.has(key)?1:0,ul:0};
 }
 function val(d){
