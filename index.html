@@ -113,29 +113,45 @@ nav button.on i{background:rgba(47,123,255,.15)}
 .dki i.ic{width:62px;height:62px;border-radius:19px;background:var(--g);box-shadow:0 8px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.4)}
 .dki i.ic svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .ic.bm{--g:linear-gradient(145deg,#5a5f78,#15161e)}.ic.ul{--g:linear-gradient(145deg,#34d399,#059669)}.ic.up{--g:linear-gradient(145deg,#60a5fa,#2563eb)}.ic.bd{--g:linear-gradient(145deg,#fbbf24,#ea580c)}.ic.pg{--g:linear-gradient(145deg,#f472b6,#9333ea)}
-#rp{position:fixed;inset:0;z-index:40;background:#0b0f16;color:#e8edf7;overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px));font:14px/1.4 system-ui,sans-serif}
+#rp{position:fixed;inset:0;z-index:40;background:radial-gradient(120% 70% at 50% 0,#1c2a47 0,#0b0f16 62%);color:#e8edf7;overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px));font:14px/1.4 system-ui,sans-serif}
 .rph{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:16px}
 .rph button{width:36px;height:36px;border:0;border-radius:12px;background:#222a3a;color:#fff;font-size:16px}
 .rpb{display:block;width:100%;margin:8px 0;border:0;border-radius:12px;background:#2f7bff;color:#fff;font:inherit;font-weight:700;padding:12px}.rpb.ok{background:#16a05a}.rpb.g{background:#222a3a}
 .rpm{text-align:center;color:#9aa6bd;margin:4px 0 8px}
-.rpw{position:relative;width:min(56vw,210px);margin:10px auto;transition:.55s}.rpw.off{transform:translateY(-46px) rotate(-10deg);opacity:0}
-.rpw svg,.rpi svg{display:block;width:100%;filter:drop-shadow(0 10px 14px rgba(0,0,0,.5))}
-.rps{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;padding:0;border-radius:50%;border:2px solid #555d70;background:radial-gradient(circle,#d3d8e2,#7d8598);transition:.35s}
-.rps::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:2px;margin:-1px 0 0 -7px;background:#333}
-.rps.out{transform:translateY(-36px) scale(.4) rotate(200deg);opacity:0;pointer-events:none}
-.rpi{width:min(60vw,230px);margin:10px auto;animation:rpin .5s}
-@keyframes rpin{from{opacity:0;transform:scale(.92)}}
+.rpsteps{display:flex;gap:6px;margin:10px 0 2px;font-size:11px;font-weight:700}.rpsteps span{flex:1;text-align:center;padding:6px 2px;border-radius:99px;background:#161d2b;color:#6f7b93}.rpsteps .on{background:#2f7bff;color:#fff}.rpsteps .dn{background:rgba(22,160,90,.2);color:#7dff9b}
+.rpmain{display:flex;gap:14px;align-items:flex-start;margin:14px 0 8px}.rpmain.c{justify-content:center}
+.rpstage{position:relative;flex:0 0 min(48vw,196px);width:min(48vw,196px);isolation:isolate;perspective:900px}
+.rpmain.c .rpstage{flex-basis:min(60vw,230px);width:min(60vw,230px)}
+.rpstage::before{content:"";position:absolute;inset:-12px;border-radius:26px;z-index:-1;background:linear-gradient(#10182a,#0b111b);border:1px solid #1f2a40;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.rpstage svg{display:block;width:100%;filter:drop-shadow(0 10px 14px rgba(0,0,0,.55))}
+.rpint.u{position:absolute;inset:0}.rpint.in{animation:rpin .6s}
+.rplid{position:relative;z-index:2;transform-origin:50% 100%}
+.rplid.glow{animation:rpglow 1.8s ease-in-out infinite alternate}
+.rplid.lift{animation:rplift .75s cubic-bezier(.4,.1,.2,1) forwards;pointer-events:none}
+.rplid.land{animation:rpland .65s cubic-bezier(.3,.1,.2,1) both}
+@keyframes rpglow{to{filter:drop-shadow(0 0 12px rgba(80,160,255,.7))}}
+@keyframes rplift{35%{transform:translateY(-4%) rotateX(22deg) scale(1.05)}100%{transform:translateY(-62%) rotateX(40deg) rotate(-12deg) scale(.88);opacity:0}}
+@keyframes rpland{from{transform:translateY(-62%) rotateX(40deg) rotate(-12deg) scale(.88);opacity:0}65%{opacity:1;transform:translateY(-3%) rotateX(14deg) scale(1.03)}to{transform:none}}
+@keyframes rpin{from{opacity:.3;transform:scale(.96)}}
+.rpside{flex:1;min-width:0}
+.rpcov{display:flex;gap:8px;align-items:center;padding:8px;border-radius:14px;border:1px solid #2c374d;background:#131a27;font-size:12px}.rpcov.bad{border-color:#ff4d4d}.rpcov.good{border-color:#7dff9b}.rpcov.tgt{outline:2px dashed #ffd24a}.rpcov.hov{background:#2a2410}
+.rpcf{flex:none;width:40px}.rpcf svg{width:100%;display:block}
+.rpcov small,.rpt small{display:block;color:#9aa6bd;font-size:11px;font-weight:400}
+.rpth{margin:12px 2px 6px;font-weight:800}.rpth small{display:block;color:#9aa6bd;font-weight:500;font-size:11px}
+.rptray{display:flex;flex-direction:column;gap:6px}.rpe{color:#7dff9b;padding:10px;text-align:center}
+.rpt{display:flex;gap:8px;align-items:center;padding:8px;border-radius:12px;background:linear-gradient(#222c42,#18202f);border:1px solid #3a4766;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;font-size:12px}
+.rpt i{font-style:normal;font-size:20px}.rpt span{flex:1;min-width:0}.rpt em{font-style:normal;font-weight:800;color:#ffd24a;white-space:nowrap}
+.rpt.lift{opacity:.3}.rpg{position:fixed;z-index:80;width:190px;pointer-events:none;transform:translate(-50%,-60%) scale(1.06) rotate(-3deg);box-shadow:0 14px 30px rgba(0,0,0,.6)}
 .rpp{cursor:pointer;transform-box:fill-box;transform-origin:center}
-.rpp rect{fill:#1b2233;stroke:#46506a;stroke-width:2}
-.rpp text{fill:#cfd6e6;font:600 11px system-ui,sans-serif;pointer-events:none}
-.rpp.bad rect{fill:#3a1518;stroke:#ff4d4d;animation:pul .8s ease-in-out infinite alternate}
-.rpp.good rect{stroke:#7dff9b}.rpp.sel rect{stroke:#ffd24a;stroke-width:3.5;animation:none}
-.rpp .crk{fill:none;stroke:#ff9a9a;stroke-width:2;pointer-events:none}
+.rpp .lb{fill:#e3e8f4;font:700 8.5px system-ui,sans-serif;paint-order:stroke;stroke:rgba(0,0,0,.7);stroke-width:2px;pointer-events:none}
+.rpp .bdov,.rpp .gd,.rpp .tg{display:none}.rpp.bad .bdov{display:block;animation:pul .8s ease-in-out infinite alternate}.rpp.good .gd{display:block}
+.rpp .tg{fill:none;stroke:#ffd24a;stroke-width:2.5;stroke-dasharray:6 4}.rpp.tgt .tg{display:block;animation:rpdash .6s linear infinite}
+.rpp.hov{filter:drop-shadow(0 0 7px #ffd24a)}.rpp.sel>rect:first-child{stroke:#ffd24a;stroke-width:2.5}
+@keyframes rpdash{to{stroke-dashoffset:-20}}
 .rpp.swap{animation:rpswap .75s}.rpp.shake{animation:rpsh .45s}
 @keyframes rpswap{0%{transform:none;opacity:1}35%{transform:translateY(-44px);opacity:0}65%{transform:translateY(44px);opacity:0}100%{transform:none;opacity:1}}
 @keyframes rpsh{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
 .rpn{background:#131a27;border:1px solid #24304a;border-radius:14px;padding:12px;margin:8px 0}
-.rpc{display:block;width:100%;text-align:left;border:1px solid #46506a;background:#1b2233;color:#e8edf7;border-radius:12px;padding:10px;font:inherit;margin:6px 0}.rpc.bad{border-color:#ff4d4d;background:#3a1518}.rpc.good{border-color:#7dff9b}.rpc.sel{border-color:#ffd24a}
 </style>
 </head>
 <body>
@@ -426,32 +442,34 @@ function glitch(sd,x,y,w,h){
   const r=rng(sd),C=['#ff2bd6','#18e0ff','#7dff3a'];let s='';
   for(let i=0;i<9;i++)s+=`<rect x="${x}" y="${n1(y+r()*(h-12))}" width="${w}" height="${n1(2+r()*9)}" fill="${C[i%3]}" fill-opacity=".6"/>`;
   s+=`<rect x="${n1(x+r()*(w-8))}" y="${y}" width="6" height="${h}" fill="#fff" fill-opacity=".14"/>`;return s}
-const lens=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#0b0c10" stroke="#6b7184" stroke-width="2.2"/><circle cx="${x}" cy="${y}" r="${n1(r*.62)}" fill="#1b2a4a"/><circle cx="${n1(x-r*.25)}" cy="${n1(y-r*.25)}" r="${n1(r*.2)}" fill="#fff" fill-opacity=".55"/>`;
+const lens=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#0a0b0f" stroke="#9aa1b2" stroke-width="2.4"/><circle cx="${x}" cy="${y}" r="${n1(r*.84)}" fill="none" stroke="#2a2d38" stroke-width="1.4"/><circle cx="${x}" cy="${y}" r="${n1(r*.66)}" fill="#101a33"/><circle cx="${x}" cy="${y}" r="${n1(r*.44)}" fill="#1c3a78"/><circle cx="${x}" cy="${y}" r="${n1(r*.22)}" fill="#0a1226"/><circle cx="${n1(x-r*.28)}" cy="${n1(y-r*.28)}" r="${n1(r*.16)}" fill="#fff" fill-opacity=".6"/><circle cx="${n1(x+r*.22)}" cy="${n1(y+r*.25)}" r="${n1(r*.08)}" fill="#7fb0ff" fill-opacity=".7"/>`;
 const ring=(x,y,r)=>`<circle class="pul" cx="${n1(x)}" cy="${n1(y)}" r="${r}" fill="none" stroke="#ff3b3b" stroke-width="3" stroke-dasharray="7 5"/>`;
 const apple=(x,y,sc,fk,ink)=>`<g transform="translate(${x} ${y}) ${fk?'rotate(-14) scale('+n1(sc*1.2)+' '+n1(sc*.85)+')':'scale('+sc+')'}" fill="rgba(${ink},.72)"><path d="M0 -6C-6 -14 -20 -10 -20 6C-20 18 -12 28 -6 28C-3 28 -2 26 0 26C2 26 3 28 6 28C12 28 20 18 20 6C20 -10 6 -14 0 -6Z"/><path d="M1 -8C0 -18 6 -24 14 -24C14 -16 8 -9 1 -8Z"/></g>`;
 // ---- телефон ----
 function phoneFace(d,side,F,hn){
   const u='k'+(++SVU),nn=I[d.key][0],[c1,c2]=pcol(d),ip=/iPhone|Duo|Vertu|Caviar/.test(nn),pro=/Pro|Duo|Gold|Platinum|Caviar|Vertu/.test(nn),sg=/Samsung/.test(nn),px=/Pixel/.test(nn),
     hue=hs(d.key)%360,sd=d.id*7919+13,lt=parseInt(c1.slice(1,3),16)>170,ink=lt?'0,0,0':'255,255,255';
-  let s=`<svg viewBox="0 0 200 410" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><linearGradient id="${u}w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue},75%,52%)"/><stop offset="1" stop-color="hsl(${(hue+70)%360},70%,24%)"/></linearGradient><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".26"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient><clipPath id="${u}c"><rect x="${side?10:18}" y="${side?8:16}" width="${side?180:164}" height="${side?394:378}" rx="${side?34:27}"/></clipPath></defs>`;
-  s+=`<rect x="5" y="96" width="6" height="30" rx="2" fill="#2c3140"/><rect x="5" y="136" width="6" height="46" rx="2" fill="#2c3140"/><rect x="189" y="128" width="6" height="64" rx="2" fill="${F.btn&&!side?'#e5484d':'#2c3140'}"/>`;
+  let s=`<svg viewBox="0 0 200 410" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><linearGradient id="${u}w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue},75%,52%)"/><stop offset="1" stop-color="hsl(${(hue+70)%360},70%,24%)"/></linearGradient><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".26"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="${u}f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="#fff" stop-opacity=".15"/><stop offset=".7" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient><radialGradient id="${u}r" cx=".25" cy=".12" r=".9"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="${u}c"><rect x="${side?10:18}" y="${side?8:16}" width="${side?180:164}" height="${side?394:378}" rx="${side?34:27}"/></clipPath></defs>`;
+  s+=`<rect x="5" y="96" width="6" height="30" rx="2" fill="#4a5266"/><rect x="5" y="136" width="6" height="46" rx="2" fill="#4a5266"/><rect x="189" y="128" width="6" height="64" rx="2" fill="${F.btn&&!side?'#e5484d':'#2c3140'}"/>`;
   if(!side){
     const rs=rng(sd+3),cx=40+rs()*120,cy=70+rs()*250;
-    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="#171a21" stroke="#555d70" stroke-width="2"/><g clip-path="url(#${u}c)">`;
+    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="#0a0c10" stroke="url(#${u}f)" stroke-width="3.2"/><rect x="14" y="12" width="172" height="386" rx="30" fill="none" stroke="#000" stroke-width="3"/><g clip-path="url(#${u}c)">`;
     if(F.off)s+=`<rect x="18" y="16" width="164" height="378" fill="#050608"/>`;
     else if(d.lock)s+=`<rect x="18" y="16" width="164" height="378" fill="#0b1220"/><rect x="82" y="150" width="36" height="30" rx="6" fill="#e5484d"/><path d="M88 150v-10a12 12 0 0 1 24 0v10" fill="none" stroke="#e5484d" stroke-width="6"/><text x="100" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Activation Lock</text><text x="100" y="230" text-anchor="middle" font-size="10" fill="#9aa4b8" font-family="system-ui,sans-serif">iPhone заблокирован</text>`;
     else{
       s+=`<rect x="18" y="16" width="164" height="378" fill="url(#${u}w)"/><text x="100" y="62" text-anchor="middle" font-size="12" fill="#fff" fill-opacity=".85" font-family="system-ui,sans-serif">вт, 3 нояб.</text><text x="100" y="104" text-anchor="middle" font-size="46" font-weight="700" fill="#fff" fill-opacity=".92" font-family="system-ui,sans-serif">9:41</text>`;
-      for(let i=0;i<4;i++)s+=`<rect x="${30+i*38}" y="344" width="30" height="30" rx="8" fill="#fff" fill-opacity=".24"/>`;
+      s+=`<circle cx="150" cy="290" r="90" fill="hsl(${(hue+50)%360},85%,65%)" fill-opacity=".28"/><circle cx="20" cy="190" r="60" fill="#fff" fill-opacity=".08"/><rect x="28" y="136" width="70" height="70" rx="18" fill="#fff" fill-opacity=".18"/><circle cx="52" cy="160" r="9" fill="#ffd54a"/><rect x="40" y="182" width="46" height="5" rx="2.5" fill="#fff" fill-opacity=".7"/><rect x="104" y="136" width="70" height="70" rx="18" fill="#fff" fill-opacity=".18"/><rect x="116" y="176" width="8" height="18" rx="2" fill="#fff" fill-opacity=".8"/><rect x="130" y="164" width="8" height="30" rx="2" fill="#fff" fill-opacity=".8"/><rect x="144" y="150" width="8" height="44" rx="2" fill="#fff" fill-opacity=".8"/><text x="34" y="36" font-size="10" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">9:41</text><rect x="148" y="28" width="20" height="9" rx="2.5" fill="none" stroke="#fff" stroke-opacity=".9"/><rect x="150" y="30" width="13" height="5" rx="1.2" fill="#fff"/><rect x="132" y="31" width="3" height="6" fill="#fff"/><rect x="137" y="29" width="3" height="8" fill="#fff"/><rect x="142" y="27" width="3" height="10" fill="#fff"/>`;
+      ['#ff5a5f','#34c759','#2f7bff','#ffb020'].forEach((c,i)=>s+=`<rect x="${30+i*38}" y="344" width="30" height="30" rx="9" fill="${c}"/><rect x="${33+i*38}" y="347" width="24" height="10" rx="5" fill="#fff" fill-opacity=".25"/>`);
+      s+=`<rect x="70" y="384" width="60" height="4" rx="2" fill="#fff" fill-opacity=".85"/>`;
       if(F.brd)s+=glitch(sd+5,18,16,164,378)}
-    s+=`</g>`+(ip?`<rect x="72" y="24" width="56" height="16" rx="8" fill="#000"/>`:`<circle cx="100" cy="31" r="5" fill="#000"/>`)+`<rect x="18" y="16" width="164" height="378" rx="27" fill="url(#${u}g)"/>`;
+    s+=`</g>`+(ip?`<rect x="72" y="24" width="56" height="16" rx="8" fill="#000"/><circle cx="116" cy="32" r="3.4" fill="#10183a" stroke="#27345f"/>`:`<circle cx="100" cy="31" r="5" fill="#000" stroke="#1a1d26" stroke-width="1.5"/>`)+`<rect x="18" y="16" width="164" height="378" rx="27" fill="url(#${u}g)"/>`;
     if(F.scr)s+=`<g clip-path="url(#${u}c)">${crack(sd,cx,cy,175)}</g>`;
     if(hn==='Разбитый экран')s+=ring(cx,cy,66);
     if(hn==='Залипает кнопка')s+=ring(192,160,34);
     if(hn==='Не включается'||hn==='Проблема с платой')s+=ring(100,200,80);
   }else{
     const rc=rng(sd+11),cx=40+rc()*120,cy=150+rc()*200,fk=!!F.fake,brand=ip?'iPhone':sg?(fk?'SAMSUMG':'SAMSUNG'):px?(fk?'Gooqle':'Google'):(fk?'Redrni':'Redmi');
-    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="url(#${u}b)" stroke="rgba(${ink},.35)" stroke-width="2"/><g clip-path="url(#${u}c)"><path d="M10 8H190V140L10 260Z" fill="#fff" fill-opacity=".08"/>`;
+    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="url(#${u}b)" stroke="url(#${u}f)" stroke-width="3"/><g clip-path="url(#${u}c)"><path d="M10 8H190V140L10 260Z" fill="#fff" fill-opacity=".08"/><rect x="10" y="8" width="180" height="394" fill="url(#${u}r)"/>`;
     if(ip){
       s+=pro?`<rect x="22" y="20" width="88" height="90" rx="22" fill="rgba(255,255,255,.14)" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>${lens(48,46,14)}${lens(48,84,14)}${lens(86,65,14)}<circle cx="90" cy="34" r="4.5" fill="#f7f1c8"/><circle cx="90" cy="98" r="3.5" fill="#222"/>`
          :`<rect x="22" y="20" width="76" height="76" rx="20" fill="rgba(255,255,255,.14)" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>${lens(44,42,14)}${lens(72,72,14)}<circle cx="76" cy="36" r="4" fill="#f7f1c8"/>`;
@@ -739,7 +757,7 @@ function vSheet(){
     const d=S.inv.find(x=>x.id===sheet.id);if(!d)return'';
     const kn=d.defs.length===0||d.defs[0].k;
     return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>${nm(d)}</h3><div class="mut">Оценка: ${f(val(d))} · куплено за ${f(d.paid)}</div>`+vwBlock(d,kn)+unlBlock(d)+pgBlock(d)+rpBtn(d,kn)+
-    (d.broke?'<div class="chips"><span class="ch bad">💥 Сломано, годится только на запчасти</span></div>':kn?d.defs.map((x,i)=>`<div class="df"><span ${vdAttr(d,x,i)}>${x.fake?'🚫 Подделка':x.n}<br><span class="mut">${x.fake?'ремонту не подлежит':f(x.c)}</span></span>${x.fx?'<span class="ch ok">Починено</span>':x.fake?'':`<button class="b" data-a="rep" data-i="${d.id}" data-j="${i}">🔧 Чинить</button>`}</div>`).join('')||'<div class="chips"><span class="ch ok">Всё исправно</span></div>':`<div class="chips">${chips(d)}</div><button class="b g" data-a="diag" data-i="${d.id}" style="width:100%">🔍 Диагностика ${f(Math.max(500,r100(val(d)*.002)))}</button>`)+
+    (d.broke?'<div class="chips"><span class="ch bad">💥 Сломано, годится только на запчасти</span></div>':kn?d.defs.map((x,i)=>`<div class="df"><span ${vdAttr(d,x,i)}>${x.fake?'🚫 Подделка':x.n}<br><span class="mut">${x.fake?'ремонту не подлежит':f(x.c)}</span></span>${x.fx?'<span class="ch ok">Починено</span>':x.fake?'':kd(d.key)==='p'?'<span class="ch">🔧 через разбор</span>':`<button class="b" data-a="rep" data-i="${d.id}" data-j="${i}">🔧 Чинить</button>`}</div>`).join('')||'<div class="chips"><span class="ch ok">Всё исправно</span></div>':`<div class="chips">${chips(d)}</div><button class="b g" data-a="diag" data-i="${d.id}" style="width:100%">🔍 Диагностика ${f(Math.max(500,r100(val(d)*.002)))}</button>`)+
     `<div class="acts">${d.sale?'<button class="b g" data-a="tab" data-i="s">💬 Продаётся · к покупателям</button>':`<button class="b ok" data-a="sellopen" data-i="${d.id}">💬 Выставить на продажу</button>`}</div><div class="acts"><button class="b g" data-a="close">Закрыть</button></div></div></div>`;
   }
   if(sheet.t==='insp')return vInsp();
@@ -865,7 +883,7 @@ document.addEventListener('click',e=>{
   else if(a==='lot'){const l=S.lots.find(x=>x.id===i);if(l&&!full(l.items.length)&&!lose(l.price)){l.items.forEach(d=>{d.paid=Math.round(l.price/l.items.length);S.inv.push(d)});S.lots=S.lots.filter(x=>x!==l);toast('Открыто! Внутри предметов: '+l.items.length+', стоимость ~'+f(l.sum))}}
   else if(a==='dev')sheet={t:'dev',id:i};
   else if(a==='diag'){const d=S.inv.find(x=>x.id===i);if(d&&!lose(Math.max(500,r100(val(d)*.002)))){d.defs.forEach(x=>x.k=1);d.offer=0}}
-  else if(a==='rep'){doRep(S.inv.find(x=>x.id===i),j)}
+  else if(a==='rep'){const dd=S.inv.find(x=>x.id===i);if(dd&&kd(dd.key)!=='p')doRep(dd,j)}
   else if(a==='rpopen'){rpOpen(i);return}
   else if(a==='sellopen'){const d=S.inv.find(x=>x.id===i);if(d&&d.pu)toast('Идёт прошивка, подождите');else if(d&&!d.sale)sheet={t:'ask',id:i,p:0}}
   else if(a==='pset'){if(sheet&&sheet.t==='ask')sheet.p=i}
@@ -946,33 +964,62 @@ document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-d
 const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.p){if(g.c!=null){sheet.ang=g.c;sheet.rx=g.cx;sheet.from=null}}else if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
 document.addEventListener('pointerup',dgEnd);document.addEventListener('pointercancel',dgEnd);
 /* ===== Интерактивный ремонт телефона: винты → крышка → замена деталей ===== */
-const RPM={'Разбитый экран':['disp','Дисплей'],'Слабая батарея':['bat','Батарея'],'Не включается':['pmic','Плата питания'],'Проблема с платой':['mb','Материнская плата'],'Разбита задняя крышка':['cov','Задняя крышка'],'Залипает кнопка':['btn','Шлейф кнопок'],'Перегрев':['cool','Система охлаждения'],'Разбито стекло камеры':['cam','Стекло камеры'],'Сломана камера':['cam','Модуль камеры']};
+const RPM={'Разбитый экран':['disp','Дисплей'],'Слабая батарея':['bat','Батарея'],'Не включается':['pmic','Плата питания'],'Проблема с платой':['mb','Материнская плата'],'Разбита задняя крышка':['cov','Задняя крышка'],'Залипает кнопка':['btn','Шлейф кнопок'],'Перегрев':['cool','Система охлаждения'],'Царапины корпуса':['cov','Задняя крышка'],'Разбито стекло камеры':['cam','Стекло камеры'],'Сломана камера':['cam','Модуль камеры']};
 const failP=(d,x)=>Math.min(.65,Math.max(.06,.13+x.c/base(d)*.6-(lvl()-1)*.015));
 function doRep(d,j){const x=d&&d.defs[j];if(!x||x.fx||x.fake||d.broke)return 0;if(lose(x.c))return 0;d.offer=0;
   if(Math.random()<failP(d,x)){if(Math.random()<.3){d.broke=1;toast('💥 Критическая неудача: устройство сломано');return 3}toast('❌ Не получилось, деньги потрачены');return 2}
   x.fx=1;S.fixed++;toast('✅ Починено · '+gain(10));return 1}
-const rpBtn=(d,kn)=>kd(d.key)==='p'&&kn&&!d.broke&&!d.sale&&d.defs.some(x=>!x.fake)?`<button class="b" data-a="rpopen" data-i="${d.id}" style="width:100%;margin:8px 0">🔧 Открыть телефон и чинить</button>`:'';
-let RP=null;
-function rpOpen(id){const d=S.inv.find(x=>x.id===id);if(!d||RP||RF||RA)return;RP={d,pop:0,open:0,sc:[1,1,1,1],sel:'',an:'',res:0};
+const rpBtn=(d,kn)=>kd(d.key)==='p'&&kn&&!d.broke&&!d.sale&&d.defs.some(x=>!x.fake&&!x.fx)?`<button class="b" data-a="rpopen" data-i="${d.id}" style="width:100%;margin:8px 0">🔧 Открыть телефон и чинить</button>`:'';
+let RP=null,RPD=null,RPT=0;
+const RPI={cam:'📷',mb:'🧠',pmic:'⚡',cool:'❄️',bat:'🔋',btn:'🔘',disp:'📱',cov:'🧩'};
+function rpOpen(id){const d=S.inv.find(x=>x.id===id);if(!d||RP||RF||RA)return;RP={d,pop:0,open:0,cl:0,sel:'',an:'',res:0,fx:'',msg:''};
   const el=document.createElement('div');el.id='rp';document.body.appendChild(el);el.addEventListener('click',rpC);rpR()}
-function rpX(){if(!RP)return;const e=$('#rp');if(e)e.remove();RP=null;render()}
-function rpR(){const R=RP,el=$('#rp');if(!R||!el)return;const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx),fix=k=>of(k).length&&!bad(k);
-  const left=d.defs.filter(x=>RPM[x.n]&&!x.fx).length;let body,pn='';
-  if(!R.open){const rem=R.sc.filter(Boolean).length;
-    body=`<div class="rpw${R.pop?' off':''}">${face(d,1,1,null)}${[[15,6],[85,6],[15,94],[85,94]].map((q,i)=>`<button class="rps${R.sc[i]?'':' out'}" data-q="sc" data-i="${i}" style="left:${q[0]}%;top:${q[1]}%"></button>`).join('')}</div><div class="rpm">${rem?'🔩 Выкрути винты, тапай по ним · осталось '+rem:'Винты сняты. Подцепи крышку'}</div>${rem?'':'<button class="rpb" data-q="pop">🪝 Снять заднюю крышку</button>'}`}
-  else{const part=(k,x,y,w,h,t)=>{const b=bad(k),sw=R.an===k;return`<g data-p="${k}" class="rpp${b?' bad':''}${fix(k)?' good':''}${R.sel===k?' sel':''}${sw&&R.res===1?' swap':''}${sw&&R.res===2?' shake':''}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9"/><text x="${x+w/2}" y="${y+h/2+4}" text-anchor="middle">${t}</text>${b?`<path class="crk" d="M${x+8} ${y+6}l${w/3} ${h/2}l${w/5} ${-h/4}l${w/3} ${h/2}"/>`:''}</g>`};
-    const cov=of('cov')[0];
-    body=`<div class="rpi"><svg viewBox="0 0 200 410"><rect x="10" y="8" width="180" height="394" rx="34" fill="#10141d" stroke="#555d70" stroke-width="2"/>${part('cam',22,22,64,64,'Камера')}${part('mb',96,22,82,62,'Плата')}${part('pmic',96,92,82,44,'Питание')}${part('cool',22,96,64,40,'Охлажд.')}${part('bat',22,148,156,150,'Батарея')}${part('btn',22,310,156,26,'Шлейф кнопок')}${part('disp',22,346,156,48,'Дисплей (шлейф)')}</svg></div>`+(cov?`<button class="rpc ${bad('cov')?'bad':'good'}${R.sel==='cov'?' sel':''}" data-p="cov">🧩 Задняя крышка (снята) · ${bad('cov')?'разбита, нужна замена':'заменена ✔'}</button>`:'');
+function rpX(){if(RPD){RPD.g.remove();RPD=null}if(!RP)return;const e=$('#rp');if(e)e.remove();RP=null;render()}
+function rpSvg(R){const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx),fix=k=>of(k).length&&!bad(k);
+  const B={cam:'#0e1119',mb:'#0e3a2d',pmic:'#162235',cool:'#3a2a1c',bat:'#1a2230',btn:'#3a2a14',disp:'#132033'},
+  chip=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="#1b202b" stroke="#465068"/>`,
+  D={cam:'<circle cx="54" cy="50" r="21" fill="#05070b" stroke="#8a91a3" stroke-width="3"/><circle cx="54" cy="50" r="14" fill="#13203f"/><circle cx="54" cy="50" r="7" fill="#2c4f94"/><circle cx="48" cy="44" r="3" fill="#fff" fill-opacity=".6"/><circle cx="76" cy="30" r="3.5" fill="#f4e6a0"/>',
+  mb:'<path d="M100 78h20V66h14M138 30v12h30" stroke="#2fb384" stroke-opacity=".6" fill="none"/>'+chip(104,30,30,26)+chip(141,30,28,16)+chip(141,52,12,12)+chip(104,62,20,12)+[0,1,2,3].map(i=>`<circle cx="${132+i*9}" cy="72" r="2" fill="#d6b24a"/>`).join(''),
+  pmic:chip(106,100,30,26)+'<rect x="144" y="100" width="26" height="8" rx="2" fill="#222836"/><rect x="144" y="112" width="26" height="8" rx="2" fill="#222836"/>',
+  cool:[0,1,2,3,4,5].map(i=>`<rect x="${28+i*10}" y="102" width="5" height="22" rx="2" fill="#d98e4f"/>`).join(''),
+  bat:'<rect x="30" y="156" width="140" height="124" rx="10" fill="#27314a" stroke="#3a4766"/><path d="M104 168l-12 20h9l-5 16 14-22h-9z" fill="#ffd24a"/><text x="100" y="236" text-anchor="middle" font-size="13" font-weight="700" fill="#9fb2dd" font-family="system-ui,sans-serif">Li-Ion</text><text x="100" y="252" text-anchor="middle" font-size="10" fill="#7f90b8" font-family="system-ui,sans-serif">4500 mAh</text><rect x="60" y="283" width="80" height="6" rx="3" fill="#e8873a"/>',
+  btn:'<rect x="26" y="315" width="148" height="12" rx="3" fill="#c98a2e" fill-opacity=".5"/><path d="M30 321h140" stroke="#f0c46a" stroke-dasharray="6 3"/>',
+  disp:'<rect x="30" y="352" width="60" height="9" rx="2" fill="#c9a24a"/><rect x="96" y="352" width="76" height="9" rx="2" fill="#1d2c47"/><path d="M30 371h140M30 378h140" stroke="#2c4470"/>'};
+  const part=(k,x,y,w,h,t)=>{const bd=bad(k),an=R.an===k;
+    return`<g data-p="${k}" class="rpp${bd?' bad':''}${fix(k)?' good':''}${R.sel===k?' sel':''}${an&&R.res===1?' swap':''}${an&&R.res===2?' shake':''}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${B[k]}" stroke="#2f3a52" stroke-width="1.5"/>${D[k]}<text x="${x+6}" y="${y+h-5}" class="lb">${t}</text><rect class="bdov" x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="#ff2d2d" fill-opacity=".28" stroke="#ff4d4d" stroke-width="2"/><path class="bdov" d="M${x+8} ${y+6}l${w/3} ${h/2}l${w/5} ${-h/4}l${w/3} ${h/2}" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="2"/><rect class="gd" x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="none" stroke="#7dff9b" stroke-width="2"/><circle class="gd" cx="${x+w-9}" cy="${y+9}" r="7" fill="#16a05a"/><path class="gd" d="M${x+w-12} ${y+9}l2.5 2.5 4.5-5" stroke="#fff" fill="none" stroke-width="1.8"/><rect class="tg" x="${x-3}" y="${y-3}" width="${w+6}" height="${h+6}" rx="12"/></g>`};
+  return`<svg viewBox="0 0 200 410"><defs><linearGradient id="rpmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9cfdc"/><stop offset=".5" stop-color="#5a6175"/><stop offset="1" stop-color="#aab0c0"/></linearGradient></defs><rect x="5" y="96" width="6" height="30" rx="2" fill="#4a5266"/><rect x="5" y="136" width="6" height="46" rx="2" fill="#4a5266"/><rect x="189" y="128" width="6" height="64" rx="2" fill="#4a5266"/><rect x="10" y="8" width="180" height="394" rx="34" fill="#0b0e15" stroke="url(#rpmg)" stroke-width="3.5"/><rect x="17" y="15" width="166" height="380" rx="28" fill="#10151f" stroke="#1d2536"/>${part('cam',22,22,64,64,'Камера')}${part('mb',96,22,82,62,'Плата')}${part('pmic',96,92,82,44,'Питание')}${part('cool',22,96,64,40,'Охлажд.')}${part('bat',22,148,156,150,'Батарея')}${part('btn',22,310,156,26,'Шлейф кнопок')}${part('disp',22,346,156,48,'Дисплей (шлейф)')}</svg>`}
+function rpR(){const R=RP,el=$('#rp');if(!R||!el)return;const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx);
+  const left=d.defs.filter(x=>RPM[x.n]&&!x.fx).length,st=!R.open?1:left?2:3,fx=R.fx;R.fx='';
+  const steps=['Снять крышку','Заменить детали','Собрать'].map((t,i)=>`<span class="${st===i+1?'on':st>i+1?'dn':''}">${i+1}. ${t}</span>`).join('');
+  let main,pn='',act='';
+  if(!R.open){main=`<div class="rpmain c"><div class="rpstage">${R.pop?`<div class="rpint u">${rpSvg(R)}</div>`:''}<div class="rplid ${R.pop?'lift':'glow'}">${face(d,1,1,null)}</div></div></div>`;
+    act=R.pop?'':`<div class="rpm">Крышка держится на защёлках — поддень её и сними</div><button class="rpb" data-q="pop">🪝 Поддеть и снять заднюю крышку</button>`}
+  else if(R.cl)main=`<div class="rpmain c"><div class="rpstage"><div class="rpint u">${rpSvg(R)}</div><div class="rplid land">${face(d,1,1,null)}</div></div></div>`;
+  else{const cb=bad('cov');
+    const chips=d.broke?'':d.defs.map((x,j)=>RPM[x.n]&&!x.fx&&!x.fake?`<div class="rpt" data-j="${j}" data-k="${RPM[x.n][0]}"><i>${RPI[RPM[x.n][0]]}</i><span><b>${RPM[x.n][1]}</b><small>${x.n} · риск ${Math.round(failP(d,x)*100)}%</small></span><em>${f(x.c)}</em></div>`:'').join('');
+    main=`<div class="rpmain"><div class="rpstage"><div class="rpint${fx==='open'?' in':''}">${rpSvg(R)}</div></div><div class="rpside"><div class="rpcov ${cb?'bad':'good'}" data-p="cov"><div class="rpcf">${face(d,1,1,null)}</div><span><b>Задняя крышка</b><small>снята · ${cb?'повреждена, замени':'в порядке ✔'}</small></span></div><div class="rpth">🧰 Новые детали<small>перетащи на сломанную деталь</small></div><div class="rptray">${chips||'<div class="rpe">Заменять больше нечего ✔</div>'}</div></div></div>`;
     const k=R.sel,x=k?of(k).find(y=>!y.fx):null;
-    pn=d.broke?'<div class="rpn">💥 Устройство сломано. Годится только на запчасти.</div>':!k?'<div class="rpn rpm">Тапни по детали. Красным мигают сломанные.</div>':x?`<div class="rpn"><b>${RPM[x.n][1]}</b> · ${x.n}<br>Новая деталь: <b>${f(x.c)}</b> · риск неудачи ~${Math.round(failP(d,x)*100)}%<button class="rpb" data-q="swap">🔧 Заменить деталь</button></div>`:`<div class="rpn">✔ Деталь исправна${of(k).length?' (заменена)':''}.</div>`}
-  el.innerHTML=`<div class="rph"><span>🔧 ${esc(nm(d))}</span><button data-q="x">✕</button></div><div class="rpm">Баланс: ${f(S.bal)}${R.open?' · сломано деталей: '+left:''}</div>${body}${pn}${R.open?`<button class="rpb ${left?'g':'ok'}" data-q="x">${left?'Закрыть крышку и выйти':'✅ Собрать телефон'}</button>`:''}`}
-function rpC(e){const R=RP;if(!R)return;const p=e.target.closest('[data-p]'),t=e.target.closest('[data-q]');
-  if(p){R.sel=p.dataset.p;R.an='';rpR();return}if(!t)return;const q=t.dataset.q,i=+t.dataset.i;
+    pn=d.broke?'<div class="rpn">💥 Устройство сломано. Годится только на запчасти.</div>':R.msg?`<div class="rpn">${R.msg}</div>`:x?`<div class="rpn"><b>${RPM[x.n][1]}</b> · ${x.n}<br>Новая деталь ${f(x.c)} · риск неудачи ~${Math.round(failP(d,x)*100)}%. Перетащи её из лотка на эту деталь.</div>`:`<div class="rpn rpm">${left?'Красным мигают сломанные детали. Перетащи подходящую новую деталь прямо на неё':'Все детали заменены — можно собирать'}</div>`;
+    act=`<button class="rpb ${left?'g':'ok'}" data-q="done">${left?'Закрыть крышку и выйти':'✅ Собрать телефон'}</button>`}
+  el.innerHTML=`<div class="rph"><span>🔧 ${esc(nm(d))}</span><button data-q="x">✕</button></div><div class="rpsteps">${steps}</div><div class="rpm">Баланс: ${f(S.bal)}${R.open?' · сломано деталей: '+left:''}</div>${main}${pn}${act}`}
+function rpC(e){const R=RP;if(!R||R.cl||Date.now()<RPT)return;const p=e.target.closest('[data-p]'),t=e.target.closest('[data-q]');
+  if(p&&R.open){R.sel=p.dataset.p;R.msg='';rpR();return}if(!t)return;const q=t.dataset.q;
   if(q==='x')rpX();
-  else if(q==='sc'){R.sc[i]=0;rpR()}
-  else if(q==='pop'){R.pop=1;rpR();setTimeout(()=>{if(RP===R){R.open=1;rpR()}},600)}
-  else if(q==='swap'){const d=R.d,j=d.defs.findIndex(x=>RPM[x.n]&&RPM[x.n][0]===R.sel&&!x.fx);if(j<0)return;
-    const r=doRep(d,j);if(!r)return;R.res=r;R.an=R.sel;save();render(1);rpR();setTimeout(()=>{R.an=''},900)}}
+  else if(q==='pop'){R.pop=1;rpR();setTimeout(()=>{if(RP===R){R.open=1;R.fx='open';rpR()}},750)}
+  else if(q==='done'){if(!R.open)return rpX();R.cl=1;rpR();setTimeout(()=>{if(RP===R){const ok=!R.d.defs.some(x=>RPM[x.n]&&!x.fx);rpX();toast(ok?'📱 Телефон собран':'📱 Крышка закрыта')}},700)}}
+const rpUnder=e=>{const u=document.elementFromPoint(e.clientX,e.clientY);return u&&u.closest?u.closest('#rp [data-p]'):null};
+document.addEventListener('pointerdown',e=>{const t=RP&&!RP.cl&&e.target.closest&&e.target.closest('.rpt');if(!t||RPD)return;e.preventDefault();
+  const g=t.cloneNode(true);g.classList.add('rpg');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';document.body.appendChild(g);t.classList.add('lift');
+  RPD={g,t,k:t.dataset.k,j:+t.dataset.j,h:null};
+  document.querySelectorAll('#rp .rpp.bad[data-p="'+RPD.k+'"],#rp .rpcov.bad[data-p="'+RPD.k+'"]').forEach(n=>n.classList.add('tgt'))});
+document.addEventListener('pointermove',e=>{if(!RPD)return;RPD.g.style.left=e.clientX+'px';RPD.g.style.top=e.clientY+'px';const h=rpUnder(e);
+  if(h!==RPD.h){if(RPD.h)RPD.h.classList.remove('hov');RPD.h=h;if(h&&h.dataset.p===RPD.k)h.classList.add('hov')}});
+const rpDEnd=(e,c)=>{const D=RPD;if(!D)return;RPD=null;RPT=Date.now()+250;D.g.remove();D.t.classList.remove('lift');
+  document.querySelectorAll('#rp .tgt,#rp .hov').forEach(n=>n.classList.remove('tgt','hov'));
+  const R=RP;if(!R||c)return;const h=rpUnder(e);if(!h)return;
+  if(h.dataset.p!==D.k){R.msg='❌ Эта деталь сюда не подходит — ищи место, подсвеченное жёлтым';R.sel='';R.an=h.dataset.p;R.res=2;rpR();setTimeout(()=>{R.an=''},600);return}
+  const r=doRep(R.d,D.j);if(!r)return;R.res=r;R.an=D.k;R.msg='';R.sel='';save();render(1);rpR();setTimeout(()=>{R.an=''},900)};
+document.addEventListener('pointerup',e=>rpDEnd(e));document.addEventListener('pointercancel',e=>rpDEnd(e,1));
 
 /* ===== Перепрошивка iPhone (DFU → прошивка → прошивка → активация) ===== */
 let RF=null;
