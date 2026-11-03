@@ -170,7 +170,7 @@ const EVS=[{t:'📈 Ажиотаж на телефоны: цены +15%',c:'p',m
 const TIERS=[['📦 Коробка с барахолки',2,3,.78],['🧳 Чемодан из ломбарда',3,4,.8],['🏚 Контейнер с аукциона',4,6,.82]];
 const MAIN_IDS=[7192529760];            // главные админы (Telegram ID)
 const ADMIN_IDS=[997042938];          // обычные админы (Telegram ID)
-const API='';                          // адрес вашего сервера для управления игроками, напр. 'https://example.com/api'
+const API='https://delicate-moon-7638.artemaleksandrovsteam.workers.dev';
 const TR_MIN=100;                      // минимальный перевод, ₽
 let TGID=0,INIT='',TGN='',TOP=null,TOPME=null,trBusy=0;
 const isMain=()=>MAIN_IDS.includes(TGID);
@@ -184,7 +184,57 @@ const BAL={fee:.04,refresh:3e5,sellLo:.97,sellHi:1.15,buyLo:.8,buyHi:1.15,ordLo:
 let sheet=null,arm=false;
 function fresh(){const s={bal:30000,rep:100,exp:0,uid:0,inv:[],mk:[],lots:[],ord:[],ev:null,next:Date.now()+18e4,flt:'a',tab:'m',sold:0,earn:0,fixed:0,bonus:0,chat:{},pc:1,own:0,bm:[],sl:[],bd:{},cap:8,ach:{},dr:{},dd:{},cn:0,t0:Date.now(),skx:0,pv:0,tx:[],done:[],pend:[]};return s}
 function load(){try{const j=localStorage.getItem(KEY);if(j)return JSON.parse(j)}catch(e){}return null}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let cloudReady=false,cloudTimer=null,cloudBusy=false,cloudAgain=false;
+function cloudPost(action,state){
+  return fetch(API+'/state',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({initData:INIT,action,state})}).then(async r=>{
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
+      return j;
+    });
+}
+function scheduleCloudSave(){
+  if(!cloudReady||!API||!TGID)return;
+  clearTimeout(cloudTimer);
+  cloudTimer=setTimeout(async()=>{
+    if(cloudBusy){cloudAgain=true;return}
+    cloudBusy=true;
+    try{await cloudPost('save',S)}
+    catch(e){console.warn('Cloud save failed:',e)}
+    finally{cloudBusy=false;if(cloudAgain){cloudAgain=false;scheduleCloudSave()}}
+  },900);
+}
+async function cloudLoad(){
+  if(!API||!TGID||!INIT)return;
+  try{
+    const j=await cloudPost('load');
+    if(j.state && typeof j.state==='object'){
+      S=j.state;
+      S.chat=S.chat||{};S.pc=S.pc||1;S.own=S.own||0;S.bm=S.bm||[];S.sl=S.sl||[];
+      S.bd=S.bd||{};S.cap=S.cap||8;S.ach=S.ach||{};S.dr=S.dr||{};S.dd=S.dd||{};
+      S.cn=S.cn||0;S.t0=S.t0||Date.now();S.skx=S.skx||0;S.pv=S.pv||0;
+      S.tx=S.tx||[];S.done=S.done||[];S.pend=S.pend||[];
+      try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+    }else if(!S){
+      S=fresh();regen();
+      await cloudPost('save',S);
+    }else{
+      // Первый вход: переносим локальный прогресс в облако, только если в D1 ещё нет сохранения.
+      await cloudPost('save',S);
+    }
+    cloudReady=true;
+    render();
+  }catch(e){
+    console.warn('Cloud load failed:',e);
+    // Не блокируем игру при временной недоступности сервера.
+    cloudReady=false;
+    render();
+  }
+}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  scheduleCloudSave();
+}
 let S=load();if(S){S.chat=S.chat||{};S.pc=S.pc||1;S.own=S.own||0;S.bm=S.bm||[];S.sl=S.sl||[];S.bd=S.bd||{};S.cap=S.cap||8;S.ach=S.ach||{};S.dr=S.dr||{};S.dd=S.dd||{};S.cn=S.cn||0;S.t0=S.t0||Date.now();S.skx=S.skx||0;S.pv=S.pv||0;S.tx=S.tx||[];S.done=S.done||[];S.pend=S.pend||[]}
 const lvl=()=>Math.floor((1+Math.sqrt(1+S.exp/12.5+1e-9))/2); // ур.2=100, ур.3=300, ур.4=600, ур.5=1000, ур.6=1500, ур.8=2800 опыта
 const mult=k=>(S.ev&&S.ev.c===I[k][2]?S.ev.m:1)*(S.dr[k]||1);
@@ -834,7 +884,7 @@ setInterval(()=>{
   const l=Math.max(0,Math.ceil((S.next-Date.now())/1000)),e=$('#cd');
   if(e)e.textContent=Math.floor(l/60)+':'+String(l%60).padStart(2,'0');
 },1000);
-try{const sc=document.createElement('script');sc.src='https://telegram.org/js/telegram-web-app.js';sc.async=true;sc.onload=()=>{try{const w=window.Telegram&&window.Telegram.WebApp;if(w){try{TGID=Number(w.initDataUnsafe.user.id)||0;TGN=w.initDataUnsafe.user.first_name||'';INIT=w.initData||''}catch(e){}w.ready();w.expand();try{w.disableVerticalSwipes()}catch(e){}try{w.setHeaderColor('#2f7bff')}catch(e){}render()}}catch(e){}};document.head.appendChild(sc)}catch(e){}
+try{const sc=document.createElement('script');sc.src='https://telegram.org/js/telegram-web-app.js';sc.async=true;sc.onload=()=>{try{const w=window.Telegram&&window.Telegram.WebApp;if(w){try{TGID=Number(w.initDataUnsafe.user.id)||0;TGN=w.initDataUnsafe.user.first_name||'';INIT=w.initData||''}catch(e){}w.ready();w.expand();try{w.disableVerticalSwipes()}catch(e){}try{w.setHeaderColor('#2f7bff')}catch(e){}if(API&&TGID)cloudLoad();else render()}}catch(e){}};document.head.appendChild(sc)}catch(e){}
 setInterval(pollCmd,10000);setInterval(fetchTop,30000);setTimeout(fetchTop,4000);setTimeout(pollCmd,2500);setInterval(trFlush,8000);setTimeout(trFlush,3000);
 let dg=null;
 document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.closest('.vw');if(!w||!sheet)return;const i=w.querySelector('.vi');dg={i,x:e.clientX,y:e.clientY,a:sheet.ang||0,r:sheet.rx||0,c:null,cx:0,p:w.classList.contains('p3')};i.classList.add('dr');try{w.setPointerCapture(e.pointerId)}catch(_){}});
