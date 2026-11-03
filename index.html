@@ -815,7 +815,7 @@ function vSheet(){
     const d=S.inv.find(x=>x.id===sheet.id);if(!d)return'';
     const kn=d.defs.length===0||d.defs[0].k;
     return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>${nm(d)}</h3><div class="mut">Оценка: ${f(val(d))} · куплено за ${f(d.paid)}</div>`+vwBlock(d,kn)+unlBlock(d)+pgBlock(d)+rpBtn(d,kn)+
-    (d.broke?'<div class="chips"><span class="ch bad">💥 Сломано, годится только на запчасти</span></div>':kn?d.defs.map((x,i)=>`<div class="df"><span ${vdAttr(d,x,i)}>${x.fake?'🚫 Подделка':x.n}<br><span class="mut">${x.fake?'ремонту не подлежит':f(x.c)}</span></span>${x.fx?'<span class="ch ok">Починено</span>':x.fake?'':kd(d.key)==='p'?'<span class="ch">🔧 через разбор</span>':`<button class="b" data-a="rep" data-i="${d.id}" data-j="${i}">🔧 Чинить</button>`}</div>`).join('')||'<div class="chips"><span class="ch ok">Всё исправно</span></div>':`<div class="chips">${chips(d)}</div><button class="b g" data-a="diag" data-i="${d.id}" style="width:100%">🔍 Диагностика ${f(Math.max(500,r100(val(d)*.002)))}</button>`)+
+    (d.broke?'<div class="chips"><span class="ch bad">💥 Сломано, годится только на запчасти</span></div>':kn?d.defs.map((x,i)=>`<div class="df"><span ${vdAttr(d,x,i)}>${x.fake?'🚫 Подделка':x.n}<br><span class="mut">${x.fake?'ремонту не подлежит':f(x.c)}</span></span>${x.fx?'<span class="ch ok">Починено</span>':x.fake?'':'<span class="ch">🔧 через разбор</span>'}</div>`).join('')||'<div class="chips"><span class="ch ok">Всё исправно</span></div>':`<div class="chips">${chips(d)}</div><button class="b g" data-a="diag" data-i="${d.id}" style="width:100%">🔍 Диагностика ${f(Math.max(500,r100(val(d)*.002)))}</button>`)+
     `<div class="acts">${d.sale?'<button class="b g" data-a="tab" data-i="s">💬 Продаётся · к покупателям</button>':`<button class="b ok" data-a="sellopen" data-i="${d.id}">💬 Выставить на продажу</button>`}</div><div class="acts"><button class="b g" data-a="close">Закрыть</button></div></div></div>`;
   }
   if(sheet.t==='insp')return vInsp();
@@ -941,7 +941,7 @@ document.addEventListener('click',e=>{
   else if(a==='lot'){const l=S.lots.find(x=>x.id===i);if(l&&!full(l.items.length)&&!lose(l.price)){l.items.forEach(d=>{d.paid=Math.round(l.price/l.items.length);S.inv.push(d)});S.lots=S.lots.filter(x=>x!==l);toast('Открыто! Внутри предметов: '+l.items.length+', стоимость ~'+f(l.sum))}}
   else if(a==='dev')sheet={t:'dev',id:i};
   else if(a==='diag'){const d=S.inv.find(x=>x.id===i);if(d&&!lose(Math.max(500,r100(val(d)*.002)))){d.defs.forEach(x=>x.k=1);d.offer=0}}
-  else if(a==='rep'){const dd=S.inv.find(x=>x.id===i);if(dd&&kd(dd.key)!=='p')doRep(dd,j)}
+  else if(a==='rep'){const dd=S.inv.find(x=>x.id===i);/* прямой ремонт отключён: только через вскрытие */}
   else if(a==='rpopen'){rpOpen(i);return}
   else if(a==='sellopen'){const d=S.inv.find(x=>x.id===i);if(d&&d.pu)toast('Идёт прошивка, подождите');else if(d&&!d.sale)sheet={t:'ask',id:i,p:0}}
   else if(a==='pset'){if(sheet&&sheet.t==='ask')sheet.p=i}
@@ -1081,12 +1081,12 @@ const rpDEnd=(e,c)=>{const D=RPD;if(!D)return;RPD=null;RPT=Date.now()+250;D.g.re
 document.addEventListener('pointerup',e=>rpDEnd(e));document.addEventListener('pointercancel',e=>rpDEnd(e,1));
 
 /* ===== 🔧 Ремонт ноутбуков, ПК и приставок: винты → крышка → замена деталей (3D) ===== */
-const RDI={cam:'📷',mb:'🧠',pmic:'⚡',cool:'❄️',bat:'🔋',btn:'🔘',disp:'🖥',cov:'🧩',hdmi:'🔌',wifi:'📶'};
-const RDN={mb:'Плата',pmic:'Питание',cool:'Охлажд.',bat:'Батарея',btn:'Кнопки',disp:'Шлейф матрицы',hdmi:'HDMI',wifi:'Wi‑Fi'};
+const RDI={cam:'📷',mb:'🧠',pmic:'⚡',cool:'❄️',bat:'🔋',btn:'🔘',disp:'🖥',cov:'🧩',hdmi:'🔌',wifi:'📶',rem:'🎮'};
+const RDN={rem:'Пульт',mb:'Плата',pmic:'Питание',cool:'Охлажд.',bat:'Батарея',btn:'Кнопки',disp:'Шлейф матрицы',hdmi:'HDMI',wifi:'Wi‑Fi'};
 const RDL={l:{disp:[4,4,92,13],cool:[5,21,27,38],mb:[35,21,34,38],pmic:[72,21,23,38],bat:[5,63,64,33],btn:[72,63,23,33]},
  d:{mb:[6,4,64,48],cool:[73,4,21,26],btn:[73,34,21,13],pmic:[6,80,88,16]},
  s:{mb:[5,10,45,80],pmic:[54,10,41,26],cool:[54,40,41,22],btn:[54,66,41,24]},
- t:{mb:[5,10,40,80],pmic:[49,10,46,26],cool:[49,40,46,22],hdmi:[49,66,21,24],wifi:[74,66,21,24]}};
+ t:{mb:[5,10,40,50],rem:[5,64,40,26],pmic:[49,10,46,26],cool:[49,40,46,22],hdmi:[49,66,21,24],wifi:[74,66,21,24]}};
 const RDS={l:[[8,12],[50,9],[92,12],[8,88],[50,91],[92,88]],d:[[12,7],[88,7],[12,93],[88,93]],s:[[8,14],[92,14],[8,86],[92,86]],t:[[8,16],[92,16],[8,84],[92,84]]};
 function RDK(d){const k=kd(d.key),n=nm(d);
   return k==='l'?{L:'l',ty:'lift',W:292,H:190,D:16,sd:1,ox:14,oy:24,ln:'Снять нижнюю панель',wc:'#8d94a6'}
@@ -1103,6 +1103,7 @@ function RDM(d,x){if(x.fake)return 0;const n=x.n,k=kd(d.key),l=k==='l',c=k==='d'
   else if(/Разбитый экран/.test(n))r=['disp','Матрица'];
   else if(/HDMI/.test(n))r=['hdmi','Порт HDMI'];
   else if(/Wi/.test(n))r=['wifi','Wi‑Fi модуль'];
+  else if(/пульта/.test(n))r=['rem','Модуль пульта (Bluetooth)'];
   return r&&(r[0]==='cov'||L[r[0]])?r:0}
 const rpLeft=d=>kd(d.key)==='p'?d.defs.filter(x=>RPM[x.n]&&!x.fx).length:d.defs.filter(x=>RDM(d,x)&&!x.fx).length;
 function rdR(){const R=RP,el=$('#rp');if(!R||!el)return;const d=R.d,K=RDK(d),lay=RDL[K.L],SC=RDS[K.L],m=x=>RDM(d,x),of=k=>d.defs.filter(x=>m(x)&&m(x)[0]===k),bad=k=>of(k).some(x=>!x.fx),
