@@ -152,6 +152,37 @@ nav button.on i{background:rgba(47,123,255,.15)}
 @keyframes rpswap{0%{transform:none;opacity:1}35%{transform:translateY(-44px);opacity:0}65%{transform:translateY(44px);opacity:0}100%{transform:none;opacity:1}}
 @keyframes rpsh{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
 .rpn{background:#131a27;border:1px solid #24304a;border-radius:14px;padding:12px;margin:8px 0}
+
+/* --- 3D-ремонт: ноутбук / ПК / приставка --- */
+.rd3{height:min(330px,82vw);perspective:900px;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:grab;margin:8px 0;border-radius:18px;background:radial-gradient(circle at 50% 45%,#1c2a47,#0b0f16 75%);border:1px solid #1f2a40;user-select:none;-webkit-user-select:none}
+.rd3.o{touch-action:pan-y;cursor:default}
+.rdm{position:relative;transform-style:preserve-3d}
+.rdm>div{position:absolute}
+.rdw{pointer-events:none;background-image:linear-gradient(90deg,rgba(255,255,255,.18),rgba(0,0,0,.28))}
+.rdbed{left:0;top:0;width:100%;height:100%;background:linear-gradient(135deg,#0c2a24,#0a1a2a);border-radius:12px;border:2px solid #1f2a40;box-shadow:inset 0 0 24px #000}
+.rdcv{left:0;top:0;width:100%;height:100%;border-radius:14px;overflow:hidden;transform:translateZ(var(--z));box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+.rdsv{position:absolute;width:320px;height:240px;pointer-events:none}.rdsv svg{width:100%;height:100%;display:block}
+.k-lift .rdcv{--o:translateZ(var(--z)) translate3d(0,-85%,70px) rotateX(35deg);--oo:0}
+.k-hood .rdcv{transform-origin:50% 0;--o:translateZ(var(--z)) rotateX(82deg);--oo:.92}
+.k-door .rdcv{transform-origin:0 50%;--o:translateZ(var(--z)) rotateY(-112deg);--oo:1}
+.rdcv.pop{animation:rdo .8s cubic-bezier(.4,.1,.2,1) forwards;pointer-events:none}
+.rdcv.off{transform:var(--o);opacity:var(--oo);pointer-events:none}
+.rdcv.land{animation:rdl .7s cubic-bezier(.3,.1,.2,1) both}
+@keyframes rdo{to{transform:var(--o);opacity:var(--oo)}}
+@keyframes rdl{from{transform:var(--o);opacity:var(--oo)}}
+.rds{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:0;padding:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#eef1f8,#7d869a 60%,#4a5266);box-shadow:0 2px 4px rgba(0,0,0,.6);cursor:pointer;outline:2px solid rgba(255,210,74,.75);outline-offset:3px}
+.rds::before,.rds::after{content:"";position:absolute;left:5px;right:5px;top:12px;height:2px;background:#2a3040;border-radius:1px}.rds::after{transform:rotate(90deg)}
+.rds.out{animation:rdso .45s forwards;pointer-events:none}
+@keyframes rdso{to{transform:rotate(540deg) scale(1.8);opacity:0}}
+.rds.hole,.rds:disabled{background:radial-gradient(#05070b 45%,#2a3040);box-shadow:inset 0 1px 3px #000;cursor:default;outline:0}
+.rds.hole::before,.rds.hole::after,.rds:disabled::before,.rds:disabled::after{display:none}
+.rdp{position:absolute;border-radius:8px;border:1.5px solid #2f3a52;background:linear-gradient(#1b2438,#121a29);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#cfd8ea;cursor:pointer;overflow:hidden;text-align:center}
+.rdp i{font-style:normal;font-size:20px;line-height:1}.rdp b{font:700 8.5px/1.1 system-ui,sans-serif;margin-top:2px}
+.rdp.rdx{pointer-events:none;opacity:.7}
+.rdp.bad{border-color:#ff4d4d;background:linear-gradient(#4a1c22,#2a1016);animation:rdb .8s ease-in-out infinite alternate}
+@keyframes rdb{to{box-shadow:0 0 14px 2px #ff4d4d;filter:brightness(1.4)}}
+.rdp.good{border-color:#7dff9b}.rdp.good::after{content:"✓";position:absolute;right:3px;top:1px;color:#7dff9b;font-weight:800;font-size:11px}
+.rdp.sel{border-color:#ffd24a}.rdp.tgt{outline:2px dashed #ffd24a;outline-offset:2px}.rdp.hov{box-shadow:0 0 10px #ffd24a}
 </style>
 </head>
 <body>
@@ -969,10 +1000,10 @@ const failP=(d,x)=>Math.min(.65,Math.max(.06,.13+x.c/base(d)*.6-(lvl()-1)*.015))
 function doRep(d,j){const x=d&&d.defs[j];if(!x||x.fx||x.fake||d.broke)return 0;if(lose(x.c))return 0;d.offer=0;
   if(Math.random()<failP(d,x)){if(Math.random()<.3){d.broke=1;toast('💥 Критическая неудача: устройство сломано');return 3}toast('❌ Не получилось, деньги потрачены');return 2}
   x.fx=1;S.fixed++;toast('✅ Починено · '+gain(10));return 1}
-const rpBtn=(d,kn)=>kd(d.key)==='p'&&kn&&!d.broke&&!d.sale&&d.defs.some(x=>!x.fake&&!x.fx)?`<button class="b" data-a="rpopen" data-i="${d.id}" style="width:100%;margin:8px 0">🔧 Открыть телефон и чинить</button>`:'';
+const rpBtn=(d,kn)=>(kd(d.key)==='p'||hasView(d.key))&&kn&&!d.broke&&!d.sale&&d.defs.some(x=>!x.fake&&!x.fx)?`<button class="b" data-a="rpopen" data-i="${d.id}" style="width:100%;margin:8px 0">🔧 ${{p:'Открыть телефон',l:'Открыть ноутбук',d:'Открыть ПК',t:'Вскрыть приставку'}[kd(d.key)]} и чинить</button>`:'';
 let RP=null,RPD=null,RPT=0;
 const RPI={cam:'📷',mb:'🧠',pmic:'⚡',cool:'❄️',bat:'🔋',btn:'🔘',disp:'📱',cov:'🧩'};
-function rpOpen(id){const d=S.inv.find(x=>x.id===id);if(!d||RP||RF||RA)return;RP={d,pop:0,open:0,cl:0,sel:'',an:'',res:0,fx:'',msg:''};
+function rpOpen(id){const d=S.inv.find(x=>x.id===id);if(!d||RP||RF||RA)return;RP={d,pop:0,open:0,cl:0,sel:'',an:'',res:0,fx:'',msg:'',sc:[],rx:-32,ry:-24};
   const el=document.createElement('div');el.id='rp';document.body.appendChild(el);el.addEventListener('click',rpC);rpR()}
 function rpX(){if(RPD){RPD.g.remove();RPD=null}if(!RP)return;const e=$('#rp');if(e)e.remove();RP=null;render()}
 function rpSvg(R){const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx),fix=k=>of(k).length&&!bad(k);
@@ -988,7 +1019,7 @@ function rpSvg(R){const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),
   const part=(k,x,y,w,h,t)=>{const bd=bad(k),an=R.an===k;
     return`<g data-p="${k}" class="rpp${bd?' bad':''}${fix(k)?' good':''}${R.sel===k?' sel':''}${an&&R.res===1?' swap':''}${an&&R.res===2?' shake':''}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${B[k]}" stroke="#2f3a52" stroke-width="1.5"/>${D[k]}<text x="${x+6}" y="${y+h-5}" class="lb">${t}</text><rect class="bdov" x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="#ff2d2d" fill-opacity=".28" stroke="#ff4d4d" stroke-width="2"/><path class="bdov" d="M${x+8} ${y+6}l${w/3} ${h/2}l${w/5} ${-h/4}l${w/3} ${h/2}" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="2"/><rect class="gd" x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="none" stroke="#7dff9b" stroke-width="2"/><circle class="gd" cx="${x+w-9}" cy="${y+9}" r="7" fill="#16a05a"/><path class="gd" d="M${x+w-12} ${y+9}l2.5 2.5 4.5-5" stroke="#fff" fill="none" stroke-width="1.8"/><rect class="tg" x="${x-3}" y="${y-3}" width="${w+6}" height="${h+6}" rx="12"/></g>`};
   return`<svg viewBox="0 0 200 410"><defs><linearGradient id="rpmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9cfdc"/><stop offset=".5" stop-color="#5a6175"/><stop offset="1" stop-color="#aab0c0"/></linearGradient></defs><rect x="5" y="96" width="6" height="30" rx="2" fill="#4a5266"/><rect x="5" y="136" width="6" height="46" rx="2" fill="#4a5266"/><rect x="189" y="128" width="6" height="64" rx="2" fill="#4a5266"/><rect x="10" y="8" width="180" height="394" rx="34" fill="#0b0e15" stroke="url(#rpmg)" stroke-width="3.5"/><rect x="17" y="15" width="166" height="380" rx="28" fill="#10151f" stroke="#1d2536"/>${part('cam',22,22,64,64,'Камера')}${part('mb',96,22,82,62,'Плата')}${part('pmic',96,92,82,44,'Питание')}${part('cool',22,96,64,40,'Охлажд.')}${part('bat',22,148,156,150,'Батарея')}${part('btn',22,310,156,26,'Шлейф кнопок')}${part('disp',22,346,156,48,'Дисплей (шлейф)')}</svg>`}
-function rpR(){const R=RP,el=$('#rp');if(!R||!el)return;const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx);
+function rpR(){const R=RP,el=$('#rp');if(!R||!el)return;if(kd(R.d.key)!=='p')return rdR();const d=R.d,of=k=>d.defs.filter(x=>RPM[x.n]&&RPM[x.n][0]===k),bad=k=>of(k).some(x=>!x.fx);
   const left=d.defs.filter(x=>RPM[x.n]&&!x.fx).length,st=!R.open?1:left?2:3,fx=R.fx;R.fx='';
   const steps=['Снять крышку','Заменить детали','Собрать'].map((t,i)=>`<span class="${st===i+1?'on':st>i+1?'dn':''}">${i+1}. ${t}</span>`).join('');
   let main,pn='',act='';
@@ -1005,8 +1036,9 @@ function rpR(){const R=RP,el=$('#rp');if(!R||!el)return;const d=R.d,of=k=>d.defs
 function rpC(e){const R=RP;if(!R||R.cl||Date.now()<RPT)return;const p=e.target.closest('[data-p]'),t=e.target.closest('[data-q]');
   if(p&&R.open){R.sel=p.dataset.p;R.msg='';rpR();return}if(!t)return;const q=t.dataset.q;
   if(q==='x')rpX();
-  else if(q==='pop'){R.pop=1;rpR();setTimeout(()=>{if(RP===R){R.open=1;R.fx='open';rpR()}},750)}
-  else if(q==='done'){if(!R.open)return rpX();R.cl=1;rpR();setTimeout(()=>{if(RP===R){const ok=!R.d.defs.some(x=>RPM[x.n]&&!x.fx);rpX();toast(ok?'📱 Телефон собран':'📱 Крышка закрыта')}},700)}}
+  else if(q==='scr'){const n=+t.dataset.n;if(R.sc[n])return;R.sc[n]=1;t.classList.add('out');setTimeout(()=>{if(RP===R)rpR()},420)}
+  else if(q==='pop'){if(kd(R.d.key)!=='p'){R.rx=0;R.ry=RDK(R.d).ty==='door'?-12:0}R.pop=1;rpR();setTimeout(()=>{if(RP===R){R.open=1;R.fx='open';rpR()}},750)}
+  else if(q==='done'){if(!R.open)return rpX();R.cl=1;rpR();setTimeout(()=>{if(RP===R){const ok=!rpLeft(R.d);rpX();toast(ok?(kd(R.d.key)==='p'?'📱 Телефон собран':'🔧 Устройство собрано'):'🔧 Корпус закрыт')}},700)}}
 const rpUnder=e=>{const u=document.elementFromPoint(e.clientX,e.clientY);return u&&u.closest?u.closest('#rp [data-p]'):null};
 document.addEventListener('pointerdown',e=>{const t=RP&&!RP.cl&&e.target.closest&&e.target.closest('.rpt');if(!t||RPD)return;e.preventDefault();
   const g=t.cloneNode(true);g.classList.add('rpg');g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';document.body.appendChild(g);t.classList.add('lift');
@@ -1020,6 +1052,61 @@ const rpDEnd=(e,c)=>{const D=RPD;if(!D)return;RPD=null;RPT=Date.now()+250;D.g.re
   if(h.dataset.p!==D.k){R.msg='❌ Эта деталь сюда не подходит — ищи место, подсвеченное жёлтым';R.sel='';R.an=h.dataset.p;R.res=2;rpR();setTimeout(()=>{R.an=''},600);return}
   const r=doRep(R.d,D.j);if(!r)return;R.res=r;R.an=D.k;R.msg='';R.sel='';save();render(1);rpR();setTimeout(()=>{R.an=''},900)};
 document.addEventListener('pointerup',e=>rpDEnd(e));document.addEventListener('pointercancel',e=>rpDEnd(e,1));
+
+/* ===== 🔧 Ремонт ноутбуков, ПК и приставок: винты → крышка → замена деталей (3D) ===== */
+const RDI={cam:'📷',mb:'🧠',pmic:'⚡',cool:'❄️',bat:'🔋',btn:'🔘',disp:'🖥',cov:'🧩',hdmi:'🔌',wifi:'📶'};
+const RDN={mb:'Плата',pmic:'Питание',cool:'Охлажд.',bat:'Батарея',btn:'Кнопки',disp:'Шлейф матрицы',hdmi:'HDMI',wifi:'Wi‑Fi'};
+const RDL={l:{disp:[4,4,92,13],cool:[5,21,27,38],mb:[35,21,34,38],pmic:[72,21,23,38],bat:[5,63,64,33],btn:[72,63,23,33]},
+ d:{mb:[6,4,64,48],cool:[73,4,21,26],btn:[73,34,21,13],pmic:[6,80,88,16]},
+ s:{mb:[5,10,45,80],pmic:[54,10,41,26],cool:[54,40,41,22],btn:[54,66,41,24]},
+ t:{mb:[5,10,40,80],pmic:[49,10,46,26],cool:[49,40,46,22],hdmi:[49,66,21,24],wifi:[74,66,21,24]}};
+const RDS={l:[[8,12],[50,9],[92,12],[8,88],[50,91],[92,88]],d:[[12,7],[88,7],[12,93],[88,93]],s:[[8,14],[92,14],[8,86],[92,86]],t:[[8,16],[92,16],[8,84],[92,84]]};
+function RDK(d){const k=kd(d.key),n=nm(d);
+  return k==='l'?{L:'l',ty:'lift',W:292,H:190,D:16,sd:1,ox:14,oy:24,ln:'Снять нижнюю панель',wc:'#8d94a6'}
+   :k==='t'?{L:'t',ty:'hood',W:200,H:100,D:40,sd:0,ox:60,oy:70,ln:'Поднять верхнюю крышку',wc:'#2b2f3a'}
+   :/Mac|сервер/.test(n)?{L:'s',ty:'lift',W:220,H:130,D:50,sd:0,ox:50,oy:50,ln:'Снять верхнюю крышку',wc:'#a9b0c0'}
+   :{L:'d',ty:'door',W:136,H:220,D:120,sd:0,ox:92,oy:10,ln:'Открыть боковую панель',wc:'#1f232c'}}
+function RDM(d,x){if(x.fake)return 0;const n=x.n,k=kd(d.key),l=k==='l',c=k==='d',L=RDL[RDK(d).L];let r=null;
+  if(/плат/.test(n))r=['mb','Материнская плата'];
+  else if(/Не включается/.test(n))r=['pmic',c?'Блок питания':'Плата питания'];
+  else if(/Перегрев/.test(n))r=['cool',l?'Кулер':'Система охлаждения'];
+  else if(/Царапины|задняя крышка|стекло корпуса/.test(n))r=['cov',/стекло/.test(n)?'Стеклянная панель':'Панель корпуса'];
+  else if(/кнопка/.test(n))r=['btn',l?'Клавиатура':'Кнопка питания'];
+  else if(/батаре/.test(n))r=['bat','Аккумулятор'];
+  else if(/Разбитый экран/.test(n))r=['disp','Матрица'];
+  else if(/HDMI/.test(n))r=['hdmi','Порт HDMI'];
+  else if(/Wi/.test(n))r=['wifi','Wi‑Fi модуль'];
+  return r&&(r[0]==='cov'||L[r[0]])?r:0}
+const rpLeft=d=>kd(d.key)==='p'?d.defs.filter(x=>RPM[x.n]&&!x.fx).length:d.defs.filter(x=>RDM(d,x)&&!x.fx).length;
+function rdR(){const R=RP,el=$('#rp');if(!R||!el)return;const d=R.d,K=RDK(d),lay=RDL[K.L],SC=RDS[K.L],m=x=>RDM(d,x),of=k=>d.defs.filter(x=>m(x)&&m(x)[0]===k),bad=k=>of(k).some(x=>!x.fx),
+  left=rpLeft(d),ns=R.sc.filter(Boolean).length,all=1,open=R.open,st=!open?1:left?2:3;R.fx='';
+  const steps=['Снять крышку','Заменить детали','Собрать'].map((t,i)=>`<span class="${st===i+1?'on':st>i+1?'dn':''}">${i+1}. ${t}</span>`).join('');
+  const {W,H,D,wc}=K,wl=s=>`<div class="rdw" style="background-color:${wc};${s}"></div>`,
+  walls=wl(`left:0;top:0;width:${W}px;height:${H}px;transform:translateZ(${-D/2}px)`)
+   +wl(`left:${(W-D)/2}px;top:0;width:${D}px;height:${H}px;transform:rotateY(-90deg) translateZ(${W/2}px)`)
+   +wl(`left:${(W-D)/2}px;top:0;width:${D}px;height:${H}px;transform:rotateY(90deg) translateZ(${W/2}px)`)
+   +wl(`left:0;top:${(H-D)/2}px;width:${W}px;height:${D}px;transform:rotateX(90deg) translateZ(${H/2}px)`)
+   +wl(`left:0;top:${(H-D)/2}px;width:${W}px;height:${D}px;transform:rotateX(-90deg) translateZ(${H/2}px)`),
+  parts=Object.entries(lay).map(([k,[x,y,w,h]])=>{const b=bad(k),an=R.an===k;
+   return`<div data-p="${k}" class="rpp rdp${b?' bad':''}${of(k).length&&!b?' good':''}${R.sel===k?' sel':''}${an&&R.res===1?' swap':''}${an&&R.res===2?' shake':''}" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%"><i>${RDI[k]}</i><b>${RDN[k]}</b></div>`}).join('')
+   +(K.L==='d'?'<div class="rdp rdx" style="left:6%;top:56%;width:64%;height:20%"><i>🎮</i><b>Видеокарта</b></div>':''),
+  cs=R.cl?' land':open?' off':R.pop?' pop':'',
+  cv=`<div class="rdcv${cs}" style="--z:${D/2}px;background:${wc}"><div class="rdsv" style="left:${-K.ox}px;top:${-K.oy}px">${face(d,K.sd,1,null)}</div></div>`,
+  model=`<div class="rd3 k-${K.ty}${open?' o':''}"><div class="rdm" style="width:${W}px;height:${H}px;transform:rotateX(${R.rx}deg) rotateY(${R.ry}deg)">${walls}<div class="rdbed" style="transform:translateZ(${D/2-6}px)">${parts}</div>${cv}</div></div>`;
+  const cx=of('cov'),cb=cx.some(x=>!x.fx),covc=open&&cx.length?`<div class="rpcov ${cb?'bad':'good'}" data-p="cov"><div class="rpcf" style="font-size:26px;text-align:center">🧩</div><span><b>${m(cx[0])[1]}</b><small>${cb?'повреждена, замени':'в порядке ✔'}</small></span></div>`:'';
+  const chips=d.broke?'':d.defs.map((x,j)=>{const r=m(x);return r&&!x.fx?`<div class="rpt" data-j="${j}" data-k="${r[0]}"><i>${RDI[r[0]]}</i><span><b>${r[1]}</b><small>${x.n} · риск ${Math.round(failP(d,x)*100)}%</small></span><em>${f(x.c)}</em></div>`:''}).join('');
+  const k=R.sel,x=k&&open?of(k).find(y=>!y.fx):null;let pn,act='';
+  if(!all)pn=`<div class="rpn rpm">🪛 Выкрути все винты: тапай по ним (${ns}/${SC.length}). Модель можно вращать пальцем.</div>`;
+  else if(!open){pn=`<div class="rpn rpm">${R.pop?'Снимаем…':'Крышка держится на защёлках — поддень её и сними. Модель можно вращать пальцем.'}</div>`;act=R.pop?'':`<button class="rpb" data-q="pop">🪝 ${K.ln}</button>`}
+  else{pn=d.broke?'<div class="rpn">💥 Устройство сломано. Годится только на запчасти.</div>':R.msg?`<div class="rpn">${R.msg}</div>`:x?`<div class="rpn"><b>${m(x)[1]}</b> · ${x.n}<br>Новая деталь ${f(x.c)} · риск неудачи ~${Math.round(failP(d,x)*100)}%. Перетащи её из лотка на эту деталь.</div>`:`<div class="rpn rpm">${left?'Красным мигают сломанные детали. Перетащи подходящую новую деталь прямо на неё':'Все детали заменены — можно собирать'}</div>`;
+    act=R.cl?'':`<button class="rpb ${left?'g':'ok'}" data-q="done">${left?'Закрыть и выйти':'✅ Собрать устройство'}</button>`}
+  el.innerHTML=`<div class="rph"><span>🔧 ${esc(nm(d))}</span><button data-q="x">✕</button></div><div class="rpsteps">${steps}</div><div class="rpm">Баланс: ${f(S.bal)}${open?' · сломано деталей: '+left:''}</div>${model}`
+   +(open?covc+`<div class="rpth">🧰 Новые детали<small>перетащи на сломанную деталь</small></div><div class="rptray">${chips||'<div class="rpe">Заменять больше нечего ✔</div>'}</div>`:'')+pn+act}
+let RDG=null;
+document.addEventListener('pointerdown',e=>{const t=e.target.closest&&e.target.closest('.rd3');if(!t||!RP||RP.open||RP.pop||RP.cl||RDG)return;RDG={x:e.clientX,y:e.clientY,rx:RP.rx,ry:RP.ry,m:0,el:t.querySelector('.rdm')}});
+document.addEventListener('pointermove',e=>{const g=RDG;if(!g||!RP)return;const dx=e.clientX-g.x,dy=e.clientY-g.y;if(Math.abs(dx)+Math.abs(dy)>6)g.m=1;if(!g.m)return;RP.ry=Math.max(-85,Math.min(85,g.ry+dx*.6));RP.rx=Math.max(-80,Math.min(80,g.rx-dy*.5));g.el.style.transform='rotateX('+RP.rx+'deg) rotateY('+RP.ry+'deg)'});
+const rdEnd=()=>{if(RDG&&RDG.m)RPT=Date.now()+250;RDG=null};
+document.addEventListener('pointerup',rdEnd);document.addEventListener('pointercancel',rdEnd);
 
 /* ===== Перепрошивка iPhone (DFU → прошивка → прошивка → активация) ===== */
 let RF=null;
