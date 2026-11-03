@@ -183,6 +183,12 @@ nav button.on i{background:rgba(47,123,255,.15)}
 @keyframes rdb{to{box-shadow:0 0 14px 2px #ff4d4d;filter:brightness(1.4)}}
 .rdp.good{border-color:#7dff9b}.rdp.good::after{content:"✓";position:absolute;right:3px;top:1px;color:#7dff9b;font-weight:800;font-size:11px}
 .rdp.sel{border-color:#ffd24a}.rdp.tgt{outline:2px dashed #ffd24a;outline-offset:2px}.rdp.hov{box-shadow:0 0 10px #ffd24a}
+.vw.p4{touch-action:none;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.p4 .vi{flex:none}
+.b3{position:absolute;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none}
+.b3 .cw{position:absolute;left:0;top:0;width:320px;height:240px;transform-origin:0 0}
+.b3 .cw svg{display:block;width:320px;height:240px}
+.b3.sd{background-image:linear-gradient(90deg,rgba(255,255,255,.18),rgba(0,0,0,.3))}
 </style>
 </head>
 <body>
@@ -626,14 +632,35 @@ function walls(){
     for(let k=0;k<N;k++){const ph=a0+(k+.5)*90/N,r=ph*Math.PI/180;
       P(cx+R*Math.cos(r),cy+R*Math.sin(r),chord,ph+90,ph)}});
   return out.join('')}
+/* ===== 3D-модели при осмотре: ноутбуки, ПК, приставки ===== */
+const TILT={l:-28,d:-14,t:-24};
+const t3=(d,sd,kn,ox,oy,sx,sy)=>`<div class="cw" style="transform:scale(${sx||1},${sy||1}) translate(${-ox}px,${-oy}px)">${face(d,sd,kn,sheet.hl)}</div>`;
+function box3(d,kn){const K=RDK(d),W=K.W,H=K.H,D=K.D,wc=K.wc,b=(st,c)=>`<div class="b3${c?' sd':''}" style="background-color:${wc};${st}">`;
+  return b(`left:0;top:0;width:${W}px;height:${H}px;border-radius:12px;transform:translateZ(${D/2}px)`)+t3(d,0,kn,K.ox,K.oy)+'</div>'
+   +b(`left:0;top:0;width:${W}px;height:${H}px;border-radius:12px;transform:rotateY(180deg) translateZ(${D/2}px)`)+t3(d,1,kn,K.ox,K.oy)+'</div>'
+   +b(`left:${(W-D)/2}px;top:0;width:${D}px;height:${H}px;transform:rotateY(-90deg) translateZ(${W/2}px)`,1)+'</div>'
+   +b(`left:${(W-D)/2}px;top:0;width:${D}px;height:${H}px;transform:rotateY(90deg) translateZ(${W/2}px)`,1)+'</div>'
+   +b(`left:0;top:${(H-D)/2}px;width:${W}px;height:${D}px;transform:rotateX(90deg) translateZ(${H/2}px)`,1)+'</div>'
+   +b(`left:0;top:${(H-D)/2}px;width:${W}px;height:${D}px;transform:rotateX(-90deg) translateZ(${H/2}px)`,1)+'</div>'}
+function lap3(d,kn){const nn=I[d.key][0],bc=/ROG|Razer|Alienware/.test(nn)?'#3a3f4c':'#cfd4de',e=(st,c)=>`<div class="b3${c?' sd':''}" style="background-color:${bc};${st}">`;
+  return e('left:0;top:90px;width:292px;height:150px;transform:rotateX(90deg);backface-visibility:visible')+t3(d,0,kn,8,176,.961,2.42)+'</div>'
+   +e('left:0;top:90px;width:292px;height:150px;transform:translateY(12px) rotateX(-90deg)',1)+'</div>'
+   +e('left:0;top:165px;width:292px;height:12px;transform:translateZ(75px)',1)+'</div>'
+   +e('left:0;top:165px;width:292px;height:12px;transform:rotateY(180deg) translateZ(75px)',1)+'</div>'
+   +e('left:71px;top:165px;width:150px;height:12px;transform:rotateY(-90deg) translateZ(146px)',1)+'</div>'
+   +e('left:71px;top:165px;width:150px;height:12px;transform:rotateY(90deg) translateZ(146px)',1)+'</div>'
+   +`<div style="position:absolute;left:0;top:-25px;width:292px;height:190px;transform-style:preserve-3d;transform-origin:50% 100%;transform:translateZ(-75px) rotateX(12deg)">`
+   +`<div class="b3" style="left:0;top:0;width:292px;height:190px;border-radius:14px;background:#101216">`+t3(d,0,kn,38,10,1.197,1.145)+'</div>'
+   +`<div class="b3" style="left:0;top:0;width:292px;height:190px;border-radius:14px;background-color:${bc};transform:rotateY(180deg)">`+t3(d,1,kn,14,24)+'</div></div>'}
+const m3=(d,kn)=>kd(d.key)==='l'?lap3(d,kn):box3(d,kn);
 function vwBlock(d,kn){
   if(!hasView(d.key)||!sheet)return'';
   const a=sheet.from!=null?sheet.from:(sheet.ang||0),cur=sideOf(sheet.ang),LB={l:['💻 Экран','🔙 Крышка'],p:['📱 Экран','🔙 Крышка'],d:['🖥 Спереди','🔙 Сзади'],t:['📺 Спереди','🔙 Сзади']}[kd(d.key)];
-  const P3=kd(d.key)==='p',rx=sheet.from!=null?(sheet.frx||0):(sheet.rx||0),sl=P3?walls():'';
-  return`<div class="vw${P3?' p3':''}"><div class="vi" style="transform:rotateX(${rx}deg) rotateY(${a}deg)"><div class="vf">${face(d,0,kn,sheet.hl)}</div>${sl}<div class="vf vb">${face(d,1,kn,sheet.hl)}</div></div></div><div class="flt" style="padding:0 0 6px;justify-content:center;flex-wrap:wrap"><span class="ch ${cur?'':'on'}" data-a="vside" data-k="0">${LB[0]}</span><span class="ch ${cur?'on':''}" data-a="vside" data-k="1">${LB[1]}</span><span class="ch" data-a="vflip">🔄 Повернуть</span>${P3?'<span class="ch" data-a="vedge">↔ Ребро</span>':''}</div><div class="mut" style="text-align:center;font-size:12px;margin-bottom:6px">${kn?(P3?'3D-осмотр: крутите телефон пальцем в любую сторону, смотрите рамку, углы и заднюю крышку. Нажмите на дефект, чтобы показать его':'Потяните устройство пальцем, чтобы повернуть. Нажмите на дефект, чтобы показать его'):'📷 Фото продавца: реальное состояние не видно, нужен осмотр'}</div>`}
+  const P3=kd(d.key)==='p',P4=!P3,tx=P4?TILT[kd(d.key)]:0;if(sheet.kdv!==d.key){sheet.kdv=d.key;sheet.tx=tx;sheet.rx=tx}const rx=sheet.from!=null?(sheet.frx||0):(sheet.rx||0),vs=P4?(kd(d.key)==='l'?'width:292px;height:190px;':`width:${RDK(d).W}px;height:${RDK(d).H}px;`):'',sl=P3?walls():'';
+  return`<div class="vw${P3?' p3':' p4'}"><div class="vi" style="${vs}transform:rotateX(${rx}deg) rotateY(${a}deg)">${P4?m3(d,kn):`<div class="vf">${face(d,0,kn,sheet.hl)}</div>${sl}<div class="vf vb">${face(d,1,kn,sheet.hl)}</div>`}</div></div><div class="flt" style="padding:0 0 6px;justify-content:center;flex-wrap:wrap"><span class="ch ${cur?'':'on'}" data-a="vside" data-k="0">${LB[0]}</span><span class="ch ${cur?'on':''}" data-a="vside" data-k="1">${LB[1]}</span><span class="ch" data-a="vflip">🔄 Повернуть</span>${P3?'<span class="ch" data-a="vedge">↔ Ребро</span>':''}</div><div class="mut" style="text-align:center;font-size:12px;margin-bottom:6px">${kn?(P3?'3D-осмотр: крутите телефон пальцем в любую сторону, смотрите рамку, углы и заднюю крышку. Нажмите на дефект, чтобы показать его':'3D-осмотр: крутите устройство пальцем в любую сторону, смотрите со всех сторон. Нажмите на дефект, чтобы показать его'):'📷 Фото продавца: реальное состояние не видно, нужен осмотр'}</div>`}
 const vdAttr=(d,x,i)=>{const s=defSide(x);return hasView(d.key)&&s!=null?`data-a="vdef" data-i="${i}" data-k="${s}" style="cursor:pointer"`:''};
 function afterRender(){if(sheet&&sheet.from!=null){const i=$('.vi');if(i){void i.offsetWidth;i.style.transform='rotateX('+(sheet.rx||0)+'deg) rotateY('+(sheet.ang||0)+'deg)'}sheet.from=null}}
-function vgo(s,w){const a=s.ang||0;s.from=a;s.frx=s.rx||0;s.ang=Math.round((a-w*180)/360)*360+w*180;s.rx=0}
+function vgo(s,w){const a=s.ang||0;s.from=a;s.frx=s.rx||0;s.ang=Math.round((a-w*180)/360)*360+w*180;s.rx=s.tx||0}
 function vInsp(){
   const l=S.mk.find(x=>x.id===sheet.id);if(!l)return'';
   const d=l.dev,kn=d.defs.length===0||d.defs[0].k,cost=Math.max(500,r100(l.price*.002));
@@ -990,7 +1017,7 @@ setInterval(()=>{
 try{const sc=document.createElement('script');sc.src='https://telegram.org/js/telegram-web-app.js';sc.async=true;sc.onload=()=>{try{const w=window.Telegram&&window.Telegram.WebApp;if(w){try{TGID=Number(w.initDataUnsafe.user.id)||0;TGN=w.initDataUnsafe.user.first_name||'';INIT=w.initData||''}catch(e){}w.ready();w.expand();try{w.disableVerticalSwipes()}catch(e){}try{w.setHeaderColor('#2f7bff')}catch(e){}if(API&&TGID)cloudLoad();else render()}}catch(e){}};document.head.appendChild(sc)}catch(e){}
 setInterval(pollCmd,10000);setInterval(fetchTop,30000);setTimeout(fetchTop,4000);setTimeout(pollCmd,2500);setInterval(trFlush,8000);setTimeout(trFlush,3000);
 let dg=null;
-document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.closest('.vw');if(!w||!sheet)return;const i=w.querySelector('.vi');dg={i,x:e.clientX,y:e.clientY,a:sheet.ang||0,r:sheet.rx||0,c:null,cx:0,p:w.classList.contains('p3')};i.classList.add('dr');try{w.setPointerCapture(e.pointerId)}catch(_){}});
+document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.closest('.vw');if(!w||!sheet)return;const i=w.querySelector('.vi');dg={i,x:e.clientX,y:e.clientY,a:sheet.ang||0,r:sheet.rx||0,c:null,cx:0,p:w.classList.contains('p3')||w.classList.contains('p4')};i.classList.add('dr');try{w.setPointerCapture(e.pointerId)}catch(_){}});
 document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*.9;dg.cx=dg.p?Math.max(-75,Math.min(75,dg.r-(e.clientY-dg.y)*.6)):0;dg.i.style.transform='rotateX('+dg.cx+'deg) rotateY('+dg.c+'deg)'});
 const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.p){if(g.c!=null){sheet.ang=g.c;sheet.rx=g.cx;sheet.from=null}}else if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
 document.addEventListener('pointerup',dgEnd);document.addEventListener('pointercancel',dgEnd);
