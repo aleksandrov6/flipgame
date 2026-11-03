@@ -73,6 +73,32 @@ nav em{position:absolute;top:0;right:22%;background:var(--bad);color:#fff;font-s
 .vf svg{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 12px rgba(0,0,0,.35))}
 .pul{animation:pul .9s ease-in-out infinite alternate}
 @keyframes pul{to{opacity:.2}}
+.vw.p3{touch-action:none;overflow:hidden}
+.p3 .vi{width:150px;height:308px;margin:6px auto 0}
+.p3 .vf{padding:0;transform:translateZ(9px)}
+.p3 .vb{transform:rotateY(180deg) translateZ(9px)}
+.sl{position:absolute;left:10.5px;top:9px;width:129px;height:289.5px;border-radius:22px;background:linear-gradient(90deg,#4f5769,#aab2c3 50%,#4f5769)}
+#rf{position:fixed;inset:0;z-index:40;background:#050806;color:#e9fff0;font:14px/1.4 ui-monospace,Menlo,monospace;overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px))}
+#rf h4{margin:14px 0 4px;font-size:18px}#rf p{margin:0 0 10px;color:#9fb3a6}#rf b{color:#e9fff0}
+.rfh{display:flex;justify-content:space-between;align-items:center;color:#7dff9b;font-weight:700}
+.rfh button{border:0;background:#1a211d;color:#e9fff0;border-radius:10px;width:34px;height:34px;font-size:16px}
+.rfp{display:block;height:200px;margin:6px auto;background:#0a0f0c;border-radius:16px;width:100%}
+.rfbar{height:10px;border-radius:9px;background:#14201a;margin:8px 0;overflow:hidden}.rfbar i{display:block;height:100%;width:0;background:#7dff9b}
+.rfm{text-align:center;font-weight:800;color:#ffd24a;margin:6px 0 10px;min-height:20px}
+.rfbt{display:flex;gap:10px;margin:6px 0}.rfbt button,.rfwf button{flex:1;border:1px solid #2a3a30;background:#0d1511;color:#e9fff0;border-radius:14px;padding:16px 8px;font:inherit;font-weight:800}
+.rfbt button.on,.rfwf button.on{background:#7dff9b;color:#06140b;box-shadow:0 0 18px rgba(125,255,155,.4)}
+.rfs{text-align:center;color:#6c8174;font-size:12px;margin-bottom:8px}
+.rfid{text-align:center;font-size:30px;font-weight:800;color:#7dff9b;padding:16px 0}.rfid small{display:block;font-size:14px;color:#9fb3a6;font-weight:400}
+.rfe{background:#b8392f;color:#fff;border-radius:14px;padding:10px 12px;font-weight:800;margin:8px 0;text-align:center}
+.rfban{background:#10201a;border-radius:14px;padding:8px;text-align:center;font-weight:800;margin-bottom:6px}
+.rff{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;border:1px solid #22302a;background:#0b110e;color:#e9fff0;border-radius:14px;padding:14px 10px;margin:6px 0;font:12px ui-monospace,Menlo,monospace}
+.rff span{font-weight:800;white-space:nowrap}.rff .ok{color:#7dff9b}.rff .bad{color:#ff7b7b}.rff .wr{color:#ffb347}
+.rfwf{background:#f4f5f8;color:#111;border-radius:18px;padding:12px;position:relative}.rfwf>b{display:block;color:#111;margin-bottom:8px;font-family:system-ui,sans-serif}
+.rfwf button{display:block;width:100%;background:#fff;color:#111;border:0;border-bottom:1px solid #e3e5ea;border-radius:8px;padding:11px 8px;margin:0;text-align:left;font-weight:600}
+.rfwf button.on{background:#7dff9b;box-shadow:none}
+.rfst{position:absolute;right:-4px;bottom:10px;background:#ffdc5e;color:#111;padding:8px 10px;border-radius:4px;transform:rotate(-4deg);font:700 13px system-ui,sans-serif;box-shadow:0 6px 14px rgba(0,0,0,.3)}.rfst b{color:#111}
+#rfin{width:100%;margin-top:10px;padding:13px;border-radius:12px;border:1px solid #2a3a30;background:#0d1511;color:#e9fff0;font:inherit}
+.rfl{background:#05080c;border:1px solid #1a251e;border-radius:12px;padding:10px;margin:12px 0 0;color:#4ade80;font:12px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;min-height:70px}
 </style>
 </head>
 <body>
@@ -446,9 +472,11 @@ function face(d,side,kn,hl){
 function vwBlock(d,kn){
   if(!hasView(d.key)||!sheet)return'';
   const a=sheet.from!=null?sheet.from:(sheet.ang||0),cur=sideOf(sheet.ang),LB={l:['💻 Экран','🔙 Крышка'],p:['📱 Экран','🔙 Крышка'],d:['🖥 Спереди','🔙 Сзади'],t:['📺 Спереди','🔙 Сзади']}[kd(d.key)];
-  return`<div class="vw"><div class="vi" style="transform:rotateY(${a}deg)"><div class="vf">${face(d,0,kn,sheet.hl)}</div><div class="vf vb">${face(d,1,kn,sheet.hl)}</div></div></div><div class="flt" style="padding:0 0 6px;justify-content:center;flex-wrap:wrap"><span class="ch ${cur?'':'on'}" data-a="vside" data-k="0">${LB[0]}</span><span class="ch ${cur?'on':''}" data-a="vside" data-k="1">${LB[1]}</span><span class="ch" data-a="vflip">🔄 Повернуть</span></div><div class="mut" style="text-align:center;font-size:12px;margin-bottom:6px">${kn?'Потяните устройство пальцем, чтобы повернуть. Нажмите на дефект, чтобы показать его':'📷 Фото продавца: реальное состояние не видно, нужен осмотр'}</div>`}
+  const P3=kd(d.key)==='p',rx=sheet.from!=null?(sheet.frx||0):(sheet.rx||0),sl=P3?Array.from({length:7},(_,k)=>`<div class="sl" style="transform:translateZ(${-9+(k+1)*2.25}px)"></div>`).join(''):'';
+  return`<div class="vw${P3?' p3':''}"><div class="vi" style="transform:rotateX(${rx}deg) rotateY(${a}deg)"><div class="vf">${face(d,0,kn,sheet.hl)}</div>${sl}<div class="vf vb">${face(d,1,kn,sheet.hl)}</div></div></div><div class="flt" style="padding:0 0 6px;justify-content:center;flex-wrap:wrap"><span class="ch ${cur?'':'on'}" data-a="vside" data-k="0">${LB[0]}</span><span class="ch ${cur?'on':''}" data-a="vside" data-k="1">${LB[1]}</span><span class="ch" data-a="vflip">🔄 Повернуть</span>${P3?'<span class="ch" data-a="vedge">↔ Ребро</span>':''}</div><div class="mut" style="text-align:center;font-size:12px;margin-bottom:6px">${kn?(P3?'3D-осмотр: крутите телефон пальцем в любую сторону, смотрите рамку, углы и заднюю крышку. Нажмите на дефект, чтобы показать его':'Потяните устройство пальцем, чтобы повернуть. Нажмите на дефект, чтобы показать его'):'📷 Фото продавца: реальное состояние не видно, нужен осмотр'}</div>`}
 const vdAttr=(d,x,i)=>{const s=defSide(x);return hasView(d.key)&&s!=null?`data-a="vdef" data-i="${i}" data-k="${s}" style="cursor:pointer"`:''};
-function afterRender(){if(sheet&&sheet.from!=null){const i=$('.vi');if(i){void i.offsetWidth;i.style.transform='rotateY('+(sheet.ang||0)+'deg)'}sheet.from=null}}
+function afterRender(){if(sheet&&sheet.from!=null){const i=$('.vi');if(i){void i.offsetWidth;i.style.transform='rotateX('+(sheet.rx||0)+'deg) rotateY('+(sheet.ang||0)+'deg)'}sheet.from=null}}
+function vgo(s,w){const a=s.ang||0;s.from=a;s.frx=s.rx||0;s.ang=Math.round((a-w*180)/360)*360+w*180;s.rx=0}
 function vInsp(){
   const l=S.mk.find(x=>x.id===sheet.id);if(!l)return'';
   const d=l.dev,kn=d.defs.length===0||d.defs[0].k,cost=Math.max(500,r100(l.price*.002));
@@ -493,7 +521,7 @@ function pcUl(){
   const L=S.inv.filter(d=>d.lock),run=S.inv.find(x=>x.ul),w=run?Math.max(0,Math.min(100,100-(run.ul-Date.now())/(pcT()*10))):0;
   const log=run?ULS.slice(0,Math.min(5,Math.floor(w/20)+1)).join('\n')+'\n█':(S.ulr||'> Ожидание устройства…');
   return`<div class="mut">Шанс успеха <b>${Math.round(pcP()*100)}%</b> · ${pcT()} сек · софт 300 ₽ за запуск. Одновременно работает одно устройство. Прокачайте ПК в «Апгрейд».</div><div class="term">${esc(log)}</div>`+
-  (L.length?L.map(d=>{const after=val({...d,lock:0});return`<div class="df"><span>${nm(d)}<br><span class="mut">сейчас ${f(val(d))} → после ~${f(after)}</span></span>${d.ul?`<div class="bar" style="width:90px"><i id="ulb" style="width:${w}%"></i></div>`:`<button class="b" data-a="unl" data-i="${d.id}" ${busy()?'disabled':''}>▶ Запуск</button>`}</div>`}).join(''):'<div class="empty" style="padding:18px">Нет заблокированных устройств на складе.<br>Купите iPhone с блокировкой на рынке или в «Чёрном рынке».</div>')}
+  (L.length?L.map(d=>{const after=val({...d,lock:0});return`<div class="df"><span>${nm(d)}<br><span class="mut">сейчас ${f(val(d))} → после ~${f(after)}</span></span>${d.ul?`<div class="bar" style="width:90px"><i id="ulb" style="width:${w}%"></i></div>`:`<button class="b" data-a="unl" data-i="${d.id}" ${busy()?'disabled':''}>▶ Перепрошить</button>`}</div>`}).join(''):'<div class="empty" style="padding:18px">Нет заблокированных устройств на складе.<br>Купите iPhone с блокировкой на рынке или в «Чёрном рынке».</div>')}
 function pcUp(){
   const mx=S.pc>=6,nx=Math.min(.95,.5+.09*(S.pc+1));
   return`<div class="st"><div>Уровень ПК<b>${S.pc} / 6</b></div><div>Шанс<b>${Math.round(pcP()*100)}%</b></div><div>Время<b>${pcT()} сек</b></div><div>Апгрейд<b>${mx?'—':f(pcCost())}</b></div></div>`+
@@ -631,7 +659,7 @@ function unlBlock(d){
   if(!d.lock)return'';
   if(!S.own)return`<div class="c" style="margin:10px 0"><b>🔒 Нужен ПК для разблокировки</b><div class="mut">Купите свой ПК во вкладке 🖥 за ${f(PCBUY)}.</div><button class="b" data-a="tab" data-i="c" style="width:100%;margin-top:8px">К покупке ПК</button></div>`;
   const w=d.ul?100-(d.ul-Date.now())/(pcT()*10):0;
-  return`<div class="c" style="margin:10px 0"><b>🔓 Разблокировка через ПК · ур. ${S.pc}</b><div class="mut">Шанс ${Math.round(pcP()*100)}% · ${pcT()} сек · софт 300 ₽.</div>${d.ul?`<div class="bar"><i style="width:${w}%"></i></div>`:''}<button class="b" data-a="pcapp" data-i="ul" style="width:100%;margin-top:8px">🖥 Открыть программу на ПК</button></div>`;
+  return`<div class="c" style="margin:10px 0"><b>🔓 Разблокировка через ПК · ур. ${S.pc}</b><div class="mut">Ручная перепрошивка: DFU, прошивка, активация · софт 300 ₽.</div>${d.ul?`<div class="bar"><i style="width:${w}%"></i></div>`:''}<button class="b" data-a="pcapp" data-i="ul" style="width:100%;margin-top:8px">🖥 Открыть программу на ПК</button></div>`;
 }
 function ask(l,txt,kind){
   const c=S.chat[l.id]=S.chat[l.id]||[],d=l.dev,s=txt.toLowerCase();
@@ -717,10 +745,11 @@ document.addEventListener('click',e=>{
   else if(a==='close')sheet=null;
   else if(a==='insp'){const l=S.mk.find(x=>x.id===i);if(l&&!lose(Math.max(500,r100(l.price*.002)))){l.dev.defs.forEach(x=>x.k=1);toast('Осмотр завершён');
     if(hasView(l.dev.key)){const s0=sheet&&sheet.t==='insp'&&sheet.id===i?sheet:{t:'insp',id:i,ang:0},fi=l.dev.defs.findIndex(x=>defSide(x)!=null);s0.hl=fi>=0?fi:null;
-      if(fi>=0&&defSide(l.dev.defs[fi])!==sideOf(s0.ang)){s0.from=s0.ang||0;s0.ang=(s0.ang||0)+180}sheet=s0}}}
+      if(fi>=0&&defSide(l.dev.defs[fi])!==sideOf(s0.ang))vgo(s0,defSide(l.dev.defs[fi]));sheet=s0}}}
   else if(a==='look'){if(S.mk.some(x=>x.id===i))sheet={t:'insp',id:i,ang:0,hl:null}}
-  else if(a==='vside'||a==='vflip'){if(sheet){const c=sideOf(sheet.ang),w=a==='vflip'?1-c:+t.dataset.k;if(w!==c){sheet.from=sheet.ang||0;sheet.ang=(sheet.ang||0)+180}}}
-  else if(a==='vdef'){if(sheet){const w=+t.dataset.k,c=sideOf(sheet.ang);sheet.hl=i;if(w!==c){sheet.from=sheet.ang||0;sheet.ang=(sheet.ang||0)+180}}}
+  else if(a==='vside'||a==='vflip'){if(sheet){const c=sideOf(sheet.ang),w=a==='vflip'?1-c:+t.dataset.k;vgo(sheet,w)}}
+  else if(a==='vedge'){if(sheet){const x=sheet.ang||0;sheet.from=x;sheet.frx=sheet.rx||0;sheet.ang=Math.round((x-90)/180)*180+90;sheet.rx=0}}
+  else if(a==='vdef'){if(sheet){const w=+t.dataset.k,c=sideOf(sheet.ang);sheet.hl=i;vgo(sheet,w)}}
   else if(a==='buy'){const l=S.mk.find(x=>x.id===i);if(l&&!full(1)&&!lose(l.price)){l.dev.paid=l.price;S.inv.push(l.dev);S.mk=S.mk.filter(x=>x!==l);sheet=null;toast('Куплено: '+nm(l.dev))}}
   else if(a==='peek'){const l=S.lots.find(x=>x.id===i);if(l&&!lose(400))l.peek=1}
   else if(a==='lot'){const l=S.lots.find(x=>x.id===i);if(l&&!full(l.items.length)&&!lose(l.price)){l.items.forEach(d=>{d.paid=Math.round(l.price/l.items.length);S.inv.push(d)});S.lots=S.lots.filter(x=>x!==l);toast('Открыто! Внутри предметов: '+l.items.length+', стоимость ~'+f(l.sum))}}
@@ -775,7 +804,7 @@ document.addEventListener('click',e=>{
   else if(a==='chat')sheet={t:'chat',id:i};
   else if(a==='q'){const l=S.mk.find(x=>x.id===i);if(l)ask(l,Q[j][0],Q[j][1])}
   else if(a==='send'){const l=S.mk.find(x=>x.id===i),v=($('#cin')||{}).value;if(l&&v&&v.trim())ask(l,v.trim())}
-  else if(a==='unl'){const d=S.inv.find(x=>x.id===i);if(d&&d.lock&&!d.ul){if(!S.own)toast('Сначала купите ПК');else if(busy())toast('ПК занят другой задачей');else if(!lose(300))d.ul=Date.now()+pcT()*1000}}
+  else if(a==='unl'){rfOpen(i);return}
   else if(a==='pgv'){S.pv=i}
   else if(a==='pgrun'){const d=S.inv.find(x=>x.id===i),v=PGV[S.pv||0];
     if(d&&okP(d)){if(!S.own)toast('Сначала купите ПК');else if(busy())toast('ПК занят другой задачей');else if(skLv()<v[5])toast('Нужен навык программирования: ур. '+v[5]);else if(!lose(v[3])){d.pt=pgT(v);d.pu=Date.now()+d.pt*1000;d.pv=S.pv||0}}}
@@ -804,10 +833,70 @@ setInterval(()=>{
 try{const sc=document.createElement('script');sc.src='https://telegram.org/js/telegram-web-app.js';sc.async=true;sc.onload=()=>{try{const w=window.Telegram&&window.Telegram.WebApp;if(w){try{TGID=Number(w.initDataUnsafe.user.id)||0;TGN=w.initDataUnsafe.user.first_name||'';INIT=w.initData||''}catch(e){}w.ready();w.expand();try{w.disableVerticalSwipes()}catch(e){}try{w.setHeaderColor('#2f7bff')}catch(e){}render()}}catch(e){}};document.head.appendChild(sc)}catch(e){}
 setInterval(pollCmd,10000);setInterval(fetchTop,30000);setTimeout(fetchTop,4000);setTimeout(pollCmd,2500);setInterval(trFlush,8000);setTimeout(trFlush,3000);
 let dg=null;
-document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.closest('.vw');if(!w||!sheet)return;const i=w.querySelector('.vi');dg={i,x:e.clientX,a:sheet.ang||0,c:null};i.classList.add('dr');try{w.setPointerCapture(e.pointerId)}catch(_){}});
-document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*.9;dg.i.style.transform='rotateY('+dg.c+'deg)'});
-const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
+document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.closest('.vw');if(!w||!sheet)return;const i=w.querySelector('.vi');dg={i,x:e.clientX,y:e.clientY,a:sheet.ang||0,r:sheet.rx||0,c:null,cx:0,p:w.classList.contains('p3')};i.classList.add('dr');try{w.setPointerCapture(e.pointerId)}catch(_){}});
+document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*.9;dg.cx=dg.p?Math.max(-75,Math.min(75,dg.r-(e.clientY-dg.y)*.6)):0;dg.i.style.transform='rotateX('+dg.cx+'deg) rotateY('+dg.c+'deg)'});
+const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.p){if(g.c!=null){sheet.ang=g.c;sheet.rx=g.cx;sheet.from=null}}else if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
 document.addEventListener('pointerup',dgEnd);document.addEventListener('pointercancel',dgEnd);
+/* ===== Перепрошивка iPhone (DFU → прошивка → прошивка → активация) ===== */
+let RF=null;
+const RFNET=['Masterskaya_5G_Guest','Masterskaya_5G','Masterskaya-5G','TP-LINK_BA34'];
+const RFLOG=['Sending iBSS (1401 KB)… done','Sending iBEC (1331 KB)… done','Sending RestoreRamdisk… done','Sending KernelCache… done','Waiting for device to enter restore mode…','Partition NAND device (1)','Uploading filesystem…','Verifying restore (6438 MB)…','Flashing SEP firmware… done','Updating baseband… done'];
+function rfId(d){const n=nm(d),m={'iPhone 8':'10,1','iPhone 11':'12,1','iPhone 12':'13,2','iPhone 13':'14,5','iPhone 14 Pro':'15,2','iPhone 14':'14,7','iPhone 15':'15,4'};
+  for(const k of Object.keys(m).sort((a,b)=>b.length-a.length))if(n.includes(k))return'iPhone'+m[k];
+  const h=hs(n);return'iPhone'+(16+h%4)+','+(1+h%5)}
+function rfOpen(id){
+  const d=S.inv.find(x=>x.id===id);if(!d||!d.lock||RF)return;
+  if(!S.own)return toast('Сначала купите ПК');if(busy())return toast('ПК занят другой задачей');
+  const i1=rfId(d),m=i1.match(/iPhone(\d+),(\d+)/),M=+m[1],N=m[2],sv=['16.7','17.6','18.3'][hs(nm(d))%3],[a,b]=sv.split('.').map(Number);
+  const F=[{n:`${i1}_${a}.${b+1}_beta2_Restore.ipsw`,t:'бета ⚠',k:'beta'},{n:`iPhone${M-1},${N}_${sv}_Restore.ipsw`,t:'подписана',k:'wrong'},{n:`${i1}_${sv}_Restore.ipsw`,t:'подписана',k:'ok'},{n:`${i1}_${a-1}.7_Restore.ipsw`,t:'не подписана',k:'old'}].sort(()=>Math.random()-.5);
+  RF={d,i1,sv,F,iv:0};rfReset();
+  const el=document.createElement('div');el.id='rf';document.body.appendChild(el);
+  el.addEventListener('click',rfC);el.addEventListener('input',e=>{if(e.target.id==='rfin')RF.in=e.target.value});
+  RF.iv=setInterval(rfT,100);rfR()}
+function rfReset(){const R=RF;Object.assign(R,{st:1,p:0,v:0,ph:'idle',t:0,msg:'',fp:0,n:0,cab:1,ev:0,bc:0,fail:'',net:'',in:'',ok:0,done:0,fw:null,pw:String(1e7+Math.floor(Math.random()*9e7)),log:['$ idevice connect','Подключено: '+R.i1+', iOS '+R.sv]})}
+function rfX(){if(!RF)return;clearInterval(RF.iv);const e=$('#rf');if(e)e.remove();RF=null;render()}
+const rfMsg=R=>R.ok?'✔ Режим DFU включён':R.msg||({idle:'Нажми обе кнопки',both:'Держи обе кнопки…',rel:'Отпусти ПИТАНИЕ! Громкость – держи',hold:'Держи ГРОМКОСТЬ…'})[R.ph];
+function rfPh(R){const s3=R.st===3,g='#7dff9b',c=x=>x?g:'#8890a8',cut=s3&&!R.cab;
+  return`<svg viewBox="0 0 200 270" class="rfp"><rect x="52" y="8" width="96" height="226" rx="16" fill="#0d1224" stroke="#8890a8" stroke-width="5"/><rect x="58" y="14" width="84" height="214" rx="11" fill="${s3?'#000':'#1b2547'}"/>`+
+  (s3?`<ellipse cx="100" cy="108" rx="11" ry="14" fill="#ddd"/><rect x="72" y="140" width="56" height="4" rx="2" fill="#333"/><rect x="72" y="140" width="${56*R.fp}" height="4" rx="2" fill="#eee"/>`:`<rect x="86" y="20" width="28" height="7" rx="3.5" fill="#000"/>`)+
+  `<rect x="46" y="62" width="6" height="16" rx="2" fill="#8890a8"/><rect x="46" y="86" width="6" height="26" rx="2" fill="#8890a8"/><rect x="46" y="118" width="6" height="26" rx="2" fill="${c(R.v&&!s3)}"/><rect x="148" y="90" width="6" height="40" rx="2" fill="${c(R.p&&!s3)}"/><path d="M100 234V258H60" stroke="${cut?'#ff5a5a':'#8890a8'}" stroke-width="3" fill="none" ${cut?'stroke-dasharray="4 9"':''}/></svg>`}
+function rfR(){const R=RF,el=$('#rf');if(!R||!el)return;
+  const T=['','режим DFU','выбор прошивки','прошивка','активация'][R.st],
+  H=['','Зажми <b>ПИТАНИЕ</b> и <b>ГРОМКОСТЬ –</b> вместе на 4 секунды. Потом отпусти ПИТАНИЕ, а ГРОМКОСТЬ – держи ещё 3 секунды.',`Найди файл прошивки именно для <b>${R.i1}</b>, который подписан Apple.`,'Идёт запись. Если кабель отойдёт — быстро нажми «Переподключить».','Подключись к своей сети. Название и пароль — на стикере.'][R.st];
+  let b='';
+  if(R.st===1)b=rfPh(R)+`<div class="rfbar"><i id="rfb"></i></div><div class="rfm" id="rfm">${rfMsg(R)}</div><div class="rfbt"><button data-r="p" class="${R.p?'on':''}">⏻ Питание</button><button data-r="v" class="${R.v?'on':''}">Громкость –</button></div><div class="rfs">Кнопки нажимаются тапом и залипают</div>`;
+  else if(R.st===2)b=`<div class="rfid">${R.i1}<small>${nm(R.d)}</small></div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}`+R.F.map((f,i)=>`<button class="rff" data-r="fw" data-i="${i}">📦 ${f.n}<span class="${f.k==='old'?'bad':f.k==='beta'?'wr':'ok'}">${f.t}</span></button>`).join('');
+  else if(R.st===3)b=`<div class="rfban">${R.i1} ${R.sv} — подписана ✅</div>`+rfPh(R)+(R.fail?`<div class="rfe">❌ ${R.fail}</div><div class="rfbt"><button data-r="again">↻ Заново</button><button data-r="x">Закрыть</button></div>`:`<div class="rfbar"><i id="rfb" style="width:${R.fp*100}%"></i></div><div class="rfm" style="${R.cab?'':'color:#ff7b7b'}">${R.cab?'Не отключай телефон…':'⚠ Кабель отошёл!'}</div>${R.cab?'':'<div class="rfbt"><button class="on" data-r="cab">🔌 Переподключить кабель</button></div>'}`);
+  else if(R.done)b=`<div class="rfid">🔓<small>${nm(R.d)} разблокирован</small></div><div class="rfm">Цена выросла. Телефон готов к продаже.</div><div class="rfbt"><button class="on" data-r="x">Готово</button></div>`;
+  else b=`<div class="rfwf"><b>Выберите сеть Wi-Fi</b>${RFNET.map((n,i)=>`<button data-r="net" data-i="${i}" class="${R.net===n?'on':''}">📶 ${n}</button>`).join('')}<div class="rfst">Wi-Fi:<br><b>Masterskaya_5G</b><br>Пароль: ${R.pw.slice(0,4)} ${R.pw.slice(4)}</div></div>${R.msg?`<div class="rfe">${R.msg}</div>`:''}<input id="rfin" inputmode="numeric" placeholder="Пароль от Wi-Fi" value="${R.in||''}"><div class="rfbt"><button class="on" data-r="act">Активировать</button></div>`;
+  el.innerHTML=`<div class="rfh"><span>Перепрошивка · ${esc(nm(R.d))}</span><button data-r="x">✕</button></div><h4>Шаг ${R.st} из 4 · ${T}</h4><p>${H}</p>${b}<pre class="rfl" id="rfl">${esc(R.log.slice(-7).join('\n'))}</pre>`}
+function rfC(e){const t=e.target.closest('[data-r]');if(!t||!RF)return;const R=RF,r=t.dataset.r,i=+t.dataset.i;
+  if(r==='x')rfX();
+  else if(r==='p'||r==='v'){if(R.st===1&&!R.ok){R[r]=R[r]?0:1;rfR()}}
+  else if(r==='fw'){const f=R.F[i];
+    if(f.k==='wrong'){R.msg='Прошивка от '+f.n.split('_')[0]+'… не та 😬';R.log.push('✗ Прошивка от другой модели — восстановление прервано')}
+    else if(f.k==='old'){R.msg='Эта версия не подписана — Apple откажет (ошибка 3194)';R.log.push('✗ Прошивка не подписана')}
+    else{if(lose(300))return;R.fw=f;R.st=3;R.msg='';R.log=['Прошивка: '+f.n]}
+    rfR()}
+  else if(r==='cab'){R.cab=1;R.log.push('✔ Кабель переподключён');rfR()}
+  else if(r==='net'){R.net=RFNET[i];rfR()}
+  else if(r==='again'){const l=R.log;rfReset();rfR()}
+  else if(r==='act'){const n=R.net==='Masterskaya_5G',p=(R.in||'').replace(/\D/g,'')===R.pw;
+    if(!n||!p){R.msg=!n?'Не та сеть — выбери Masterskaya_5G 😬':'Неверный пароль — смотри стикер';R.log.push('✗ Активация не удалась');rfR();return}
+    const d=R.d;d.lock=0;d.offer=0;S.ulr='✅ '+nm(d)+': разблокирован, цена выросла';R.done=1;toast('🔓 Разблокирован: '+nm(d)+' · '+gain(15));save();rfR()}}
+function rfT(){const R=RF;if(!R)return;const n=Date.now(),B=x=>{const b=$('#rfb');if(b)b.style.width=x*100+'%'},rs=m=>{R.ph='idle';R.p=R.v=0;R.msg=m;rfR()};
+  if(R.st===1&&!R.ok){
+    if(R.ph==='idle'){if(R.p&&R.v){R.ph='both';R.t=n;R.msg='';const m=$('#rfm');if(m)m.textContent=rfMsg(R)}}
+    else if(R.ph==='both'){if(!(R.p&&R.v))rs('Рано отпустил — начни заново');else{const e=(n-R.t)/4000;B(Math.min(1,e));if(e>=1){R.ph='rel';R.t=n;B(1);const m=$('#rfm');if(m)m.textContent=rfMsg(R)}}}
+    else if(R.ph==='rel'){if(!R.v)rs('Громкость отпущена — заново');else if(!R.p){R.ph='hold';R.t=n;B(0);const m=$('#rfm');if(m)m.textContent=rfMsg(R)}else if(n-R.t>5000)rs('Слишком долго держал ПИТАНИЕ — заново')}
+    else if(R.ph==='hold'){if(!R.v)rs('Громкость отпущена — заново');else{const e=(n-R.t)/3000;B(Math.min(1,e));if(e>=1){R.ok=1;R.log.push('✔ Устройство в режиме DFU');rfR();setTimeout(()=>{if(RF===R){R.st=2;R.msg='';rfR()}},900)}}}
+  }else if(R.st===3&&!R.fail){
+    if(R.cab){R.fp=Math.min(1,R.fp+.1/14);B(R.fp);const k=Math.floor(R.fp*RFLOG.length);let ch=0;while(R.n<k){R.log.push(RFLOG[R.n++]);ch=1}if(ch){const l=$('#rfl');if(l)l.textContent=R.log.slice(-7).join('\n')}
+      if(R.fp>=.45&&!R.ev){R.ev=1;R.cab=0;R.et=n;R.log.push('✗ Кабель отключён!');rfR()}
+      else if(R.fw.k==='beta'&&R.fp>=.85&&!R.bc){R.bc=1;if(Math.random()<.5){R.fail='Бета-сборка не прошла проверку (ошибка 4005)';rfR()}}
+      if(R.fp>=1&&!R.fail){R.st=4;R.msg='';R.log.push('✔ Восстановление завершено');rfR()}
+    }else if(n-R.et>3500+400*S.pc){R.fail='Кабель не переподключён вовремя (ошибка 4013)';rfR()}}}
+
 if(!S){S=fresh();regen()}
 if(!S.mk.some(x=>I[x.dev.key]&&I[x.dev.key][1]>=1e6))elite(1);
 render();
