@@ -205,6 +205,28 @@ const I={};
 const ad=(k,n,p,c,l,s,t)=>{I[k]=[n,p,c,l,s,t]};
 // Телефоны, ур. 1
 [['iphone12','📱 iPhone 12',29000],['iphone14','📱 iPhone 14',47000],['iphone15','📱 iPhone 15',62000],['a54','📱 Samsung A54',24000],['s23','📱 Samsung S23',44000],['redmi','📱 Redmi Note 13',19000],['pixel','📱 Google Pixel 8',41000],['ip11l','🔒 iPhone 11 (заблок.)',22000],['ip13l','🔒 iPhone 13 (заблок.)',41000],['ip14l','🔒 iPhone 14 Pro (заблок.)',66000]].forEach(x=>ad(x[0],x[1],x[2],'p',1));
+
+// ===== Новые телефоны: [название, цена ₽, мин. уровень] =====
+const PKEY=(p,n)=>p+'_'+n.toLowerCase().replace(/[^a-z0-9]/g,'');
+[['Tecno Spark Go 2024',6500,1],['Tecno Spark 20 Pro',11500,1],['Tecno Spark 30 Pro',14500,1],['Tecno Pova 6 Pro',19500,1],['Tecno Camon 30',22500,2],['Tecno Phantom X2 Pro',34000,2],['Tecno Phantom V Fold 2',68000,3],
+ ['Infinix Smart 8',5500,1],['Infinix Hot 40 Pro',10500,1],['Infinix Note 40 Pro',17500,1],['Infinix Note 50 Pro',21000,2],['Infinix Zero 30 5G',21500,2],['Infinix Zero 40 5G',25000,2],['Infinix GT 20 Pro',27000,2],
+ ['Nokia 105 4G',1500,1],['Nokia 110 4G',2200,1],['Nokia 225 4G',3500,1],['Nokia 3310',4000,1],['Nokia 8110 4G',6500,1],['Nokia C32',6500,1],['Nokia G42 5G',11500,1],['Nokia XR21',22000,2],
+ ['Redmi 13C',8500,1],['Redmi Note 12',15000,1],['Poco X6 Pro',24500,1],['Poco F6',33500,2],['Xiaomi 13T',34000,2],['Xiaomi 14',54000,3],
+ ['realme C55',10500,1],['realme 12 Pro+',31000,2],['Honor X8b',17000,1],['Honor Magic6 Pro',62000,3],['Huawei nova 12',25500,2],['Huawei P60 Pro',62000,3],
+ ['Oppo Reno 11',28500,2],['vivo V30',31500,2],['Motorola Moto G54',12500,1],['OnePlus 12',52500,3],
+ ['Samsung A15',12500,1],['Samsung A25',19500,1],['Samsung A35',27500,2],['Samsung S24',48500,2],['Samsung S24 Ultra',82000,3],
+ ['Sony Xperia 1 V',58000,3],['ASUS ROG Phone 8',62500,3],['Nothing Phone (2)',38500,2],['ZTE Blade A54',6500,1],['itel A60',5000,1],['BQ 5060L Basic',4200,1],['Philips Xenium E2101',2500,1]
+].forEach(x=>ad(PKEY('p',x[0]),'📱 '+x[0],x[1],'p',x[2]));
+// ===== Заблокированные iPhone (цена = стоимость после разблокировки) =====
+const BL=[['iPhone 8',9000,1],['iPhone X',14000,1],['iPhone XR',15500,1],['iPhone SE',11000,1],['iPhone XS',17500,1],
+ ['iPhone 11 Pro',26000,2],['iPhone 11 Pro Max',30000,2],['iPhone XS Max',20500,2],['iPhone 12 mini',24000,2],['iPhone 12',31000,2],['iPhone 12 Pro',40000,2],
+ ['iPhone 12 Pro Max',46000,3],['iPhone 13 mini',34000,3],['iPhone 13 Pro',52000,3],['iPhone 13 Pro Max',58000,3],['iPhone 14',47000,3],['iPhone 14 Plus',51000,3],
+ ['iPhone 14 Pro Max',74000,4],['iPhone 15',62000,4],['iPhone 15 Plus',68000,4],['iPhone 15 Pro',82000,4],
+ ['iPhone 15 Pro Max',98000,5],['iPhone 16',85000,5],['iPhone 16 Pro',108000,5],['iPhone 16 Pro Max',128000,6]
+].map(x=>[PKEY('l',x[0]),'🔒 '+x[0]+' (заблок.)',x[1],x[2]]);
+BL.forEach(x=>ad(x[0],x[1],x[2],'p',x[3]));
+// бренд на задней крышке (для оригиналов и подделок)
+const BRD=[[/Tecno/,'TECNO','TECN0'],[/Infinix/,'Infinix','lnfinix'],[/Nokia/,'NOKIA','NOK1A'],[/Poco/,'POCO','P0CO'],[/Xiaomi/,'XIAOMI','XIAOM1'],[/realme/,'realme','rea1me'],[/Honor/,'HONOR','H0NOR'],[/Huawei/,'HUAWEI','HUAWEl'],[/Oppo/,'OPPO','0PPO'],[/vivo/,'vivo','v1vo'],[/Moto/,'moto','mot0'],[/OnePlus/,'OnePlus','0nePlus'],[/Sony/,'SONY','S0NY'],[/ROG/,'ROG','R0G'],[/Nothing/,'NOTHING','N0THING'],[/ZTE/,'ZTE','ZTF'],[/itel/,'itel','ite1'],[/BQ/,'BQ','8Q'],[/Philips/,'PHILIPS','PHILLPS']];
 // Флагманы 200 000 – 1 000 000 ₽: [ключ, название, мин. уровень, [[память ГБ, цена в тыс. ₽]...]]
 [['ip17','iPhone 17',2,[[256,200],[512,235],[1024,280]]],
  ['ip17p','iPhone 17 Pro',3,[[256,260],[512,305],[1024,360]]],
@@ -234,7 +256,7 @@ const PARTS=[
 ['psu','🔌',[['psu550','Блок питания 550 Вт',4000,1],['psu750','Блок питания 750 Вт',8500,2],['psu850','Блок питания 850 Вт Gold',13000,3],['psu1000','Блок питания 1000 Вт Platinum',20000,4],['psu1200','Блок питания 1200 Вт Titanium',32000,5],['psu1600','Блок питания 1600 Вт Titanium',55000,6]]],
 ['case','🗄',[['case0','Корпус офисный',3000,1],['case1','Корпус ATX',7000,2],['case2','Корпус Fractal',14000,3],['case3','Корпус Lian Li O11',22000,4],['case4','Корпус Corsair 7000D',34000,5],['case5','Корпус витрина с СЖО',90000,6]]]];
 PARTS.forEach(g=>g[2].forEach(x=>ad(x[0],g[1]+' '+x[1],x[2],'r',8,g[0],x[3])));
-const KEYS=Object.keys(I);const LK=new Set(['ip11l','ip13l','ip14l']);
+const KEYS=Object.keys(I);const LK=new Set(['ip11l','ip13l','ip14l',...BL.map(x=>x[0])]);
 I.custom=['🖥 Сборный ПК',0,'c',99];
 const nm=d=>d.nm||I[d.key]?.[0]||'Неизвестное устройство';
 const lab=k=>{const x=I[k];if(x[2]==='t')return'смарт-приставки';if(x[2]==='r')return'комплектующие';if(x[2]==='c')return x[0].startsWith('💻')?'ноутбуки':'ПК';return/iPhone 1[78]|Duo|Vertu|Caviar/.test(x[0])?x[0].replace(/^\S+\s/,'').split(' · ')[0]:'телефоны'};
@@ -506,7 +528,7 @@ function phoneFace(d,side,F,hn){
     if(hn==='Залипает кнопка')s+=ring(192,160,34);
     if(hn==='Не включается'||hn==='Проблема с платой')s+=ring(100,200,80);
   }else{
-    const rc=rng(sd+11),cx=40+rc()*120,cy=150+rc()*200,fk=!!F.fake,brand=ip?'iPhone':sg?(fk?'SAMSUMG':'SAMSUNG'):px?(fk?'Gooqle':'Google'):(fk?'Redrni':'Redmi');
+    const rc=rng(sd+11),cx=40+rc()*120,cy=150+rc()*200,fk=!!F.fake,brand=ip?'iPhone':sg?(fk?'SAMSUMG':'SAMSUNG'):px?(fk?'Gooqle':'Google'):((b=>b?(fk?b[2]:b[1]):(fk?'Redrni':'Redmi'))(BRD.find(b=>b[0].test(nn))));
     s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="url(#${u}b)" stroke="url(#${u}f)" stroke-width="3"/><g clip-path="url(#${u}c)"><path d="M10 8H190V140L10 260Z" fill="#fff" fill-opacity=".08"/><rect x="10" y="8" width="180" height="394" fill="url(#${u}r)"/>`;
     if(ip){
       s+=pro?`<rect x="22" y="20" width="88" height="90" rx="22" fill="rgba(255,255,255,.14)" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>${lens(48,46,14)}${lens(48,84,14)}${lens(86,65,14)}<circle cx="90" cy="34" r="4.5" fill="#f7f1c8"/><circle cx="90" cy="98" r="3.5" fill="#222"/>`
@@ -1187,7 +1209,7 @@ document.addEventListener('pointerup',rdEnd);document.addEventListener('pointerc
 let RF=null;
 const RFNET=['Masterskaya_5G_Guest','Masterskaya_5G','Masterskaya-5G','TP-LINK_BA34'];
 const RFLOG=['Sending iBSS (1401 KB)… done','Sending iBEC (1331 KB)… done','Sending RestoreRamdisk… done','Sending KernelCache… done','Waiting for device to enter restore mode…','Partition NAND device (1)','Uploading filesystem…','Verifying restore (6438 MB)…','Flashing SEP firmware… done','Updating baseband… done'];
-function rfId(d){const n=nm(d),m={'iPhone 8':'10,1','iPhone 11':'12,1','iPhone 12':'13,2','iPhone 13':'14,5','iPhone 14 Pro':'15,2','iPhone 14':'14,7','iPhone 15':'15,4'};
+function rfId(d){const n=nm(d),m={'iPhone 8':'10,1','iPhone X':'10,6','iPhone XR':'11,8','iPhone XS':'11,2','iPhone XS Max':'11,6','iPhone SE':'12,8','iPhone 11':'12,1','iPhone 11 Pro':'12,3','iPhone 11 Pro Max':'12,5','iPhone 12':'13,2','iPhone 12 mini':'13,1','iPhone 12 Pro':'13,3','iPhone 12 Pro Max':'13,4','iPhone 13':'14,5','iPhone 13 mini':'14,4','iPhone 13 Pro':'14,2','iPhone 13 Pro Max':'14,3','iPhone 14 Pro':'15,2','iPhone 14 Pro Max':'15,3','iPhone 14':'14,7','iPhone 14 Plus':'14,8','iPhone 15':'15,4','iPhone 15 Plus':'15,5','iPhone 15 Pro':'16,1','iPhone 15 Pro Max':'16,2','iPhone 16':'17,3','iPhone 16 Pro':'17,1','iPhone 16 Pro Max':'17,2'};
   for(const k of Object.keys(m).sort((a,b)=>b.length-a.length))if(n.includes(k))return'iPhone'+m[k];
   const h=hs(n);return'iPhone'+(16+h%4)+','+(1+h%5)}
 function rfOpen(id){
