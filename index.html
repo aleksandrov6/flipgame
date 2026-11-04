@@ -710,7 +710,7 @@ function vOrd(){
 }
 function vProf(){
   const L0=lvl(),lo=50*L0*(L0-1),hi=50*(L0+1)*L0,to=hi-S.exp,can=Date.now()-S.bonus>864e5;
-  return`<div class="c"><h3>🛠 Мастер, уровень ${lvl()}</h3><div class="mut">До следующего уровня: ${to} опыта. За каждую продажу 15–25 опыта, каждый следующий уровень дольше. Выше уровень, меньше шанс неудачного ремонта.</div><div class="bar"><i style="width:${Math.round((S.exp-lo)/(hi-lo)*100)}%"></i></div></div><div class="c"><div class="st"><div>Продано<b>${S.sold}</b></div><div>Прибыль<b>${f(S.earn)}</b></div><div>Починено<b>${S.fixed}</b></div><div>Репутация<b>${S.rep}</b></div><div>Капитал<b>${f(worth())}</b></div><div>Расходы/цикл<b>~${f(rent()+taxOf())}</b></div></div></div><div class="c"><div class="acts"><button class="b ok" data-a="bonus" ${can?'':'disabled'}>🎁 Бонус 1 000 ₽</button></div><div class="acts"><button class="b g" data-a="theme">🌓 Тема</button><button class="b bad" data-a="reset">${arm?'Точно сбросить?':'Сбросить игру'}</button></div></div><div class="mut" style="text-align:center;margin:12px">Ваш Telegram ID: ${TGID||'виден при запуске из Telegram'}</div>`+vTop()+vAch();
+  return`<div class="c"><h3>🛠 Мастер, уровень ${lvl()}</h3><div class="mut">До следующего уровня: ${to} опыта. За каждую продажу 15–25 опыта, каждый следующий уровень дольше. Выше уровень, меньше шанс неудачного ремонта.</div><div class="bar"><i style="width:${Math.round((S.exp-lo)/(hi-lo)*100)}%"></i></div></div><div class="c"><div class="st"><div>Продано<b>${S.sold}</b></div><div>Прибыль<b>${f(S.earn)}</b></div><div>Починено<b>${S.fixed}</b></div><div>Репутация<b>${S.rep}</b></div><div>Капитал<b>${f(worth())}</b></div><div>Расходы/цикл<b>~${f(rent()+taxOf())}</b></div></div></div><div class="c"><div class="acts"><button class="b ok" data-a="bonus" ${can?'':'disabled'}>🎁 Бонус 1 000 ₽</button></div><div class="acts"><button class="b g" data-a="theme">🌓 Тема</button><button class="b bad" data-a="reset">${arm?'Точно сбросить?':'Сбросить игру'}</button></div></div>${vPromoUse()}<div class="mut" style="text-align:center;margin:12px">Ваш Telegram ID: ${TGID||'виден при запуске из Telegram'}</div>`+vTop()+vAch();
 }
 function pcBuild(){
   const o=bdInfo(),sty='padding:8px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;max-width:58%';
@@ -795,6 +795,72 @@ function plSend(type,amount){
   fetch(API+'/admin/player',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:INIT,target:id,type:type==='take'?'money':type==='give'?'money':type,amount:type==='take'?-n:n})})
    .then(r=>{if(!r.ok)throw 0;toast('Отправлено игроку '+id)}).catch(()=>toast('Ошибка: сервер не принял команду'));
 }
+/* ===== 🎟 Промокоды ===== */
+let PROMOS=null,PROMO_ERR='',promoBusy=0,PRIN='',PRD={code:'',type:'money',amt:'',max:''};
+const PR_INP='width:100%;padding:10px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;margin-top:8px';
+const prNorm=s=>String(s||'').trim().toUpperCase().replace(/\s+/g,'');
+const prOk=s=>/^[\p{L}\d_-]{3,24}$/u.test(s);
+const prRew=p=>p.type==='lvl'?'🛠 +'+p.amount+' ур.':'💰 +'+f(p.amount);
+function promoReq(path,body){
+  return fetch(API+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({initData:INIT},body))})
+   .then(async r=>{const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j});
+}
+function vPromoUse(){
+  return`<div class=\"c\"><h3>🎟 Промокод</h3><div class=\"mut\">Есть промокод? Введите его и получите награду.</div>
+<input id=\"prin\" value=\"${esc(PRIN)}\" placeholder=\"Введите промокод\" autocapitalize=\"characters\" autocomplete=\"off\" style=\"${PR_INP};text-transform:uppercase\">
+<div class=\"acts\"><button class=\"b ok\" data-a=\"promouse\" ${promoBusy?'disabled':''}>Активировать</button></div></div>`}
+function promoRedeem(){
+  const code=prNorm((($('#prin')||{}).value)||PRIN);
+  if(!code)return toast('Введите промокод');
+  if(!prOk(code))return toast('Неверный формат промокода');
+  if(!API||!TGID)return toast('Нужен Telegram и подключённый сервер');
+  if(promoBusy)return;promoBusy=1;
+  promoReq('/promo/redeem',{code}).then(j=>{
+    const n=Math.max(0,Math.floor(+j.amount||0));
+    if(j.type==='lvl'){const L=lvl()+n;S.exp=Math.max(S.exp,50*L*(L-1));toast('🎟 Промокод принят! Уровень +'+n+' (теперь '+lvl()+')')}
+    else{S.bal+=n;toast('🎟 Промокод принят! +'+f(n))}
+    PRIN='';
+  }).catch(e=>toast('Промокод: '+(e.message||'ошибка')))
+   .finally(()=>{promoBusy=0;save();render()});
+}
+function promoLoad(){
+  if(!API||!TGID||!isMain()||promoBusy)return;promoBusy=1;PROMO_ERR='';
+  promoReq('/admin/promo',{op:'list'}).then(j=>{PROMOS=Array.isArray(j.promos)?j.promos:[]})
+   .catch(e=>{PROMOS=PROMOS||[];PROMO_ERR=e.message||'ошибка'})
+   .finally(()=>{promoBusy=0;render(1)});
+}
+function vPromoAdm(){
+  if(PROMOS===null&&!promoBusy)setTimeout(promoLoad,0);
+  const list=(PROMOS||[]).map(p=>`<div class=\"df\"><span><b>${esc(p.code)}</b><br><span class=\"mut\">${prRew(p)} · активаций: ${p.used||0}${p.max?' / '+p.max:' (без лимита)'}</span></span><button class=\"b bad\" style=\"padding:6px 10px\" data-a=\"prdel\" data-k=\"${esc(p.code)}\">✕</button></div>`).join('');
+  return`<div class=\"c\"><h3>🎟 Промокоды</h3><div class=\"mut\">Создайте код и выберите награду. Каждый игрок может активировать один код только один раз.${API?'':' <b style=\"color:var(--bad)\">Сервер не подключён (API пустой)</b>'}</div>
+<div class=\"row\" style=\"gap:6px\"><input id=\"prcode\" value=\"${esc(PRD.code)}\" placeholder=\"Код (напр. START2026)\" autocapitalize=\"characters\" autocomplete=\"off\" style=\"${PR_INP};text-transform:uppercase\"><button class=\"b g\" data-a=\"prgen\" style=\"margin-top:8px\" title=\"Случайный код\">🎲</button></div>
+<select id=\"prtype\" style=\"${PR_INP}\"><option value=\"money\" ${PRD.type==='money'?'selected':''}>💰 Дать деньги</option><option value=\"lvl\" ${PRD.type==='lvl'?'selected':''}>🛠 Дать уровни</option></select>
+<input id=\"pramt\" value=\"${esc(PRD.amt)}\" inputmode=\"numeric\" placeholder=\"${PRD.type==='lvl'?'Сколько уровней (1–20)':'Сумма, ₽'}\" style=\"${PR_INP}\">
+<input id=\"prmax\" value=\"${esc(PRD.max)}\" inputmode=\"numeric\" placeholder=\"Лимит активаций (пусто = без лимита)\" style=\"${PR_INP}\">
+<div class=\"acts\"><button class=\"b ok\" data-a=\"prcreate\" ${promoBusy?'disabled':''}>➕ Создать промокод</button><button class=\"b g\" data-a=\"prrefresh\">🔄 Список</button></div>
+<div style=\"margin-top:10px\">${PROMO_ERR?`<div class=\"mut\" style=\"color:var(--bad)\">Ошибка списка: ${esc(PROMO_ERR)}</div>`:''}${PROMOS===null?'<div class=\"mut\">Загрузка…</div>':list||'<div class=\"mut\">Промокодов пока нет.</div>'}</div></div>`}
+function promoCreate(){
+  const code=prNorm(PRD.code),amt=parseInt(String(PRD.amt).replace(/\D/g,''))||0,max=parseInt(String(PRD.max).replace(/\D/g,''))||0,type=PRD.type==='lvl'?'lvl':'money';
+  if(!prOk(code))return toast('Код: 3–24 символа, буквы/цифры/_/-');
+  if(amt<1)return toast('Укажите награду');
+  if(type==='lvl'&&amt>20)return toast('Максимум 20 уровней за код');
+  if(!API||!TGID)return toast('Нужен Telegram и подключённый сервер');
+  if(promoBusy)return;promoBusy=1;
+  promoReq('/admin/promo',{op:'create',code,type,amount:amt,max}).then(()=>{toast('✅ Промокод '+code+' создан');PRD={code:'',type:PRD.type,amt:'',max:''};PROMOS=null})
+   .catch(e=>toast('Ошибка: '+(e.message||'сервер не принял')))
+   .finally(()=>{promoBusy=0;render()});
+}
+function promoDelete(code){
+  if(!confirm('Удалить промокод '+code+'?'))return;
+  if(promoBusy)return;promoBusy=1;
+  promoReq('/admin/promo',{op:'delete',code}).then(()=>{toast('Промокод удалён');PROMOS=null})
+   .catch(e=>toast('Ошибка: '+(e.message||'сервер не принял')))
+   .finally(()=>{promoBusy=0;render()});
+}
+document.addEventListener('input',e=>{const t=e.target;if(!t||!t.id)return;
+  if(t.id==='prin')PRIN=t.value;else if(t.id==='prcode')PRD.code=t.value;else if(t.id==='pramt')PRD.amt=t.value;else if(t.id==='prmax')PRD.max=t.value});
+document.addEventListener('change',e=>{const t=e.target;if(t&&t.id==='prtype'){PRD.type=t.value;render()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='prin'){e.preventDefault();promoRedeem()}});
 function pollCmd(){
   if(!API||!TGID)return;
   fetch(API+'/commands',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:INIT,ack:S.done})})
@@ -824,7 +890,7 @@ function trFlush(){
 }
 function vAdmin(){
   const ev=EVS.map((e,k)=>`<button class="b g" data-a="admev" data-i="${k}">${e.t}</button>`).join('');
-  return`<div class="c"><h3>${isMain()?'👑 Главный админ':'⚙️ Админ-панель'}</h3><div class="mut">${isMain()?'Ниже — управление игроками. Остальные инструменты действуют на этом устройстве.':'Видна только вам. Действует на этом устройстве.'}<div style="margin-top:6px">Ваш ID: <b>${TGID||'не определён'}</b> · роль: <b>${isMain()?'главный':'обычный'}</b> · версия 7 (частые поломки телефонов)</div></div></div>${isMain()?vPlayers():''}
+  return`<div class="c"><h3>${isMain()?'👑 Главный админ':'⚙️ Админ-панель'}</h3><div class="mut">${isMain()?'Ниже — управление игроками. Остальные инструменты действуют на этом устройстве.':'Видна только вам. Действует на этом устройстве.'}<div style="margin-top:6px">Ваш ID: <b>${TGID||'не определён'}</b> · роль: <b>${isMain()?'главный':'обычный'}</b> · версия 7 (частые поломки телефонов)</div></div></div>${isMain()?vPlayers()+vPromoAdm():''}
 <div class="c"><h3>💰 Деньги</h3><div class="acts"><button class="b ok" data-a="admm" data-i="10000">+10 000</button><button class="b ok" data-a="admm" data-i="100000">+100 000</button></div><div class="acts"><button class="b bad" data-a="admm" data-i="-10000">−10 000</button><button class="b g" data-a="admz">Обнулить</button></div></div>
 <div class="c"><h3>🔄 Рынок</h3><div class="acts"><button class="b" data-a="admr">🔄 Себе</button><button class="b bad" data-a="admrall">🌍 Всем игрокам</button></div><div class="mut" style="margin-top:8px">Событие:</div><div style="display:grid;gap:6px;margin-top:6px">${ev}<button class="b g" data-a="admev" data-i="9">Без события</button></div></div>
 <div class="c"><h3>🎁 Выдать товар на склад</h3><select id="admsel" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit">${(()=>{const o=k=>`<option value="${k}">${I[k][0]} · ${f(I[k][1])}</option>`;const hi=KEYS.filter(k=>I[k][1]>=1e6).sort((a,b)=>I[a][1]-I[b][1]),lo=KEYS.filter(k=>I[k][1]<1e6);return`<optgroup label="💎 Элита — от 1 000 000 ₽ (${hi.length})">${hi.map(o).join('')}</optgroup><optgroup label="Остальные товары">${lo.map(o).join('')}</optgroup>`})()}</select><div class="acts"><button class="b" data-a="admadd" data-i="0">Со случайными дефектами</button><button class="b ok" data-a="admadd" data-i="1">Исправный</button></div></div>
@@ -946,7 +1012,7 @@ function vTr(){
   (sheet.id?`<div class="df"><span style="display:flex;gap:8px;align-items:center">${av(sheet.name,28)}${esc(sheet.name)}</span><span class="mut">ID ${sheet.id}</span></div>`:`<input id="trid" inputmode="numeric" placeholder="Telegram ID получателя" value="${esc(sheet.rid||'')}" style="${inp}">`)+
   `<input id="tramt" inputmode="numeric" placeholder="Сумма, ₽" value="${sheet.amt||''}" style="${inp}"><div class="flt" style="padding:10px 0 4px">${[1000,5000,10000,50000].map(v=>`<span class="ch" data-a="trset" data-i="${v}">${f(v)}</span>`).join('')}</div><div class="acts"><button class="b ok" data-a="trgo">Отправить</button><button class="b g" data-a="close">Отмена</button></div></div></div>`}
 function render(k){
-  const keep=k?['cin','pin','trid','tramt'].map(id=>{const e=document.getElementById(id);return e?[id,e.value,document.activeElement===e]:0}).filter(Boolean):[];
+  const keep=k?['cin','pin','trid','tramt','prin','prcode','pramt','prmax'].map(id=>{const e=document.getElementById(id);return e?[id,e.value,document.activeElement===e]:0}).filter(Boolean):[];
   const T={m:vMarket,i:vInv,s:vSales,l:vLots,o:vOrd,p:vProf,c:vPc,a:vAdmin},N=[['m','search','Рынок'],['i','box','Склад'],['s','chat','Продажи'],['l','case','Лоты'],['c','pc','ПК']];if(S.tab==='o')S.tab='m';
   if(isAdm())N.push(['a','gear','Админ']);else if(S.tab==='a')S.tab='m';
   $('#app').innerHTML=hdr()+T[S.tab]()+vSheet()+`<nav>${N.map(n=>`<button class="${S.tab===n[0]?'on':''}" data-a="tab" data-i="${n[0]}"><i>${IC(n[1])}</i>${n[2]}${n[0]==='i'&&S.inv.length?`<em>${S.inv.length}</em>`:n[0]==='s'&&unread()?`<em>${unread()}</em>`:''}</button>`).join('')}</nav>`;
@@ -1000,6 +1066,12 @@ document.addEventListener('click',e=>{
   else if(a==='trgo'){if(sheet&&sheet.t==='tr'){const to=sheet.id||parseInt((($('#trid')||{}).value||'').replace(/\D/g,''))||0,n=parseInt((($('#tramt')||{}).value||'').replace(/\D/g,''))||0;
     if(!to)toast('Укажите ID получателя');else if(to===TGID)toast('Нельзя перевести самому себе');else if(n<TR_MIN)toast('Минимум '+f(TR_MIN));
     else if(!lose(n)){S.pend.push({tid:TGID+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,8),to,n,name:sheet.name});sheet=null;toast('💸 Отправляем '+f(n)+'…');trFlush()}}}
+  else if(a==='promouse')promoRedeem();
+  else if(a.startsWith('pr')&&['prgen','prcreate','prrefresh','prdel'].includes(a)){if(!isMain())return;
+    if(a==='prgen'){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let q=0;q<8;q++)c+=A[Math.floor(Math.random()*A.length)];PRD.code=c}
+    else if(a==='prcreate')promoCreate();
+    else if(a==='prrefresh'){PROMOS=null;PROMO_ERR=''}
+    else if(a==='prdel')promoDelete(t.dataset.k)}
   else if(a.startsWith('mpl')){if(!isMain())return;
     if(a==='mplgive')plSend('give');else if(a==='mpltake')plSend('take');
     else if(a==='mplzero')plSend('zero');else if(a==='mpllvl')plSend('lvl');
