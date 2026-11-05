@@ -568,6 +568,19 @@ const BRD=[[/Tecno/,'TECNO','TECN0'],[/Infinix/,'Infinix','lnfinix'],[/Nokia/,'N
 [['alien','💻 Alienware Area-51 Extreme Edition',1200000,7],['mpro','🖥 Mac Pro Rack M5 Ultra',1500000,7],['wks2','🖥 Станция 2×Threadripper PRO',2200000,8],['gpusrv','🖥 GPU-сервер 8×RTX PRO 6000',4500000,9]].forEach(x=>ad(x[0],x[1],x[2],'c',x[3]));
 // Смарт-приставки (прошиваются под Алису на своём ПК)
 [['tvmi','📺 Xiaomi Mi Box S',4500,1],['tvsber','📺 SberBox',5500,1],['tvyb','📺 Яндекс ТВ Станция Бейсик',9000,1],['tvyp','📺 Яндекс ТВ Станция Про',16000,2],['tvatv','📺 Apple TV 4K',18000,2],['tvatv2','📺 Apple TV 4K · 128 ГБ',23000,3],['tvshield','📺 NVIDIA Shield TV Pro',26000,3],['tvgold','📺 Caviar Apple TV 4K Gold Edition',140000,5]].forEach(x=>ad(x[0],x[1],x[2],'t',x[3]));
+// ===== Сверхэлита: 4,5 – 10 млн ₽ (ур. 9–12) =====
+// Телефоны: [ключ, название, мин. уровень, [[память ГБ, цена в тыс. ₽]...]]
+[['ipcavd','Caviar iPhone 18 Pro Max Diamond',9,[[2048,4800]]],
+ ['vertu2','Vertu Aster Royal',10,[[1024,5800],[2048,6600]]],
+ ['ipcavt','Caviar iPhone Duo Tourbillon Titanium',11,[[2048,8000]]],
+ ['ipcavi','Caviar iPhone Duo Imperial Edition',12,[[2048,10000]]]
+].forEach(m=>m[3].forEach(v=>ad(m[0]+'_'+v[0],'📱 '+m[1]+' · '+(v[0]>=1024?v[0]/1024+' ТБ':v[0]+' ГБ'),v[1]*1000,'p',m[2])));
+// Ноутбуки и ПК: [ключ, название, цена ₽, мин. уровень]
+[['rogg','💻 Caviar ROG Strix SCAR 18 Gold Edition',5100000,10],['alienf','💻 Alienware Area-51 Founders Edition',6500000,10],['razerbd','💻 Razer Blade 18 Black Diamond Edition',8800000,11],
+ ['gpc5090t','🖥 Игровой ПК Caviar RTX 5090 Titanium',5400000,10],['aisrv','🖥 AI-сервер 16×B200 Blackwell',7200000,11],['macclu','🖥 Кластер Mac Studio 8×M5 Ultra',9400000,12]
+].forEach(x=>ad(x[0],x[1],x[2],'c',x[3]));
+// Смарт-приставки
+[['tvgold2','📺 Caviar Apple TV 4K Royal Gold Edition',4800000,10],['tvgold3','📺 Caviar Яндекс ТВ Станция Imperial Gold',7500000,11]].forEach(x=>ad(x[0],x[1],x[2],'t',x[3]));
 // Комплектующие, ур. 8: слот, значок, [[ключ, название, цена, тир 1-6]...]
 const PARTS=[
 ['cpu','⚙️',[['i5','Core i5-12400F',12000,1],['ryzen5','Ryzen 5 7600',19000,2],['ryzen7','Ryzen 7',29000,3],['i9','Core i9-14900K',52000,4],['r9','Ryzen 9 9950X',68000,5],['tr','Threadripper PRO 7995WX',700000,6]]],
