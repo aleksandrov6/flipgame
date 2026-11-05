@@ -189,6 +189,203 @@ nav button.on i{background:rgba(47,123,255,.15)}
 .b3 .cw{position:absolute;left:0;top:0;width:320px;height:240px;transform-origin:0 0}
 .b3 .cw svg{display:block;width:320px;height:240px}
 .b3.sd{background-image:linear-gradient(90deg,rgba(255,255,255,.18),rgba(0,0,0,.3))}
+
+/* === Редизайн: оформление поверх логики (3D и ремонт не затронуты) === */
+:root{--bg:#f1f3f7;--card:#fff;--tx:#0e1726;--mut:#667389;--ac:#0a8bff;--ac2:#7a5cff;--ok:#12b360;--bad:#f04452;--warn:#e8920c;--bd:#e3e8f0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#080e19;--card:#111b2d;--tx:#e9eff9;--mut:#8794ab;--bd:#1f2c44}}
+:root[data-theme="dark"]{--bg:#080e19;--card:#111b2d;--tx:#e9eff9;--mut:#8794ab;--bd:#1f2c44}
+html,body{font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.005em;font-variant-numeric:tabular-nums}
+body{padding-bottom:108px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.top{background:radial-gradient(120% 150% at 100% 0,rgba(10,139,255,.5),transparent 55%),radial-gradient(80% 100% at 0 100%,rgba(122,92,255,.3),transparent 60%),#0e1726;border-radius:0 0 32px 32px;box-shadow:0 14px 30px -18px rgba(10,139,255,.55);padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
+.top small{opacity:.62;font-size:12px;font-weight:600}
+.top .bal{font-size:40px;font-weight:800;letter-spacing:-1.2px;line-height:1.1;margin-top:2px}
+.pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:6px 11px;font-weight:700}
+.pb{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.1)}
+.pb.on{background:#fff;color:#0e1726}
+.ev{border-radius:16px;border-left:4px solid var(--warn);background:rgba(232,146,12,.12)}
+.c{border-radius:22px;padding:16px;box-shadow:none;border:1px solid var(--bd)}
+.c h3{font-size:17px;font-weight:800;letter-spacing:-.015em;margin-bottom:6px}
+.mut{line-height:1.45}
+.price{font-weight:800;font-size:19px;letter-spacing:-.02em}
+.ch{border-radius:10px;padding:5px 10px;font-weight:600}
+.ch.ok{background:rgba(18,179,96,.13);color:var(--ok)}
+.ch.bad{background:rgba(240,68,82,.13);color:var(--bad)}
+.ch.on{background:var(--ac);color:#fff}
+.flt{padding:14px 12px 2px;scrollbar-width:none}.flt::-webkit-scrollbar{display:none}
+.flt .ch{background:var(--card);border:1px solid var(--bd);padding:8px 14px;border-radius:12px}
+.flt .ch.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.b{border-radius:14px;padding:12px 16px;background:linear-gradient(180deg,#22a0ff,#0a82ee);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 16px -8px rgba(10,139,255,.7);transition:transform .12s,filter .12s}
+.b:hover{filter:brightness(1.05)}
+.b.g{background:var(--bg);color:var(--tx);box-shadow:inset 0 0 0 1px var(--bd)}
+.b.ok{background:linear-gradient(180deg,#1fcb78,#0e9f55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 16px -8px rgba(18,179,96,.7)}
+.b.bad{background:linear-gradient(180deg,#ff6370,#e0303f);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 16px -8px rgba(240,68,82,.7)}
+.b:disabled{opacity:.4;box-shadow:none;filter:grayscale(.3)}
+nav{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));padding:6px;border-radius:26px;border:1px solid var(--bd);background:color-mix(in srgb,var(--card) 88%,transparent);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:0 16px 34px -14px rgba(14,23,38,.45)}
+nav button{font-size:11px;font-weight:700;padding:3px 0}
+nav button.on{color:var(--tx)}
+nav button.on i{background:var(--ac);color:#fff;box-shadow:0 6px 14px -6px rgba(10,139,255,.8)}
+nav em{top:-2px;right:18%;border:2px solid var(--card);padding:0 5px}
+.ov{background:rgba(8,14,26,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.sh{border-radius:30px 30px 0 0;padding-top:12px;box-shadow:0 -10px 40px rgba(0,0,0,.25)}
+.sh::before{content:"";display:block;width:42px;height:4px;border-radius:4px;background:var(--bd);margin:0 auto 14px}
+.df{padding:11px 0}.df:last-child{border-bottom:0}
+.toast{background:var(--tx);color:var(--bg);border-radius:16px;box-shadow:0 12px 30px -10px rgba(0,0,0,.5)}
+.empty{padding:46px 24px;line-height:1.5}
+.st{gap:10px}.st div{border-radius:16px;padding:12px;border:1px solid var(--bd);font-size:12px;color:var(--mut);font-weight:600}.st b{font-size:19px;color:var(--tx);letter-spacing:-.02em;margin-top:2px}
+.bar{height:10px}.bar i{border-radius:9px}
+.dk{border-radius:28px;background:radial-gradient(110% 70% at 85% 0,rgba(122,92,255,.55),transparent 60%),radial-gradient(90% 60% at 0 100%,rgba(10,139,255,.35),transparent 60%),#0b1330;box-shadow:0 18px 36px -18px rgba(40,30,140,.7)}
+.dki button{font-weight:700}
+.win{border-radius:18px}
+.wt{padding:10px 14px;background:rgba(0,0,0,.14)}
+.tbar{background:rgba(0,0,0,.28)}
+
+/* === Редизайн v2: глубина, иерархия, десктоп === */
+::selection{background:rgba(10,139,255,.28)}
+*{scrollbar-width:thin;scrollbar-color:var(--bd) transparent}
+#app{max-width:520px;margin:0 auto;min-height:100vh}
+@media (min-width:560px){body{background:radial-gradient(60% 40% at 50% 0,rgba(10,139,255,.12),transparent),var(--bg)}#app{border-left:1px solid var(--bd);border-right:1px solid var(--bd);background:var(--bg)}}
+nav{max-width:500px;margin:0 auto}
+.sh{max-width:520px;margin:0 auto}
+.top{padding-bottom:20px}
+.top .bal{background:linear-gradient(180deg,#fff 30%,#bfe0ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.top .row{margin-top:10px}
+.pill{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.c{box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 1px 2px rgba(14,23,38,.04);transition:transform .12s,border-color .15s}
+:root[data-theme="dark"] .c{box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .c{box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}}
+.c[data-a]{cursor:pointer}.c[data-a]:active{transform:scale(.985);border-color:var(--ac)}
+.c .row h3{margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px}
+.c .row .price{flex:none;background:var(--bg);padding:3px 10px;border-radius:10px;font-size:16px}
+.th{border-radius:18px;background:radial-gradient(circle at 50% 30%,#fafbfe,#cdd5e3);box-shadow:inset 0 0 0 1px rgba(14,23,38,.06),0 8px 16px -10px rgba(14,23,38,.4)}
+.th span{background:rgba(14,23,38,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:1px 7px;border-radius:9px}
+.chips{gap:6px;margin:10px 0 4px}
+.ch:not(.ok):not(.bad):not(.on){box-shadow:inset 0 0 0 1px var(--bd);background:transparent}
+.flt .ch:not(.on){background:var(--card)}
+.acts{gap:8px;margin-top:12px}
+.acts .b{flex:1 1 auto}.acts .b.g{flex:.8 1 auto}.acts .b:not(.g){flex:1.3 1 auto}
+.b{font-weight:700;letter-spacing:-.01em;min-height:44px}
+.b:active{transform:scale(.96);filter:brightness(.96)}
+.df{gap:10px}
+.dki{gap:10px;padding:24px 14px}
+.dki button{padding:12px 2px;font-size:12px}
+.dki i.ic{position:relative;overflow:hidden;width:64px;height:64px;border-radius:21px}
+.dki i.ic::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.3),transparent 48%)}
+.dki button:active i.ic{transform:scale(.93)}
+.win{box-shadow:0 20px 40px -20px rgba(0,0,0,.6)}
+.wt button{border-radius:9px;width:30px;height:26px}
+.term{border:1px solid rgba(74,222,128,.18);box-shadow:inset 0 0 30px rgba(74,222,128,.05)}
+.bmc{border-radius:16px;background:linear-gradient(180deg,#171722,#101018)}
+input,select,textarea{transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ac)!important;box-shadow:0 0 0 3px rgba(10,139,255,.2)}
+.toast{animation:tin .26s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes tin{from{opacity:0;transform:translate(-50%,-14px) scale(.96)}}
+.empty{border:1.5px dashed var(--bd);border-radius:22px;margin:14px 12px;font-size:14px}
+nav button i{transition:background .2s,color .2s,box-shadow .2s}
+nav button:active i{transform:scale(.9)}
+
+/* === Редизайн v3: финальная шлифовка === */
+html{-webkit-text-size-adjust:100%;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+button,.ch,nav button,[data-a]{touch-action:manipulation;-webkit-touch-callout:none}
+button,.ch,nav,.dki{-webkit-user-select:none;user-select:none}
+.c{margin:12px 12px 0}.c:last-child{margin-bottom:12px}
+.top+.c,.top+.flt{margin-top:14px}
+.c h3{line-height:1.25}
+.mut{font-size:13px;line-height:1.45}
+.c>.mut:first-of-type{margin-top:2px}
+.ch{line-height:1.3}
+.flt .ch{min-height:36px;display:inline-flex;align-items:center}
+.row{min-height:0}
+.top .row .mut{color:rgba(255,255,255,.7)!important}
+:root[data-theme="dark"] .mut{color:#9aa7bd}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .mut{color:#9aa7bd}}
+.vw{border-radius:24px;background:radial-gradient(circle at 50% 35%,#fbfcff,#c4ccdb 75%);box-shadow:inset 0 0 0 1px rgba(14,23,38,.07),inset 0 -24px 40px -28px rgba(14,23,38,.35)}
+.vw:active{cursor:grabbing}
+.vf svg{filter:drop-shadow(0 14px 16px rgba(14,23,38,.38))}
+.rd3{border-radius:24px;box-shadow:inset 0 0 0 1px #24324d,inset 0 -30px 50px -34px #000}
+#rp .rpb,.rpb{border-radius:15px;min-height:48px;background:linear-gradient(180deg,#22a0ff,#0a82ee);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 10px 20px -10px rgba(10,139,255,.8);letter-spacing:-.01em}
+.rpb.ok{background:linear-gradient(180deg,#1fcb78,#0e9f55)}
+.rpb.g{background:#1b2436;box-shadow:inset 0 0 0 1px #2a3752}
+.rpb:active{transform:scale(.97)}
+.rph{font-size:17px;letter-spacing:-.01em}
+.rph button{border-radius:13px;background:#1b2436;box-shadow:inset 0 0 0 1px #2a3752}
+.rpsteps span{padding:7px 2px;font-weight:700}
+.rpsteps .on{background:#0a8bff;box-shadow:0 6px 14px -6px rgba(10,139,255,.8)}
+.rpn,.rpcov{border-radius:16px}
+.rpt{border-radius:14px}
+.rpstage::before{border-radius:30px}
+.rfbt button,.rfwf button{min-height:48px}
+nav{padding:7px 6px}
+nav button{min-height:52px}
+nav button:not(.on){opacity:.85}
+.pb{transition:background .2s,color .2s,transform .12s}.pb:active{transform:scale(.92)}
+.sh h3{font-size:19px;letter-spacing:-.02em;margin-bottom:6px}
+.sh .acts{margin-top:16px}
+.sh input{min-height:46px}
+.st div{display:flex;flex-direction:column;gap:2px}
+.bar{box-shadow:inset 0 0 0 1px var(--bd);background:var(--bg)}
+.bar i{box-shadow:0 0 12px rgba(10,139,255,.45)}
+.toast{font-size:14px;padding:11px 18px}
+@media (max-width:360px){.top .bal{font-size:34px}.c{padding:14px;border-radius:20px}.b{padding:11px 12px;font-size:14px}}
+@media (prefers-reduced-motion:reduce){.toast{animation:none}.b,.c,nav button i,.pb{transition:none}}
+
+/* === Ремонт: крутой редизайн (логика не тронута) === */
+#rp{background:radial-gradient(90% 50% at 50% -5%,#24407a 0,transparent 70%),radial-gradient(60% 40% at 100% 100%,rgba(122,92,255,.22),transparent 70%),#080b12}
+#rp::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(120,170,255,.05) 1px,transparent 1px) 0 0/28px 28px,linear-gradient(90deg,rgba(120,170,255,.05) 1px,transparent 1px) 0 0/28px 28px;-webkit-mask:radial-gradient(circle at 50% 35%,#000,transparent 75%);mask:radial-gradient(circle at 50% 35%,#000,transparent 75%)}
+#rp>*{position:relative}
+.rph button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
+.rpsteps{gap:0;margin:14px 0 4px}
+.rpsteps span{background:none;position:relative;padding:24px 2px 0;color:#5f6b84}
+.rpsteps span::before{content:"";position:absolute;left:50%;top:5px;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#1a2336;border:2px solid #2c3956;z-index:1}
+.rpsteps span::after{content:"";position:absolute;left:-50%;right:50%;top:11px;height:2px;background:#1f2a40}
+.rpsteps span:first-child::after{display:none}
+.rpsteps .on,.rpsteps .dn{background:none}.rpsteps .on{color:#fff}.rpsteps .dn{color:#7dff9b}
+.rpsteps .on::before{background:#2f7bff;border-color:#9cc2ff;box-shadow:0 0 0 4px rgba(47,123,255,.25),0 0 14px #2f7bff;animation:rpbeat 1.6s ease-in-out infinite}
+.rpsteps .dn::before{background:#16a05a;border-color:#7dff9b;box-shadow:0 0 10px rgba(125,255,155,.6)}
+.rpsteps .on::after,.rpsteps .dn::after{background:linear-gradient(90deg,#16a05a,#2f7bff)}
+@keyframes rpbeat{50%{box-shadow:0 0 0 8px rgba(47,123,255,.08),0 0 20px #2f7bff}}
+.rpstage::before{background:linear-gradient(160deg,#142040,#0a0f1b);border:1px solid #2a3a5f;box-shadow:0 22px 50px rgba(0,0,0,.6),inset 0 0 40px rgba(47,123,255,.14)}
+.rpstage::after{content:"";position:absolute;left:8%;right:8%;bottom:-28px;height:18px;background:radial-gradient(closest-side,rgba(0,0,0,.7),transparent);filter:blur(4px);z-index:-1}
+.rplid{filter:drop-shadow(0 14px 18px rgba(0,0,0,.55))}
+.rplid.glow{animation:rpglow 1.6s ease-in-out infinite alternate,rpbob 3.2s ease-in-out infinite}
+.rplid.glow::after{content:"";position:absolute;inset:0;border-radius:30px;background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.4) 50%,transparent 65%) -120% 0/250% 100% no-repeat;animation:rpglint 2.8s ease-in-out infinite;pointer-events:none}
+@keyframes rpglint{to{background-position:220% 0}}
+@keyframes rpbob{50%{transform:translateY(-1.5%)}}
+@keyframes rpglow{to{filter:drop-shadow(0 0 16px rgba(90,170,255,.85)) drop-shadow(0 14px 18px rgba(0,0,0,.55))}}
+.rplid.lift{animation:rplift2 .75s cubic-bezier(.4,.1,.2,1) forwards}
+@keyframes rplift2{0%{transform:none}12%{transform:translateY(1%) scale(.985)}22%{transform:translateY(-1%) rotate(.8deg)}42%{transform:translateY(-6%) rotateX(24deg) scale(1.06)}100%{transform:translateY(-72%) rotateX(48deg) rotate(-14deg) scale(.86);opacity:0}}
+.rpint{position:relative}
+.rpint.u{animation:rpreveal .75s ease-out both}
+@keyframes rpreveal{from{filter:brightness(.4)}to{filter:none}}
+@keyframes rpin{0%{filter:brightness(2.4) saturate(1.6);transform:scale(.97)}100%{filter:none}}
+.rpint.in::after{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent,#7fd4ff,transparent);box-shadow:0 0 16px 4px rgba(127,212,255,.7);animation:rpscan .9s ease-out forwards;pointer-events:none}
+@keyframes rpscan{to{top:100%;opacity:0}}
+.rpp.good{filter:drop-shadow(0 0 6px rgba(125,255,155,.55))}
+.rpcov,.rpn{border-radius:16px;background:linear-gradient(160deg,#16203a,#101727);border:1px solid #2a3a5f}
+.rpcov.bad{border-color:#ff4d4d;box-shadow:0 0 14px rgba(255,77,77,.35)}.rpcov.good{border-color:#3fbf6c}
+.rpt{border-radius:16px;background:linear-gradient(160deg,#243050,#161d2f);border:1px solid #3a4a72;box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);padding:9px 10px;transition:transform .15s,border-color .15s}
+.rpt:active{transform:scale(.98);border-color:#ffd24a}
+.rpt i{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#3b4d7c,#1a2340);font-size:19px;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+.rpt em{background:rgba(255,210,74,.12);border:1px solid rgba(255,210,74,.35);padding:3px 8px;border-radius:99px;font-size:11px}
+.rpg{border-radius:16px;box-shadow:0 18px 36px rgba(0,0,0,.6),0 0 0 2px #ffd24a,0 0 24px rgba(255,210,74,.5)}
+.rpb{border-radius:16px;padding:14px;background:linear-gradient(180deg,#4d92ff,#2563eb);box-shadow:0 8px 20px rgba(47,123,255,.4),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .12s;position:relative;overflow:hidden}
+.rpb:active{transform:translateY(1px) scale(.985)}
+.rpb::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%) -150% 0/200% 100% no-repeat;animation:rpglint 3s ease-in-out infinite;pointer-events:none}
+.rpb.ok{background:linear-gradient(180deg,#2fd27d,#119a55);box-shadow:0 8px 20px rgba(22,160,90,.45),inset 0 1px 0 rgba(255,255,255,.3);animation:rpok 1.8s ease-in-out infinite}
+.rpb.g{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);box-shadow:none}.rpb.g::after{display:none}
+@keyframes rpok{50%{box-shadow:0 8px 28px rgba(22,160,90,.85),inset 0 1px 0 rgba(255,255,255,.3)}}
+.rd3{background:radial-gradient(circle at 50% 45%,rgba(47,123,255,.22),transparent 65%),linear-gradient(rgba(120,170,255,.06) 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,rgba(120,170,255,.06) 1px,transparent 1px) 0 0/24px 24px,#0a0f1a;border:1px solid #2a3a5f;box-shadow:inset 0 0 40px rgba(0,0,0,.5),0 12px 30px rgba(0,0,0,.4)}
+.rd3.o .rdbed{border-color:#3b5ea8;box-shadow:inset 0 0 24px #000,0 0 28px rgba(47,123,255,.35)}
+.rdcv{box-shadow:0 0 0 1px rgba(255,255,255,.14),0 20px 40px rgba(0,0,0,.5)}
+.rdcv::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.22) 50%,transparent 65%) -120% 0/250% 100% no-repeat;animation:rpglint 3s ease-in-out infinite;pointer-events:none}
+.rdcv.pop::after,.rdcv.off::after{animation:none;opacity:0}
+.rdp{border-radius:10px;background:linear-gradient(160deg,#233152,#131b2e);border-color:#3a4b72}
+.fxw{position:fixed;z-index:90;pointer-events:none;width:0;height:0}
+.fxw i{position:absolute;width:6px;height:6px;margin:-3px;border-radius:50%;background:var(--c);box-shadow:0 0 8px 2px var(--c);animation:fxs .7s cubic-bezier(.1,.7,.3,1) forwards}
+.fxw b{position:absolute;width:20px;height:20px;margin:-10px;border-radius:50%;border:3px solid var(--c);animation:fxr .6s ease-out forwards}
+@keyframes fxs{to{transform:translate(var(--x),var(--y)) scale(.2);opacity:0}}
+@keyframes fxr{to{transform:scale(7);opacity:0}}
+@media (prefers-reduced-motion:reduce){.rplid.glow,.rplid.glow::after,.rpb::after,.rpb.ok,.rdcv::after,.rpsteps .on::before,.fxw i,.fxw b{animation:none}}
 </style>
 </head>
 <body>
@@ -1167,11 +1364,12 @@ function rpR(){const R=RP,el=$('#rp');if(!R||!el)return;if(kd(R.d.key)!=='p'||is
     pn=d.broke?'<div class="rpn">💥 Устройство сломано. Годится только на запчасти.</div>':R.msg?`<div class="rpn">${R.msg}</div>`:x?`<div class="rpn"><b>${RPM[x.n][1]}</b> · ${x.n}<br>Новая деталь ${f(partCost(x))} · риск неудачи ~${Math.round(failP(d,x)*100)}%. Перетащи её из лотка на эту деталь.</div>`:`<div class="rpn rpm">${left?'Красным мигают сломанные детали. Перетащи подходящую новую деталь прямо на неё':'Все детали заменены — можно собирать'}</div>`;
     act=`<button class="rpb ${left?'g':'ok'}" data-q="done">${left?'Закрыть крышку и выйти':'✅ Собрать телефон'}</button>`}
   el.innerHTML=`<div class="rph"><span>🔧 ${esc(nm(d))}</span><button data-q="x">✕</button></div><div class="rpsteps">${steps}</div><div class="rpm">Баланс: ${f(S.bal)}${R.open?' · сломано деталей: '+left:''}</div>${main}${pn}${act}`}
+function rpFx(r,k){try{const el=$('#rp');if(!el)return;const t=r===4?el.querySelector('.rpstage,.rd3'):el.querySelector('[data-p="'+k+'"]')||el.querySelector('.rpstage,.rd3');if(!t)return;const b=t.getBoundingClientRect(),c=r===4?'#6fd3ff':r===1?'#7dff9b':'#ff4d4d',n=r===4?22:r===1?18:10,w=document.createElement('div');w.className='fxw';w.style.cssText='left:'+(b.left+b.width/2)+'px;top:'+(b.top+b.height/2)+'px;--c:'+c;for(let i=0;i<n;i++){const q=document.createElement('i'),a=Math.random()*6.283,l=40+Math.random()*(r===4?110:70);q.style.cssText='--x:'+Math.cos(a)*l+'px;--y:'+Math.sin(a)*l+'px;animation-delay:'+Math.random()*.08+'s';w.appendChild(q)}w.appendChild(document.createElement('b'));document.body.appendChild(w);setTimeout(()=>w.remove(),900);if(navigator.vibrate)navigator.vibrate(r===2||r===3?[40,30,40]:[18])}catch(e){}}
 function rpC(e){const R=RP;if(!R||R.cl||Date.now()<RPT)return;const p=e.target.closest('[data-p]'),t=e.target.closest('[data-q]');
   if(p&&R.open){R.sel=p.dataset.p;R.msg='';rpR();return}if(!t)return;const q=t.dataset.q;
   if(q==='x')rpX();
   else if(q==='scr'){const n=+t.dataset.n;if(R.sc[n])return;R.sc[n]=1;t.classList.add('out');setTimeout(()=>{if(RP===R)rpR()},420)}
-  else if(q==='pop'){if(kd(R.d.key)!=='p'||isR(R.d)){R.rx=0;R.ry=RDK(R.d).ty==='door'?-12:0}R.pop=1;rpR();setTimeout(()=>{if(RP===R){R.open=1;R.fx='open';rpR()}},750)}
+  else if(q==='pop'){if(kd(R.d.key)!=='p'||isR(R.d)){R.rx=0;R.ry=RDK(R.d).ty==='door'?-12:0}R.pop=1;rpR();setTimeout(()=>{if(RP===R){R.open=1;R.fx='open';rpR();rpFx(4)}},750)}
   else if(q==='done'){if(!R.open)return rpX();R.cl=1;rpR();setTimeout(()=>{if(RP===R){const ok=!rpLeft(R.d);rpX();toast(ok?(kd(R.d.key)==='p'&&!isR(R.d)?'📱 Телефон собран':'🔧 Устройство собрано'):'🔧 Корпус закрыт')}},700)}}
 const rpUnder=e=>{const u=document.elementFromPoint(e.clientX,e.clientY);return u&&u.closest?u.closest('#rp [data-p]'):null};
 document.addEventListener('pointerdown',e=>{const t=RP&&!RP.cl&&e.target.closest&&e.target.closest('.rpt');if(!t||RPD)return;e.preventDefault();
@@ -1184,7 +1382,7 @@ const rpDEnd=(e,c)=>{const D=RPD;if(!D)return;RPD=null;RPT=Date.now()+250;D.g.re
   document.querySelectorAll('#rp .tgt,#rp .hov').forEach(n=>n.classList.remove('tgt','hov'));
   const R=RP;if(!R||c)return;const h=rpUnder(e);if(!h)return;
   if(h.dataset.p!==D.k){R.msg='❌ Эта деталь сюда не подходит — ищи место, подсвеченное жёлтым';R.sel='';R.an=h.dataset.p;R.res=2;rpR();setTimeout(()=>{R.an=''},600);return}
-  const r=doRep(R.d,D.j);if(!r)return;R.res=r;R.an=D.k;R.msg='';R.sel='';save();render(1);rpR();setTimeout(()=>{R.an=''},900)};
+  const r=doRep(R.d,D.j);if(!r)return;R.res=r;R.an=D.k;R.msg='';R.sel='';save();render(1);rpR();rpFx(r,D.k);setTimeout(()=>{R.an=''},900)};
 document.addEventListener('pointerup',e=>rpDEnd(e));document.addEventListener('pointercancel',e=>rpDEnd(e,1));
 
 /* ===== 🔧 Ремонт ноутбуков, ПК и приставок: винты → крышка → замена деталей (3D) ===== */
