@@ -995,7 +995,7 @@ function vAch(){return`<div class="c"><h3>🏆 Достижения ${Object.key
 const BOTS=[['Artem_flip',9],['Марат',7],['PhoneKing',12],['Dasha_tech',6],['Сергей_опт',10],['Lena88',5]];
 function fetchTop(){if(!API||!TGID)return;fetch(API+'/top',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:INIT,worth:Math.round(worth()),name:TGN})}).then(r=>r.json()).then(j=>{if(j&&j.top){TOP=j.top;TOPME=j.me||null;if(S.tab==='p')render(1)}}).catch(()=>{})}
 function trRow(x,rank){const md=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank;
-  return`<div class="df" style="${x.me?'font-weight:800':''}"><span style="display:flex;gap:8px;align-items:center;min-width:0"><span style="min-width:22px;text-align:center">${md}</span>${av(x.n,28)}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.n)}${x.me?' (вы)':''}</span></span><span style="display:flex;gap:8px;align-items:center;white-space:nowrap">${f(x.w)}${TOP&&x.id&&!x.me?`<button class="b g" style="padding:6px 10px" data-a="trto" data-i="${x.id}" data-n="${esc(x.n)}">💸</button>`:''}</span></div>`}
+  return`<div class="df" style="${x.me?'font-weight:800':''}"><span style="display:flex;gap:8px;align-items:center;min-width:0"><span style="min-width:22px;text-align:center">${md}</span>${av(x.n,28)}<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.n)}${x.me?' (вы)':''}</span></span><span style="display:flex;gap:8px;align-items:center;white-space:nowrap">${f(x.w)}${isMain()&&TOP&&x.id&&!x.me?`<button class="b g" style="padding:6px 10px" data-a="trto" data-i="${x.id}" data-n="${esc(x.n)}">💸</button>`:''}</span></div>`}
 function vTop(){const m=(Date.now()-S.t0)/6e4;
   let L=TOP?TOP.map(x=>({id:x.id,n:x.name,w:x.worth,me:x.me})):BOTS.map(b=>({n:b[0],w:Math.round(3e4+b[1]*600*Math.pow(m,.9)*(.9+hs(b[0])%20/100))})).concat([{n:TGN||'Вы',w:Math.round(worth()),me:1}]);
   L.sort((a,b)=>b.w-a.w);
@@ -1004,6 +1004,7 @@ function vTop(){const m=(Date.now()-S.t0)/6e4;
   const note=TOP?(TOPME?' · ваше место: '+TOPME.rank+' из '+TOPME.total:''):' · сервер не подключён, сравнение с ботами';
   return`<div class="c"><h3>🏆 Топ перекупов</h3><div class="mut">Капитал = деньги + стоимость склада${note}</div>`+rows+'</div>'+vTrCard()}
 function vTrCard(){
+  if(!isMain())return'';
   const h=S.pend.map(t=>`<div class="df"><span>⏳ → ${esc(t.name||t.to)}<br><span class="mut">отправляется…</span></span><b>−${f(t.n)}</b></div>`).concat(S.tx.slice(0,5).map(x=>`<div class="df"><span>${x.k==='in'?'⬇️ от ':'⬆️ для '}${esc(x.w)}<br><span class="mut">${new Date(x.d).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></span><b style="color:var(--${x.k==='in'?'ok':'bad'})">${x.k==='in'?'+':'−'}${f(x.n)}</b></div>`)).join('');
   return`<div class="c"><h3>💸 Переводы игрокам</h3><div class="mut">Нажмите 💸 рядом с игроком в рейтинге или введите его Telegram ID. Ваш ID: <b>${TGID||'—'}</b>${API&&TGID?'':' · <b style="color:var(--bad)">доступно в Telegram при подключённом сервере</b>'}</div><div class="acts"><button class="b" data-a="trto" data-i="0" data-n="">Перевести по ID</button></div>${h}</div>`}
 function vTr(){
@@ -1061,7 +1062,7 @@ document.addEventListener('click',e=>{
   else if(a==='ordp')sheet={t:'ord',id:i};
   else if(a==='give'){const o=S.ord.find(x=>x.id===sheet.id),d=S.inv.find(x=>x.id===i);
     if(o&&d){S.bal+=o.reward;S.earn+=o.reward-d.paid;S.rep+=2;const xp=gain(RI(15,25));S.sold++;S.inv=S.inv.filter(x=>x!==d);S.ord=S.ord.filter(x=>x!==o);sheet=null;toast('Заказ выполнен: +'+f(o.reward)+', репутация +2 · '+xp)}}
-  else if(a==='trto'){if(!API||!TGID)toast('Переводы доступны в Telegram при подключённом сервере');else sheet={t:'tr',id:i||0,name:t.dataset.n||''}}
+  else if(a==='trto'){if(!isMain())toast('Переводы между игроками отключены');else if(!API||!TGID)toast('Переводы доступны в Telegram при подключённом сервере');else sheet={t:'tr',id:i||0,name:t.dataset.n||''}}
   else if(a==='trset'){if(sheet&&sheet.t==='tr'){sheet.amt=i;const e=$('#trid');if(e&&!sheet.id)sheet.rid=e.value}}
   else if(a==='trgo'){if(sheet&&sheet.t==='tr'){const to=sheet.id||parseInt((($('#trid')||{}).value||'').replace(/\D/g,''))||0,n=parseInt((($('#tramt')||{}).value||'').replace(/\D/g,''))||0;
     if(!to)toast('Укажите ID получателя');else if(to===TGID)toast('Нельзя перевести самому себе');else if(n<TR_MIN)toast('Минимум '+f(TR_MIN));
