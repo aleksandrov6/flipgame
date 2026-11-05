@@ -386,6 +386,14 @@ nav button:not(.on){opacity:.85}
 @keyframes fxs{to{transform:translate(var(--x),var(--y)) scale(.2);opacity:0}}
 @keyframes fxr{to{transform:scale(7);opacity:0}}
 @media (prefers-reduced-motion:reduce){.rplid.glow,.rplid.glow::after,.rpb::after,.rpb.ok,.rdcv::after,.rpsteps .on::before,.fxw i,.fxw b{animation:none}}
+
+/* === 3D-телефон: рамка, камера, сцена === */
+.pb3{position:absolute;left:0;top:0;pointer-events:none}
+.cam3{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateY(180deg) translateZ(9px);pointer-events:none}
+.p3 .vf svg{filter:none}
+.vw.p3{background:radial-gradient(ellipse at 50% 26%,#ffffff 0,#dfe5f0 52%,#aab5ca 100%)}
+.vw.p3::after{content:"";position:absolute;left:50%;bottom:3px;width:128px;height:14px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(14,23,38,.42),rgba(14,23,38,0));pointer-events:none;z-index:0}
+.p3 .vi{z-index:1}
 </style>
 </head>
 <body>
@@ -699,51 +707,70 @@ function glitch(sd,x,y,w,h){
   const r=rng(sd),C=['#ff2bd6','#18e0ff','#7dff3a'];let s='';
   for(let i=0;i<9;i++)s+=`<rect x="${x}" y="${n1(y+r()*(h-12))}" width="${w}" height="${n1(2+r()*9)}" fill="${C[i%3]}" fill-opacity=".6"/>`;
   s+=`<rect x="${n1(x+r()*(w-8))}" y="${y}" width="6" height="${h}" fill="#fff" fill-opacity=".14"/>`;return s}
-const lens=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#0a0b0f" stroke="#9aa1b2" stroke-width="2.4"/><circle cx="${x}" cy="${y}" r="${n1(r*.84)}" fill="none" stroke="#2a2d38" stroke-width="1.4"/><circle cx="${x}" cy="${y}" r="${n1(r*.66)}" fill="#101a33"/><circle cx="${x}" cy="${y}" r="${n1(r*.44)}" fill="#1c3a78"/><circle cx="${x}" cy="${y}" r="${n1(r*.22)}" fill="#0a1226"/><circle cx="${n1(x-r*.28)}" cy="${n1(y-r*.28)}" r="${n1(r*.16)}" fill="#fff" fill-opacity=".6"/><circle cx="${n1(x+r*.22)}" cy="${n1(y+r*.25)}" r="${n1(r*.08)}" fill="#7fb0ff" fill-opacity=".7"/>`;
+const lens=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${n1(r+1.8)}" fill="#000" fill-opacity=".32"/><circle cx="${x}" cy="${y}" r="${r}" fill="#0a0b0f" stroke="#b9bfce" stroke-width="2.4"/><circle cx="${x}" cy="${y}" r="${n1(r*.9)}" fill="none" stroke="#4a4f5e" stroke-width="1.2"/><circle cx="${x}" cy="${y}" r="${n1(r*.7)}" fill="#0f1a36"/><circle cx="${x}" cy="${y}" r="${n1(r*.54)}" fill="#1d3c80"/><circle cx="${x}" cy="${y}" r="${n1(r*.36)}" fill="#2a1d62"/><circle cx="${x}" cy="${y}" r="${n1(r*.2)}" fill="#070b18"/><path d="M${n1(x-r*.55)} ${n1(y-r*.12)}A${n1(r*.56)} ${n1(r*.56)} 0 0 1 ${n1(x-r*.1)} ${n1(y-r*.55)}" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.6" stroke-linecap="round"/><circle cx="${n1(x+r*.26)}" cy="${n1(y+r*.28)}" r="${n1(r*.1)}" fill="#8fb8ff" fill-opacity=".75"/>`;
 const ring=(x,y,r)=>`<circle class="pul" cx="${n1(x)}" cy="${n1(y)}" r="${r}" fill="none" stroke="#ff3b3b" stroke-width="3" stroke-dasharray="7 5"/>`;
-const apple=(x,y,sc,fk,ink)=>`<g transform="translate(${x} ${y}) ${fk?'rotate(-14) scale('+n1(sc*1.2)+' '+n1(sc*.85)+')':'scale('+sc+')'}" fill="rgba(${ink},.72)"><path d="M0 -6C-6 -14 -20 -10 -20 6C-20 18 -12 28 -6 28C-3 28 -2 26 0 26C2 26 3 28 6 28C12 28 20 18 20 6C20 -10 6 -14 0 -6Z"/><path d="M1 -8C0 -18 6 -24 14 -24C14 -16 8 -9 1 -8Z"/></g>`;
+const apple=(x,y,sc,fk,ink,lt)=>{const g=`<path d="M0 -6C-6 -14 -20 -10 -20 6C-20 18 -12 28 -6 28C-3 28 -2 26 0 26C2 26 3 28 6 28C12 28 20 18 20 6C20 -10 6 -14 0 -6Z"/><path d="M1 -8C0 -18 6 -24 14 -24C14 -16 8 -9 1 -8Z"/>`,tr=`translate(${x} ${y}) ${fk?'rotate(-14) scale('+n1(sc*1.2)+' '+n1(sc*.85)+')':'scale('+sc+')'}`;
+  return`<g transform="${tr} translate(.7 1.1)" fill="${lt?'rgba(255,255,255,.65)':'rgba(0,0,0,.32)'}">${g}</g><g transform="${tr}" fill="rgba(${ink},.74)">${g}</g>`};
+// плоский (не 3D) остров камеры: тень + корпус + блик
+const isl2=(x,y,w,h,r)=>`<rect x="${x}" y="${y+3}" width="${w}" height="${h}" rx="${r}" fill="#000" fill-opacity=".28"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="rgba(255,255,255,.16)" stroke="rgba(0,0,0,.3)" stroke-width="1.5"/><rect x="${x+1}" y="${y+1}" width="${w-2}" height="${h-2}" rx="${r-1}" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1"/>`;
 // ---- телефон ----
-function phoneFace(d,side,F,hn){
+function phoneFace(d,side,F,hn,c3){
   const u='k'+(++SVU),nn=I[d.key][0],[c1,c2]=pcol(d),ip=/iPhone|Duo|Vertu|Caviar/.test(nn),pro=/Pro|Duo|Gold|Platinum|Caviar|Vertu/.test(nn),sg=/Samsung/.test(nn),px=/Pixel/.test(nn),
     hue=hs(d.key)%360,sd=d.id*7919+13,lt=parseInt(c1.slice(1,3),16)>170,ink=lt?'0,0,0':'255,255,255';
-  let s=`<svg viewBox="0 0 200 410" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><linearGradient id="${u}w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue},75%,52%)"/><stop offset="1" stop-color="hsl(${(hue+70)%360},70%,24%)"/></linearGradient><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".26"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="${u}f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="#fff" stop-opacity=".15"/><stop offset=".7" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient><radialGradient id="${u}r" cx=".25" cy=".12" r=".9"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="${u}c"><rect x="${side?10:18}" y="${side?8:16}" width="${side?180:164}" height="${side?394:378}" rx="${side?34:27}"/></clipPath></defs>`;
-  s+=`<rect x="5" y="96" width="6" height="30" rx="2" fill="#4a5266"/><rect x="5" y="136" width="6" height="46" rx="2" fill="#4a5266"/><rect x="189" y="128" width="6" height="64" rx="2" fill="${F.btn&&!side?'#e5484d':'#2c3140'}"/>`;
+  let s=`<svg viewBox="0 0 200 410" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="${u}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient><linearGradient id="${u}w" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hue},78%,54%)"/><stop offset=".55" stop-color="hsl(${(hue+40)%360},72%,38%)"/><stop offset="1" stop-color="hsl(${(hue+80)%360},70%,20%)"/></linearGradient><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".26"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="${u}f" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".35" stop-color="#fff" stop-opacity=".15"/><stop offset=".7" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity=".12"/></linearGradient><linearGradient id="${u}t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity=".7"/></linearGradient><linearGradient id="${u}a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity=".55"/></linearGradient><radialGradient id="${u}r" cx=".25" cy=".12" r=".9"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="${u}c"><rect x="${side?10:18}" y="${side?8:16}" width="${side?180:164}" height="${side?394:378}" rx="${side?34:27}"/></clipPath></defs>`;
+  if(!c3)s+=`<rect x="5" y="96" width="6" height="30" rx="2" fill="#4a5266"/><rect x="5" y="136" width="6" height="46" rx="2" fill="#4a5266"/><rect x="189" y="128" width="6" height="64" rx="2" fill="${F.btn&&!side?'#e5484d':'#2c3140'}"/>`;
   if(!side){
-    const rs=rng(sd+3),cx=40+rs()*120,cy=70+rs()*250;
-    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="#0a0c10" stroke="url(#${u}f)" stroke-width="3.2"/><rect x="14" y="12" width="172" height="386" rx="30" fill="none" stroke="#000" stroke-width="3"/><g clip-path="url(#${u}c)">`;
-    if(F.off)s+=`<rect x="18" y="16" width="164" height="378" fill="#050608"/>`;
-    else if(d.lock)s+=`<rect x="18" y="16" width="164" height="378" fill="#0b1220"/><rect x="82" y="150" width="36" height="30" rx="6" fill="#e5484d"/><path d="M88 150v-10a12 12 0 0 1 24 0v10" fill="none" stroke="#e5484d" stroke-width="6"/><text x="100" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Activation Lock</text><text x="100" y="230" text-anchor="middle" font-size="10" fill="#9aa4b8" font-family="system-ui,sans-serif">iPhone заблокирован</text>`;
+    const rs=rng(sd+3),cx=40+rs()*120,cy=70+rs()*250,h1=(hue+50)%360,h2=(hue+300)%360;
+    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="#0a0c10" stroke="url(#${u}f)" stroke-width="3.2"/><rect x="12.4" y="10.4" width="175.2" height="389.2" rx="31.8" fill="none" stroke="#fff" stroke-opacity=".12"/><rect x="14" y="12" width="172" height="386" rx="30" fill="#000" stroke="#000" stroke-width="3"/><g clip-path="url(#${u}c)">`;
+    if(F.off)s+=`<rect x="18" y="16" width="164" height="378" fill="#050608"/><rect x="18" y="16" width="164" height="378" fill="url(#${u}r)" fill-opacity=".5"/>`;
+    else if(d.lock)s+=`<rect x="18" y="16" width="164" height="378" fill="#0b1220"/><circle cx="100" cy="190" r="86" fill="#e5484d" fill-opacity=".1"/><rect x="82" y="150" width="36" height="30" rx="6" fill="#e5484d"/><path d="M88 150v-10a12 12 0 0 1 24 0v10" fill="none" stroke="#e5484d" stroke-width="6"/><text x="100" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">Activation Lock</text><text x="100" y="230" text-anchor="middle" font-size="10" fill="#9aa4b8" font-family="system-ui,sans-serif">iPhone заблокирован</text>`;
     else{
-      s+=`<rect x="18" y="16" width="164" height="378" fill="url(#${u}w)"/><text x="100" y="62" text-anchor="middle" font-size="12" fill="#fff" fill-opacity=".85" font-family="system-ui,sans-serif">вт, 3 нояб.</text><text x="100" y="104" text-anchor="middle" font-size="46" font-weight="700" fill="#fff" fill-opacity=".92" font-family="system-ui,sans-serif">9:41</text>`;
-      s+=`<circle cx="150" cy="290" r="90" fill="hsl(${(hue+50)%360},85%,65%)" fill-opacity=".28"/><circle cx="20" cy="190" r="60" fill="#fff" fill-opacity=".08"/><rect x="28" y="136" width="70" height="70" rx="18" fill="#fff" fill-opacity=".18"/><circle cx="52" cy="160" r="9" fill="#ffd54a"/><rect x="40" y="182" width="46" height="5" rx="2.5" fill="#fff" fill-opacity=".7"/><rect x="104" y="136" width="70" height="70" rx="18" fill="#fff" fill-opacity=".18"/><rect x="116" y="176" width="8" height="18" rx="2" fill="#fff" fill-opacity=".8"/><rect x="130" y="164" width="8" height="30" rx="2" fill="#fff" fill-opacity=".8"/><rect x="144" y="150" width="8" height="44" rx="2" fill="#fff" fill-opacity=".8"/><text x="34" y="36" font-size="10" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">9:41</text><rect x="148" y="28" width="20" height="9" rx="2.5" fill="none" stroke="#fff" stroke-opacity=".9"/><rect x="150" y="30" width="13" height="5" rx="1.2" fill="#fff"/><rect x="132" y="31" width="3" height="6" fill="#fff"/><rect x="137" y="29" width="3" height="8" fill="#fff"/><rect x="142" y="27" width="3" height="10" fill="#fff"/>`;
-      ['#ff5a5f','#34c759','#2f7bff','#ffb020'].forEach((c,i)=>s+=`<rect x="${30+i*38}" y="344" width="30" height="30" rx="9" fill="${c}"/><rect x="${33+i*38}" y="347" width="24" height="10" rx="5" fill="#fff" fill-opacity=".25"/>`);
-      s+=`<rect x="70" y="384" width="60" height="4" rx="2" fill="#fff" fill-opacity=".85"/>`;
+      s+=`<rect x="18" y="16" width="164" height="378" fill="url(#${u}w)"/><circle cx="156" cy="318" r="104" fill="hsl(${h1},88%,66%)" fill-opacity=".34"/><circle cx="14" cy="150" r="82" fill="hsl(${h2},90%,62%)" fill-opacity=".3"/><circle cx="118" cy="26" r="62" fill="#fff" fill-opacity=".12"/><path d="M18 330C70 290 120 340 182 296V394H18Z" fill="#000" fill-opacity=".16"/>`;
+      // статус-бар
+      s+=`<text x="34" y="36" font-size="10" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">9:41</text>`
+        +[0,1,2,3].map(i=>`<rect x="${133+i*4.2}" y="${36-3-i*2}" width="2.4" height="${3+i*2}" rx="1" fill="#fff"/>`).join('')
+        +`<path d="M151 33.2a6.4 6.4 0 0 1 8.4 0M152.7 35.1a4 4 0 0 1 5 0" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><circle cx="155.2" cy="37" r="1" fill="#fff"/><rect x="161.5" y="28.6" width="18" height="9" rx="2.8" fill="none" stroke="#fff" stroke-opacity=".7"/><rect x="163" y="30.1" width="12.5" height="6" rx="1.7" fill="#fff"/><rect x="180.4" y="31.4" width="1.3" height="3.4" rx=".6" fill="#fff" fill-opacity=".7"/>`;
+      // дата и время
+      s+=`<text x="100" y="64" text-anchor="middle" font-size="11.5" font-weight="600" fill="#fff" fill-opacity=".85" font-family="system-ui,sans-serif">вт, 3 нояб.</text><text x="100" y="112" text-anchor="middle" font-size="50" font-weight="700" letter-spacing="-1" fill="url(#${u}t)" font-family="system-ui,sans-serif">9:41</text>`;
+      // виджеты
+      const gw=(x,y,w,h)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="18" fill="#fff" fill-opacity=".17" stroke="#fff" stroke-opacity=".28"/><path d="M${x+14} ${y+1}H${x+w-14}" stroke="#fff" stroke-opacity=".5" stroke-linecap="round"/>`;
+      s+=gw(28,134,70,70)+`<circle cx="50" cy="157" r="8.5" fill="#ffd54a"/>`+[0,1,2,3,4,5,6,7].map(i=>{const a=i*.785;return`<path d="M${n1(50+Math.cos(a)*12)} ${n1(157+Math.sin(a)*12)}L${n1(50+Math.cos(a)*15)} ${n1(157+Math.sin(a)*15)}" stroke="#ffd54a" stroke-width="2" stroke-linecap="round"/>`}).join('')+`<text x="40" y="193" font-size="17" font-weight="700" fill="#fff" font-family="system-ui,sans-serif">21°</text><text x="72" y="190" font-size="7" fill="#fff" fill-opacity=".75" font-family="system-ui,sans-serif">ясно</text>`;
+      s+=gw(104,134,70,70)+[16,28,40,54].map((hh,i)=>`<rect x="${116+i*14}" y="${188-hh}" width="8" height="${hh}" rx="3" fill="#fff" fill-opacity="${.55+i*.14}"/>`).join('')+`<circle cx="122" cy="150" r="3.4" fill="#34c759"/><rect x="129" y="148" width="26" height="4" rx="2" fill="#fff" fill-opacity=".6"/>`;
+      s+=gw(28,212,146,56)+`<rect x="38" y="221" width="38" height="38" rx="10" fill="hsl(${h2},85%,62%)"/><circle cx="57" cy="240" r="9" fill="#fff" fill-opacity=".85"/><circle cx="57" cy="240" r="3" fill="hsl(${h2},85%,40%)"/><rect x="84" y="226" width="52" height="5" rx="2.5" fill="#fff" fill-opacity=".9"/><rect x="84" y="236" width="36" height="4" rx="2" fill="#fff" fill-opacity=".5"/><rect x="84" y="248" width="76" height="3.6" rx="1.8" fill="#fff" fill-opacity=".25"/><rect x="84" y="248" width="34" height="3.6" rx="1.8" fill="#fff"/><path d="M148 225l9 5.5-9 5.5z" fill="#fff"/>`;
+      // ряд приложений
+      ['#8e5cff','#ff7a45','#22c3b0','#ff4f8b'].forEach((c,i)=>s+=`<rect x="${30+i*38}" y="282" width="30" height="30" rx="9" fill="${c}"/><rect x="${30+i*38}" y="282" width="30" height="15" rx="9" fill="#fff" fill-opacity=".18"/><circle cx="${45+i*38}" cy="297" r="6" fill="none" stroke="#fff" stroke-width="2.2" stroke-opacity=".9"/>`);
+      // док
+      s+=`<rect x="22" y="332" width="156" height="48" rx="23" fill="#fff" fill-opacity=".2" stroke="#fff" stroke-opacity=".25"/>`;
+      ['#ff5a5f','#34c759','#2f7bff','#ffb020'].forEach((c,i)=>s+=`<rect x="${30+i*38}" y="341" width="30" height="30" rx="9" fill="${c}"/><rect x="${30+i*38}" y="341" width="30" height="15" rx="9" fill="#fff" fill-opacity=".22"/>`);
+      s+=`<rect x="36" y="351" width="18" height="11" rx="3" fill="#fff"/><circle cx="45" cy="356.5" r="3" fill="#ff5a5f"/><path d="M71 347h22a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-12l-6 5v-5h-4a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3z" fill="#fff"/><circle cx="121" cy="356" r="9" fill="none" stroke="#fff" stroke-width="2"/><path d="M121 349l3 7-3 7-3-7z" fill="#fff" transform="rotate(40 121 356)"/><circle cx="155" cy="364" r="3.2" fill="#fff"/><path d="M158 364v-13l7 2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>`;
+      s+=`<rect x="70" y="386" width="60" height="4" rx="2" fill="#fff" fill-opacity=".88"/>`;
       if(F.brd)s+=glitch(sd+5,18,16,164,378)}
-    s+=`</g>`+(ip?`<rect x="72" y="24" width="56" height="16" rx="8" fill="#000"/><circle cx="116" cy="32" r="3.4" fill="#10183a" stroke="#27345f"/>`:`<circle cx="100" cy="31" r="5" fill="#000" stroke="#1a1d26" stroke-width="1.5"/>`)+`<rect x="18" y="16" width="164" height="378" rx="27" fill="url(#${u}g)"/>`;
+    s+=`<path d="M18 16H122L18 196Z" fill="#fff" fill-opacity=".05"/></g>`+(ip?`<rect x="72" y="24" width="56" height="16" rx="8" fill="#000"/><circle cx="116" cy="32" r="3.6" fill="#10183a" stroke="#27345f"/><circle cx="115" cy="31" r="1" fill="#6f8be0" fill-opacity=".8"/><circle cx="106" cy="32" r="1.5" fill="#0c0e17"/>`:`<circle cx="100" cy="31" r="5.2" fill="#000" stroke="#1a1d26" stroke-width="1.5"/><circle cx="98.6" cy="29.6" r="1.2" fill="#fff" fill-opacity=".4"/>`)+`<rect x="18" y="16" width="164" height="378" rx="27" fill="url(#${u}g)"/>`;
     if(F.scr)s+=`<g clip-path="url(#${u}c)">${crack(sd,cx,cy,175)}</g>`;
     if(hn==='Разбитый экран')s+=ring(cx,cy,66);
     if(hn==='Залипает кнопка')s+=ring(192,160,34);
     if(hn==='Не включается'||hn==='Проблема с платой')s+=ring(100,200,80);
   }else{
     const rc=rng(sd+11),cx=40+rc()*120,cy=150+rc()*200,fk=!!F.fake,brand=ip?'iPhone':sg?(fk?'SAMSUMG':'SAMSUNG'):px?(fk?'Gooqle':'Google'):((b=>b?(fk?b[2]:b[1]):(fk?'Redrni':'Redmi'))(BRD.find(b=>b[0].test(nn))));
-    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="url(#${u}b)" stroke="url(#${u}f)" stroke-width="3"/><g clip-path="url(#${u}c)"><path d="M10 8H190V140L10 260Z" fill="#fff" fill-opacity=".08"/><rect x="10" y="8" width="180" height="394" fill="url(#${u}r)"/>`;
+    s+=`<rect x="10" y="8" width="180" height="394" rx="34" fill="url(#${u}b)" stroke="url(#${u}f)" stroke-width="3"/><g clip-path="url(#${u}c)"><path d="M10 8H190V140L10 260Z" fill="#fff" fill-opacity=".09"/><path d="M10 335L190 195V219L10 359Z" fill="#fff" fill-opacity=".05"/><rect x="10" y="8" width="180" height="394" fill="url(#${u}r)"/><rect x="12.2" y="10.2" width="175.6" height="389.6" rx="31.8" fill="none" stroke="#fff" stroke-opacity=".24" stroke-width="1.4"/><rect x="14.8" y="12.8" width="170.4" height="384.4" rx="29.2" fill="none" stroke="#000" stroke-opacity=".12"/>`;
     if(ip){
-      s+=pro?`<rect x="22" y="20" width="88" height="90" rx="22" fill="rgba(255,255,255,.14)" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>${lens(48,46,14)}${lens(48,84,14)}${lens(86,65,14)}<circle cx="90" cy="34" r="4.5" fill="#f7f1c8"/><circle cx="90" cy="98" r="3.5" fill="#222"/>`
-         :`<rect x="22" y="20" width="76" height="76" rx="20" fill="rgba(255,255,255,.14)" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>${lens(44,42,14)}${lens(72,72,14)}<circle cx="76" cy="36" r="4" fill="#f7f1c8"/>`;
-      s+=apple(100,218,1.7,fk,ink)}
-    else if(sg)s+=lens(44,46,12)+lens(44,82,12)+lens(44,118,12)+`<circle cx="72" cy="46" r="4" fill="#f7f1c8"/>`;
-    else if(px)s+=`<rect x="0" y="62" width="200" height="50" fill="#0c0e13"/>${lens(78,87,15)}${lens(114,87,15)}<circle cx="146" cy="87" r="5" fill="#f7f1c8"/>`;
-    else s+=`<rect x="22" y="20" width="78" height="78" rx="18" fill="#0d0f14" stroke="rgba(255,255,255,.2)"/>${lens(46,44,11)}${lens(76,44,11)}${lens(60,76,11)}`;
-    s+=`<text x="100" y="354" text-anchor="middle" font-size="12" letter-spacing="2" font-weight="600" fill="rgba(${ink},.55)" font-family="system-ui,sans-serif">${brand}</text>`;
+      if(!c3)s+=pro?`${isl2(22,20,88,90,22)}${lens(48,46,14)}${lens(48,84,14)}${lens(86,65,14)}<circle cx="90" cy="34" r="4.5" fill="#f7f1c8"/><circle cx="90" cy="98" r="3.5" fill="#222"/>`
+         :`${isl2(22,20,76,76,20)}${lens(44,42,14)}${lens(72,72,14)}<circle cx="76" cy="36" r="4" fill="#f7f1c8"/>`;
+      s+=`<circle cx="100" cy="218" r="44" fill="none" stroke="rgba(${ink},.13)" stroke-width="1.2"/><circle cx="100" cy="218" r="40" fill="none" stroke="rgba(${ink},.06)" stroke-width="3"/>`+apple(100,218,1.7,fk,ink,lt)}
+    else if(sg){if(!c3)s+=lens(44,46,12)+lens(44,82,12)+lens(44,118,12)+`<circle cx="72" cy="46" r="4" fill="#f7f1c8"/>`}
+    else if(px){if(!c3)s+=`<rect x="0" y="65" width="200" height="50" fill="#000" fill-opacity=".3"/><rect x="0" y="62" width="200" height="50" fill="#0c0e13"/><rect x="0" y="62" width="200" height="2" fill="#fff" fill-opacity=".14"/>${lens(78,87,15)}${lens(114,87,15)}<circle cx="146" cy="87" r="5" fill="#f7f1c8"/>`}
+    else if(!c3)s+=`${isl2(22,20,78,78,18)}${lens(46,44,11)}${lens(76,44,11)}${lens(60,76,11)}`;
+    s+=`<text x="100" y="354" text-anchor="middle" font-size="12" letter-spacing="2" font-weight="600" fill="rgba(${ink},.55)" font-family="system-ui,sans-serif">${brand}</text>`+(ip?`<text x="100" y="372" text-anchor="middle" font-size="4.6" letter-spacing=".5" fill="rgba(${ink},.32)" font-family="system-ui,sans-serif">Designed by Apple in California</text><text x="100" y="379" text-anchor="middle" font-size="4.6" letter-spacing=".5" fill="rgba(${ink},.32)" font-family="system-ui,sans-serif">Assembled in China · Model A${2600+hs(nn)%400}</text>`:`<text x="100" y="372" text-anchor="middle" font-size="5" letter-spacing=".6" fill="rgba(${ink},.3)" font-family="system-ui,sans-serif">5G · IP68 · NFC</text>`);
     const cc=ip?(pro?[66,65]:[60,58]):sg?[44,82]:px?[100,87]:[61,59],cr=sg?44:px?70:ip&&pro?56:48;
-    if(F.cam)s+=`<circle cx="${cc[0]}" cy="${cc[1]}" r="${cr*.8}" fill="#000" fill-opacity=".55"/><path d="M${cc[0]-cr*.5} ${cc[1]-cr*.5}L${cc[0]+cr*.5} ${cc[1]+cr*.5}M${cc[0]+cr*.5} ${cc[1]-cr*.5}L${cc[0]-cr*.5} ${cc[1]+cr*.5}" stroke="#ff3b3b" stroke-width="4" stroke-linecap="round"/>`;
-    if(F.glass)s+=crack(sd+21,cc[0],cc[1],cr);
+    if(!c3){
+      if(F.cam)s+=`<circle cx="${cc[0]}" cy="${cc[1]}" r="${cr*.8}" fill="#000" fill-opacity=".55"/><path d="M${cc[0]-cr*.5} ${cc[1]-cr*.5}L${cc[0]+cr*.5} ${cc[1]+cr*.5}M${cc[0]+cr*.5} ${cc[1]-cr*.5}L${cc[0]-cr*.5} ${cc[1]+cr*.5}" stroke="#ff3b3b" stroke-width="4" stroke-linecap="round"/>`;
+      if(F.glass)s+=crack(sd+21,cc[0],cc[1],cr)}
     if(F.sc)s+=scrat(sd+1,26,130,148,250,9);
     if(F.bk)s+=crack(sd+11,cx,cy,190);
     s+=`</g>`;
     if(F.fake){const fy=ip?218:352;s+=`<circle cx="100" cy="${fy}" r="${ip?44:50}" fill="none" stroke="#ff3b3b" stroke-width="2" stroke-dasharray="4 4"/><text x="100" y="${fy+(ip?62:-56)}" text-anchor="middle" font-size="11" font-weight="700" fill="#ff3b3b" font-family="system-ui,sans-serif">логотип не оригинальный</text>`}
     if(hn===BK)s+=ring(cx,cy,66);
-    if(hn==='Разбито стекло камеры'||hn==='Сломана камера')s+=ring(cc[0],cc[1],cr+6);
+    if(!c3&&(hn==='Разбито стекло камеры'||hn==='Сломана камера'))s+=ring(cc[0],cc[1],cr+6);
     if(hn==='Царапины корпуса')s+=ring(100,255,88);
     if(hn==='fake')s+=ring(100,ip?218:352,58);
   }
@@ -835,23 +862,117 @@ function tvFace(d,side,F,hn){
     if(hn==='Царапины корпуса')s+=ring(160,120,104);
     if(hn==='fake')s+=ring(160,138,66)}
   return s+'</svg>'}
-function face(d,side,kn,hl){
+function face(d,side,kn,hl,c3){
   const F=dfl(d,kn),hd=kn&&hl!=null?d.defs[hl]:null,hn=hd&&!hd.fx?(hd.fake?'fake':hd.n):null;
-  const k=kd(d.key);return k==='l'?lapFace(d,side,F,hn):k==='t'?tvFace(d,side,F,hn):k==='d'?pcFace(d,side,F,hn):phoneFace(d,side,F,hn)}
-function walls(){
-  const L0=10.5,T0=9,W=129,H=289.5,R=22,N=8,out=[];
-  const P=(cx,cy,len,deg,ph)=>{
-    const t=Math.abs(Math.sin(ph*Math.PI/180)),m=(a,b)=>Math.round(a+(b-a)*t),
-    c=`rgb(${m(90,170)},${m(98,178)},${m(117,195)})`,l=`rgb(${m(120,205)},${m(128,212)},${m(147,225)})`,
-    w=len+.6;
-    out.push(`<div class="wl" style="width:${w.toFixed(2)}px;transform-origin:${(w/2).toFixed(2)}px 9px;transform:translate3d(${(cx-w/2).toFixed(2)}px,${(cy-9).toFixed(2)}px,0) rotateZ(${deg.toFixed(2)}deg) rotateX(90deg);background:linear-gradient(180deg,${c},${l} 50%,${c})"></div>`)};
-  P(L0+W/2,T0,W-2*R,0,270);P(L0+W/2,T0+H,W-2*R,0,90);
-  P(L0,T0+H/2,H-2*R,90,180);P(L0+W,T0+H/2,H-2*R,90,0);
-  const chord=2*R*Math.sin(Math.PI/4/N);
-  [[L0+R,T0+R,180],[L0+W-R,T0+R,270],[L0+W-R,T0+H-R,0],[L0+R,T0+H-R,90]].forEach(([cx,cy,a0])=>{
-    for(let k=0;k<N;k++){const ph=a0+(k+.5)*90/N,r=ph*Math.PI/180;
-      P(cx+R*Math.cos(r),cy+R*Math.sin(r),chord,ph+90,ph)}});
-  return out.join('')}
+  const k=kd(d.key);return k==='l'?lapFace(d,side,F,hn):k==='t'?tvFace(d,side,F,hn):k==='d'?pcFace(d,side,F,hn):phoneFace(d,side,F,hn,c3)}
+// данные для 3D-слоёв телефона (рамка, камера): те же дефекты и подсветка, что и на плоских гранях
+const ph3=(d,kn,hl)=>{const F=dfl(d,kn),hd=kn&&hl!=null?d.defs[hl]:null,hn=hd&&!hd.fx?(hd.fake?'fake':hd.n):null;return walls(d,F)+cam3(d,F,hn)}
+/* ===== 3D-корпус телефона: цельная рамка со скосами, кнопки, порты, объёмная камера ===== */
+const K3=.75;
+const hx3=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
+const mx3=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
+const LGT=(()=>{const v=[-.38,-.58,.72],m=Math.hypot(...v);return v.map(x=>x/m)})();
+const HLF=(()=>{const v=[LGT[0],LGT[1],LGT[2]+1],m=Math.hypot(...v);return v.map(x=>x/m)})();
+// освещение грани: base [r,g,b], n — нормаль (x вправо, y вниз, z к зрителю), gl — глянец
+function lit3(base,n,gl){
+  const dif=Math.max(0,n[0]*LGT[0]+n[1]*LGT[1]+n[2]*LGT[2]),
+    sp=Math.pow(Math.max(0,n[0]*HLF[0]+n[1]*HLF[1]+n[2]*HLF[2]),gl||28),
+    k=.42+.7*dif,c=base.map(v=>v*k+255*sp*.62);
+  return'rgb('+c.map(v=>Math.max(0,Math.min(255,Math.round(v)))).join(',')+')'}
+// плоская полоса: центр (cx,cy), длина по касательной, ph — угол внешней нормали, zc — высота центра, hl — ширина по склону
+const bd3=(cx,cy,len,ph,zc,hl,tilt,bg,inner)=>`<div class="pb3" style="width:${len.toFixed(2)}px;height:${hl.toFixed(2)}px;transform-origin:${(len/2).toFixed(2)}px ${(hl/2).toFixed(2)}px;transform:translate3d(${(cx-len/2).toFixed(2)}px,${(cy-hl/2).toFixed(2)}px,0) rotateZ(${(ph+90).toFixed(2)}deg) rotateX(90deg) translate3d(0,${zc.toFixed(2)}px,0) rotateX(${tilt.toFixed(2)}deg);background:${bg}">${inner||''}</div>`;
+// профиль рамки: [высота центра, вынос наружу, ширина по склону, наклон°]. Наклон >0 — грань смотрит к зрителю (+z)
+const PRF=[[0,2.7,9.4,0],[5.85,2.4,3.0,12.5],[8.1,1.55,2.35,31.4],[-5.85,2.4,3.0,-12.5],[-8.1,1.55,2.35,-31.4]];
+// выдавленный скруглённый контур из полос без зазоров: прямые + грани углов (вершины на окружности, с нахлёстом)
+function outl(x0,y0,w,h,r,Nc,prof,B,deco,gl){
+  let o='';const D=90/Nc,dr=Math.PI/180;
+  const add=(cx,cy,len,ph,side)=>{prof.forEach(([zc,off,hl,be],bi)=>{
+    const a=ph*dr,cs=Math.cos(a),sn=Math.sin(a),br=be*dr,
+      n=[cs*Math.cos(br),sn*Math.cos(br),Math.sin(br)],col=lit3(B,n,be?22:gl||30),
+      bg=be?col:`linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,0) 35%,rgba(0,0,0,.14)),${col}`;
+    o+=bd3(cx+off*cs,cy+off*sn,len(off),ph,zc,hl,-be,bg,!be&&zc===0&&deco&&side?deco(side):'')})};
+  if(w-2*r>.5){add(x0+w/2,y0,()=>w-2*r+.7,270,'T');add(x0+w/2,y0+h,()=>w-2*r+.7,90,'B')}
+  if(h-2*r>.5){add(x0,y0+h/2,()=>h-2*r+.7,180,'L');add(x0+w,y0+h/2,()=>h-2*r+.7,0,'R')}
+  [[x0+r,y0+r,180],[x0+w-r,y0+r,270],[x0+w-r,y0+h-r,0],[x0+r,y0+h-r,90]].forEach(([cx,cy,a0])=>{
+    for(let k=0;k<Nc;k++){const ph=a0+(k+.5)*D,a=ph*dr,half=D*dr/2;
+      prof.forEach(([zc,off,hl,be],bi)=>{const rho=Math.max(.05,r+off),br=be*dr,
+        n=[Math.cos(a)*Math.cos(br),Math.sin(a)*Math.cos(br),Math.sin(br)],col=lit3(B,n,be?22:gl||30),
+        bg=be?col:`linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,0) 35%,rgba(0,0,0,.14)),${col}`,
+        len=2*rho*Math.sin(half)+.6,ce=rho*Math.cos(half);
+        o+=bd3(cx+ce*Math.cos(a),cy+ce*Math.sin(a),len,ph,zc,hl,-be,bg,'')})}});
+  return o}
+const disc3=(x,y,r,z,bg,ex)=>`<div class="pb3" style="width:${(2*r).toFixed(2)}px;height:${(2*r).toFixed(2)}px;border-radius:50%;transform:translate3d(${(x-r).toFixed(2)}px,${(y-r).toFixed(2)}px,${z.toFixed(2)}px);background:${bg};${ex||''}"></div>`;
+const top3=(x,y,w,h,r,z,bg,ex)=>`<div class="pb3" style="width:${w.toFixed(2)}px;height:${h.toFixed(2)}px;border-radius:${r.toFixed(2)}px;transform:translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,${z.toFixed(2)}px);background:${bg};${ex||''}"></div>`;
+// параллелепипед (кнопки): оси в px, границы x0..x1, y0..y1, z0..z1
+function bx3d(x0,x1,y0,y1,z0,z1,B,gl){
+  const w=x1-x0,h=y1-y0,t=z1-z0,mx=(x0+x1)/2,my=(y0+y1)/2,mz=(z0+z1)/2,
+  F=(W,H,cx,cy,cz,rot,n)=>`<div class="pb3" style="width:${W.toFixed(2)}px;height:${H.toFixed(2)}px;transform:translate3d(${(cx-W/2).toFixed(2)}px,${(cy-H/2).toFixed(2)}px,${cz.toFixed(2)}px) ${rot};background:${lit3(B,n,gl||26)}"></div>`;
+  return F(w,h,mx,my,z1,'',[0,0,1])+F(w,h,mx,my,z0,'',[0,0,-1])
+   +F(t,h,x0,my,mz,'rotateY(90deg)',[-1,0,0])+F(t,h,x1,my,mz,'rotateY(90deg)',[1,0,0])
+   +F(w,t,mx,y0,mz,'rotateX(90deg)',[0,-1,0])+F(w,t,mx,y1,mz,'rotateX(90deg)',[0,1,0])}
+function rimBase(d){
+  const [c1,c2]=pcol(d),nn=I[d.key][0];
+  if(/Gold|Vertu|Caviar|Platinum/.test(nn))return[226,188,100];
+  const m=mx3(hx3(c1),hx3(c2),.5),g=(m[0]+m[1]+m[2])/3;
+  return mx3(mx3(m,[g,g,g],.45),[172,178,194],.4)}
+const phInfo=d=>{const nn=I[d.key][0];return{nn,ip:/iPhone|Duo|Vertu|Caviar/.test(nn),pro:/Pro|Duo|Gold|Platinum|Caviar|Vertu/.test(nn),sg:/Samsung/.test(nn),px:/Pixel/.test(nn)}};
+const camPos=p=>({cc:p.ip?(p.pro?[66,65]:[60,58]):p.sg?[44,82]:p.px?[100,87]:[61,59],cr:p.sg?44:p.px?70:p.ip&&p.pro?56:48});
+// рамка + кнопки + порты (общие для обеих сторон, в системе координат .vi)
+function walls(d,F){
+  F=F||{};
+  const L0=7.5,T0=6.25,W=135,H=295.5,R=25.5,B=rimBase(d),
+  dec=s=>s==='B'?'<i style="position:absolute;left:calc(50% - 8px);top:calc(50% - 2.1px);width:16px;height:4.2px;border-radius:2.1px;background:#05070a;box-shadow:0 0 0 .7px rgba(255,255,255,.3),inset 0 0 0 .6px #2a2f3a"></i><i style="position:absolute;left:calc(50% - 40px);top:calc(50% - 2px);width:22px;height:4px;background:radial-gradient(circle,#05070a 0 .85px,transparent 1.1px) 0 0/4.4px 4px"></i><i style="position:absolute;left:calc(50% + 18px);top:calc(50% - 2px);width:22px;height:4px;background:radial-gradient(circle,#05070a 0 .85px,transparent 1.1px) 0 0/4.4px 4px"></i>'
+    :s==='T'?'<i style="position:absolute;left:calc(50% + 18px);top:calc(50% - 1.2px);width:2.4px;height:2.4px;border-radius:50%;background:#05070a"></i>'
+    :'<i style="position:absolute;left:11%;top:0;bottom:0;width:1.4px;background:rgba(0,0,0,.5);box-shadow:1px 0 0 rgba(255,255,255,.28)"></i><i style="position:absolute;right:11%;top:0;bottom:0;width:1.4px;background:rgba(0,0,0,.5);box-shadow:1px 0 0 rgba(255,255,255,.28)"></i>',
+  bb=mx3(B,[38,42,54],.42),hot=[229,72,77];
+  let o=outl(L0,T0,W,H,R,6,PRF,B,dec,30);
+  [[72,94.5],[102,136.5]].forEach(([a,b])=>o+=bx3d(2.5,5.9,a,b,-3.3,3.3,bb,22));
+  o+=bx3d(144.3,147.6,96,144,-3.3,3.3,F.btn?hot:bb,22);
+  return o}
+// объёмная камера на задней стороне (в системе координат задней грани)
+function cam3(d,F,hn){
+  F=F||{};
+  const P=phInfo(d),{ip,pro,sg,px}=P,[c1,c2]=pcol(d),sd=d.id*7919+13,sc=v=>v*K3,{cc,cr}=camPos(P);
+  const ib=ip?mx3(mx3(hx3(c1),hx3(c2),.4),[255,255,255],.08):px?[20,22,30]:[22,24,32],
+    metal=[206,211,225],glass=[26,34,64],
+    lensT=r=>`radial-gradient(circle,#06070b 0 60%,#2b2f3b 62% 72%,#c9cfdd 78%,#f6f8fc 86%,#8d94a6 100%)`,
+    glT=`radial-gradient(circle at 34% 30%,rgba(255,255,255,.9) 0 6%,rgba(255,255,255,0) 17%),radial-gradient(circle at 70% 75%,rgba(130,170,255,.65) 0 5%,rgba(130,170,255,0) 14%),radial-gradient(circle,#050812 0 14%,#2255b0 33%,#16306a 52%,#0b1632 74%,#04060d 100%)`;
+  let o='',z0=0,hr=3.4,hg=.9;
+  const lens3=(x,y,r)=>{const rg=r*.68;
+    return outl(x-r,y-r,2*r,2*r,r,4,[[z0+hr/2,0,hr+.3,0]],metal,0,40)
+     +disc3(x,y,r,z0+hr,lensT(r))
+     +outl(x-rg,y-rg,2*rg,2*rg,rg,3,[[z0+hr+hg/2,0,hg+.3,0]],glass,0,60)
+     +disc3(x,y,rg,z0+hr+hg,glT)};
+  const ext=(x,y,w,h,r,Hh,Nc,col,ns)=>{const bv=.9;
+    return (ns?'':top3(x-1,y-1,w+2,h+2,r+1,.04,'rgba(0,0,0,.001)','box-shadow:0 2px 7px rgba(0,0,0,.42)'))
+     +outl(x,y,w,h,r,Nc,[[(Hh-bv)/2,0,Hh-bv+.3,0],[Hh-bv/2,-.4,1.25,41.6]],col,0,36)
+     +top3(x+.8,y+.8,w-1.6,h-1.6,Math.max(.5,r-.8),Hh,`linear-gradient(140deg,rgba(255,255,255,.3),rgba(255,255,255,.05) 50%,rgba(0,0,0,.22)),rgb(${col.map(Math.round).join(',')})`,'box-shadow:inset 0 0 0 .7px rgba(255,255,255,.3)')};
+  let lenses,fl=null,mic=null;
+  if(ip){
+    const isl=pro?[22,20,88,90,22]:[22,20,76,76,20],Hh=3.4;
+    o+=ext(...isl.map(sc),Hh,5,ib);z0=Hh;hr=pro?2.7:2.4;
+    lenses=pro?[[48,46,14],[48,84,14],[86,65,14]]:[[44,42,14],[72,72,14]];
+    fl=pro?[90,34,4.5]:[76,36,4];mic=pro?[90,98,3.4]:null}
+  else if(sg){z0=0;hr=3.8;hg=1;lenses=[[44,46,12],[44,82,12],[44,118,12]];fl=[72,46,4]}
+  else if(px){
+    const Hh=3.2,x=7.5,w=135,y=sc(62),h=sc(50);
+    o+=ext(x,y,w,h,1.4,Hh,2,ib,1);z0=Hh;hr=1.9;hg=.8;
+    lenses=[[78,87,15],[114,87,15]];fl=[146,87,5]}
+  else{
+    const isl=[22,20,78,78,18],Hh=3;
+    o+=ext(...isl.map(sc),Hh,5,ib);z0=Hh;hr=2;hg=.8;
+    lenses=[[46,44,11],[76,44,11],[60,76,11]]}
+  lenses.forEach(([x,y,r])=>o+=lens3(sc(x),sc(y),sc(r)));
+  if(fl){const [x,y,r]=fl;o+=outl(sc(x-r),sc(y-r),sc(2*r),sc(2*r),sc(r),3,[[z0+.35,0,.8,0]],[236,226,170],0,30)+disc3(sc(x),sc(y),sc(r),z0+.7,'radial-gradient(circle at 40% 38%,#fffbe0,#f3e7a2 55%,#b7a55a)')}
+  if(mic){const [x,y,r]=mic;o+=disc3(sc(x),sc(y),sc(r),z0+.05,'radial-gradient(circle,#05070a 0 55%,#303542 60%,#14161d)')}
+  const zt=z0+hr+hg+.5;
+  if(F.cam||F.glass||hn==='Разбито стекло камеры'||hn==='Сломана камера'){
+    let g='';
+    if(F.cam)g+=`<circle cx="${cc[0]}" cy="${cc[1]}" r="${cr*.8}" fill="#000" fill-opacity=".55"/><path d="M${cc[0]-cr*.5} ${cc[1]-cr*.5}L${cc[0]+cr*.5} ${cc[1]+cr*.5}M${cc[0]+cr*.5} ${cc[1]-cr*.5}L${cc[0]-cr*.5} ${cc[1]+cr*.5}" stroke="#ff3b3b" stroke-width="4" stroke-linecap="round"/>`;
+    if(F.glass)g+=crack(sd+21,cc[0],cc[1],cr);
+    if(hn==='Разбито стекло камеры'||hn==='Сломана камера')g+=ring(cc[0],cc[1],cr+6);
+    o+=`<svg class="pb3" viewBox="0 0 200 410" style="width:150px;height:308px;transform:translateZ(${zt.toFixed(2)}px);overflow:visible" xmlns="http://www.w3.org/2000/svg">${g}</svg>`}
+  return`<div class="cam3">${o}</div>`}
 /* ===== 3D-модели при осмотре: ноутбуки, ПК, приставки ===== */
 const TILT={l:-28,d:-14,t:-24};
 const t3=(d,sd,kn,ox,oy,sx,sy)=>`<div class="cw" style="transform:scale(${sx||1},${sy||1}) translate(${-ox}px,${-oy}px)">${face(d,sd,kn,sheet.hl)}</div>`;
@@ -876,8 +997,8 @@ const m3=(d,kn)=>kd(d.key)==='l'?lap3(d,kn):box3(d,kn);
 function vwBlock(d,kn){
   if(!hasView(d.key)||!sheet)return'';
   const a=sheet.from!=null?sheet.from:(sheet.ang||0),cur=sideOf(sheet.ang),LB={l:['💻 Экран','🔙 Крышка'],p:['📱 Экран','🔙 Крышка'],d:['🖥 Спереди','🔙 Сзади'],t:['📺 Спереди','🔙 Сзади']}[kd(d.key)];
-  const P3=kd(d.key)==='p',P4=!P3,tx=P4?TILT[kd(d.key)]:0;if(sheet.kdv!==d.key){sheet.kdv=d.key;sheet.tx=tx;sheet.rx=tx}const rx=sheet.from!=null?(sheet.frx||0):(sheet.rx||0),vs=P4?(kd(d.key)==='l'?'width:292px;height:190px;':`width:${RDK(d).W}px;height:${RDK(d).H}px;`):'',sl=P3?walls():'';
-  return`<div class="vw${P3?' p3':' p4'}"><div class="vi" style="${vs}transform:rotateX(${rx}deg) rotateY(${a}deg)">${P4?m3(d,kn):`<div class="vf">${face(d,0,kn,sheet.hl)}</div>${sl}<div class="vf vb">${face(d,1,kn,sheet.hl)}</div>`}</div></div><div class="flt" style="padding:0 0 6px;justify-content:center;flex-wrap:wrap"><span class="ch ${cur?'':'on'}" data-a="vside" data-k="0">${LB[0]}</span><span class="ch ${cur?'on':''}" data-a="vside" data-k="1">${LB[1]}</span><span class="ch" data-a="vflip">🔄 Повернуть</span>${P3?'<span class="ch" data-a="vedge">↔ Ребро</span>':''}</div><div class="mut" style="text-align:center;font-size:12px;margin-bottom:6px">${kn?(P3?'3D-осмотр: крутите телефон пальцем в любую сторону, смотрите рамку, углы и заднюю крышку. Нажмите на дефект, чтобы показать его':'3D-осмотр: крутите устройство пальцем в любую сторону, смотрите со всех сторон. Нажмите на дефект, чтобы показать его'):'📷 Фото продавца: реальное состояние не видно, нужна диагностика'}</div>`}
+  const P3=kd(d.key)==='p',P4=!P3,tx=P4?TILT[kd(d.key)]:0;if(sheet.kdv!==d.key){sheet.kdv=d.key;sheet.tx=tx;sheet.rx=tx}const rx=sheet.from!=null?(sheet.frx||0):(sheet.rx||0),vs=P4?(kd(d.key)==='l'?'width:292px;height:190px;':`width:${RDK(d).W}px;height:${RDK(d).H}px;`):'',sl=P3?ph3(d,kn,sheet.hl):'';
+  return`<div class="vw${P3?' p3':' p4'}"><div class="vi" style="${vs}transform:rotateX(${rx}deg) rotateY(${a}deg)">${P4?m3(d,kn):`<div class="vf">${face(d,0,kn,sheet.hl,1)}</div>${sl}<div class="vf vb">${face(d,1,kn,sheet.hl,1)}</div>`}</div></div><div class="flt" style="padding:0 0 6px;justify-content:center;flex-wrap:wrap"><span class="ch ${cur?'':'on'}" data-a="vside" data-k="0">${LB[0]}</span><span class="ch ${cur?'on':''}" data-a="vside" data-k="1">${LB[1]}</span><span class="ch" data-a="vflip">🔄 Повернуть</span>${P3?'<span class="ch" data-a="vedge">↔ Ребро</span>':''}</div><div class="mut" style="text-align:center;font-size:12px;margin-bottom:6px">${kn?(P3?'3D-осмотр: крутите телефон пальцем в любую сторону, смотрите рамку, кнопки, объёмную камеру и заднюю крышку. Нажмите на дефект, чтобы показать его':'3D-осмотр: крутите устройство пальцем в любую сторону, смотрите со всех сторон. Нажмите на дефект, чтобы показать его'):'📷 Фото продавца: реальное состояние не видно, нужна диагностика'}</div>`}
 const vdAttr=(d,x,i)=>{const s=defSide(x);return hasView(d.key)&&s!=null?`data-a="vdef" data-i="${i}" data-k="${s}" style="cursor:pointer"`:''};
 function afterRender(){if(sheet&&sheet.from!=null){const i=$('.vi');if(i){void i.offsetWidth;i.style.transform='rotateX('+(sheet.rx||0)+'deg) rotateY('+(sheet.ang||0)+'deg)'}sheet.from=null}}
 function vgo(s,w){const a=s.ang||0;s.from=a;s.frx=s.rx||0;s.ang=Math.round((a-w*180)/360)*360+w*180;s.rx=s.tx||0}
