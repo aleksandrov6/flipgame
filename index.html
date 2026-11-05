@@ -395,6 +395,9 @@ nav button:not(.on){opacity:.85}
 .vw.p3::after{content:"";position:absolute;left:50%;bottom:3px;width:128px;height:14px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(14,23,38,.42),rgba(14,23,38,0));pointer-events:none;z-index:0}
 .p3 .vi{z-index:1}
 .rgb{animation:rgbh 7s linear infinite}@keyframes rgbh{to{filter:hue-rotate(360deg)}}@media (prefers-reduced-motion:reduce){.rgb{animation:none}}
+.vi{will-change:transform}
+.ov:has(.vw){-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(8,14,26,.72)}
+body:has(.ov) .rgb,.vw .rgb{animation:none}
 </style>
 </head>
 <body>
@@ -1468,8 +1471,8 @@ try{const sc=document.createElement('script');sc.src='https://telegram.org/js/te
 setInterval(pollCmd,10000);setInterval(fetchTop,30000);setTimeout(fetchTop,4000);setTimeout(pollCmd,2500);setInterval(trFlush,8000);setTimeout(trFlush,3000);
 let dg=null;
 document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.closest('.vw');if(!w||!sheet)return;const i=w.querySelector('.vi');dg={i,x:e.clientX,y:e.clientY,a:sheet.ang||0,r:sheet.rx||0,c:null,cx:0,p:w.classList.contains('p3')||w.classList.contains('p4')};i.classList.add('dr');try{w.setPointerCapture(e.pointerId)}catch(_){}});
-document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*.9;dg.cx=dg.p?Math.max(-75,Math.min(75,dg.r-(e.clientY-dg.y)*.6)):0;dg.i.style.transform='rotateX('+dg.cx+'deg) rotateY('+dg.c+'deg)'});
-const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.p){if(g.c!=null){sheet.ang=g.c;sheet.rx=g.cx;sheet.from=null}}else if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
+document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*.9;dg.cx=dg.p?Math.max(-75,Math.min(75,dg.r-(e.clientY-dg.y)*.6)):0;if(dg.raf)return;dg.raf=requestAnimationFrame(()=>{if(!dg)return;dg.raf=0;dg.i.style.transform='rotateX('+dg.cx+'deg) rotateY('+dg.c+'deg)'})});
+const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.p){if(g.c!=null){sheet.ang=g.c;sheet.rx=g.cx;sheet.from=null;g.i.style.transform='rotateX('+g.cx+'deg) rotateY('+g.c+'deg)'}}else if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
 document.addEventListener('pointerup',dgEnd);document.addEventListener('pointercancel',dgEnd);
 /* ===== Интерактивный ремонт телефона: винты → крышка → замена деталей ===== */
 const RPM={'Разбитый экран':['disp','Дисплей'],'Слабая батарея':['bat','Батарея'],'Не включается':['pmic','Плата питания'],'Проблема с платой':['mb','Материнская плата'],'Разбита задняя крышка':['cov','Задняя крышка'],'Залипает кнопка':['btn','Шлейф кнопок'],'Перегрев':['cool','Система охлаждения'],'Царапины корпуса':['cov','Задняя крышка'],'Разбито стекло камеры':['cam','Стекло камеры'],'Сломана камера':['cam','Модуль камеры']};
