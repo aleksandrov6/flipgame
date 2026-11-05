@@ -1006,7 +1006,7 @@ function vTop(){const m=(Date.now()-S.t0)/6e4;
 function vTrCard(){
   if(!isMain())return'';
   const h=S.pend.map(t=>`<div class="df"><span>⏳ → ${esc(t.name||t.to)}<br><span class="mut">отправляется…</span></span><b>−${f(t.n)}</b></div>`).concat(S.tx.slice(0,5).map(x=>`<div class="df"><span>${x.k==='in'?'⬇️ от ':'⬆️ для '}${esc(x.w)}<br><span class="mut">${new Date(x.d).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></span><b style="color:var(--${x.k==='in'?'ok':'bad'})">${x.k==='in'?'+':'−'}${f(x.n)}</b></div>`)).join('');
-  return`<div class="c"><h3>💸 Переводы игрокам</h3><div class="mut">Нажмите 💸 рядом с игроком в рейтинге или введите его Telegram ID. Ваш ID: <b>${TGID||'—'}</b>${API&&TGID?'':' · <b style="color:var(--bad)">доступно в Telegram при подключённом сервере</b>'}</div><div class="acts"><button class="b" data-a="trto" data-i="0" data-n="">Перевести по ID</button></div>${h}</div>`}
+  return`<div class="c"><h3>💸 Переводы игрокам</h3><div class="mut">Нажмите 💸 рядом с игроком в рейтинге. Ваш ID: <b>${TGID||'—'}</b>${API&&TGID?'':' · <b style="color:var(--bad)">доступно в Telegram при подключённом сервере</b>'}</div>${h}</div>`}
 function vTr(){
   const inp='width:100%;padding:11px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font:inherit;margin-top:8px';
   return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><h3>💸 Перевод денег</h3><div class="mut">Баланс: ${f(S.bal)} · минимум ${f(TR_MIN)}. Деньги спишутся сразу, у получателя появятся в течение ~10 секунд.</div>`+
@@ -1064,7 +1064,7 @@ document.addEventListener('click',e=>{
     if(o&&d){S.bal+=o.reward;S.earn+=o.reward-d.paid;S.rep+=2;const xp=gain(RI(15,25));S.sold++;S.inv=S.inv.filter(x=>x!==d);S.ord=S.ord.filter(x=>x!==o);sheet=null;toast('Заказ выполнен: +'+f(o.reward)+', репутация +2 · '+xp)}}
   else if(a==='trto'){if(!isMain())toast('Переводы между игроками отключены');else if(!API||!TGID)toast('Переводы доступны в Telegram при подключённом сервере');else sheet={t:'tr',id:i||0,name:t.dataset.n||''}}
   else if(a==='trset'){if(sheet&&sheet.t==='tr'){sheet.amt=i;const e=$('#trid');if(e&&!sheet.id)sheet.rid=e.value}}
-  else if(a==='trgo'){if(sheet&&sheet.t==='tr'){const to=sheet.id||parseInt((($('#trid')||{}).value||'').replace(/\D/g,''))||0,n=parseInt((($('#tramt')||{}).value||'').replace(/\D/g,''))||0;
+  else if(a==='trgo'){if(!isMain()){sheet=null;toast('Переводы между игроками отключены');return}if(sheet&&sheet.t==='tr'){const to=sheet.id||parseInt((($('#trid')||{}).value||'').replace(/\D/g,''))||0,n=parseInt((($('#tramt')||{}).value||'').replace(/\D/g,''))||0;
     if(!to)toast('Укажите ID получателя');else if(to===TGID)toast('Нельзя перевести самому себе');else if(n<TR_MIN)toast('Минимум '+f(TR_MIN));
     else if(!lose(n)){S.pend.push({tid:TGID+'-'+Date.now().toString(36)+Math.random().toString(36).slice(2,8),to,n,name:sheet.name});sheet=null;toast('💸 Отправляем '+f(n)+'…');trFlush()}}}
   else if(a==='promouse')promoRedeem();
