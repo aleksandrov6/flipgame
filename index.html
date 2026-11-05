@@ -66,7 +66,7 @@ nav em{position:absolute;top:0;right:22%;background:var(--bad);color:#fff;font-s
 .th svg{width:100%;height:100%;display:block}
 .th span{position:absolute;right:4px;bottom:3px;font-size:11px;background:rgba(0,0,0,.5);color:#fff;border-radius:8px;padding:0 5px}
 .vw{perspective:900px;height:320px;margin:8px 0;border-radius:18px;background:radial-gradient(circle at 50% 40%,#eef1f7,#bcc4d4);touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
-.vi{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.3,.7,.2,1)}
+.vi{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .38s cubic-bezier(.2,.8,.2,1)}
 .vi.dr{transition:none}
 .vf{position:absolute;inset:0;padding:10px;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none}
 .vb{transform:rotateY(180deg)}
@@ -866,7 +866,11 @@ function tvFace(d,side,F,hn){
     if(hn==='Царапины корпуса')s+=ring(160,120,104);
     if(hn==='fake')s+=ring(160,138,66)}
   return s+'</svg>'}
+const FCH=new Map();
 function face(d,side,kn,hl,c3){
+  let fk;try{fk=side+'|'+kn+'|'+hl+'|'+c3+'|'+(Date.now()/6e4|0)+'|'+JSON.stringify(d)}catch(e){return face0(d,side,kn,hl,c3)}
+  let fr=FCH.get(fk);if(fr===undefined){fr=face0(d,side,kn,hl,c3);if(FCH.size>240)FCH.clear();FCH.set(fk,fr)}return fr}
+function face0(d,side,kn,hl,c3){
   const F=dfl(d,kn),hd=kn&&hl!=null?d.defs[hl]:null,hn=hd&&!hd.fx?(hd.fake?'fake':hd.n):null;
   const k=kd(d.key);return k==='l'?lapFace(d,side,F,hn):k==='t'?tvFace(d,side,F,hn):k==='d'?pcFace(d,side,F,hn):phoneFace(d,side,F,hn,c3)}
 /* === Электроника: объём, блики, RGB-подсветка (ноутбуки, ПК, приставки) === */
@@ -894,7 +898,8 @@ const _tf=tvFace;tvFace=function(d,side,F,hn){const s=_tf(d,side,F,hn),u='k'+(++
   if(!side&&!F.off)post+=`<ellipse cx="160" cy="148" rx="60" ry="14" fill="url(#${u}l)" style="mix-blend-mode:screen"/><path d="M84 168H236" stroke="${c}" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round"/>`;
   return exT(s,df,'',post)};
 // данные для 3D-слоёв телефона (рамка, камера): те же дефекты и подсветка, что и на плоских гранях
-const ph3=(d,kn,hl)=>{const F=dfl(d,kn),hd=kn&&hl!=null?d.defs[hl]:null,hn=hd&&!hd.fx?(hd.fake?'fake':hd.n):null;return walls(d,F)+cam3(d,F,hn)}
+const ph3c=new Map();
+const ph3=(d,kn,hl)=>{const F=dfl(d,kn),hd=kn&&hl!=null?d.defs[hl]:null,hn=hd&&!hd.fx?(hd.fake?'fake':hd.n):null;const key=d.id+'|'+d.key+'|'+JSON.stringify(F)+'|'+hn;let r=ph3c.get(key);if(!r){r=walls(d,F)+cam3(d,F,hn);if(ph3c.size>30)ph3c.clear();ph3c.set(key,r)}return r}
 /* ===== 3D-корпус телефона: цельная рамка со скосами, кнопки, порты, объёмная камера ===== */
 const K3=.75;
 const hx3=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
@@ -910,7 +915,7 @@ function lit3(base,n,gl){
 // плоская полоса: центр (cx,cy), длина по касательной, ph — угол внешней нормали, zc — высота центра, hl — ширина по склону
 const bd3=(cx,cy,len,ph,zc,hl,tilt,bg,inner)=>`<div class="pb3" style="width:${len.toFixed(2)}px;height:${hl.toFixed(2)}px;transform-origin:${(len/2).toFixed(2)}px ${(hl/2).toFixed(2)}px;transform:translate3d(${(cx-len/2).toFixed(2)}px,${(cy-hl/2).toFixed(2)}px,0) rotateZ(${(ph+90).toFixed(2)}deg) rotateX(90deg) translate3d(0,${zc.toFixed(2)}px,0) rotateX(${tilt.toFixed(2)}deg);background:${bg}">${inner||''}</div>`;
 // профиль рамки: [высота центра, вынос наружу, ширина по склону, наклон°]. Наклон >0 — грань смотрит к зрителю (+z)
-const PRF=[[0,2.7,9.4,0],[5.85,2.4,3.0,12.5],[8.1,1.55,2.35,31.4],[-5.85,2.4,3.0,-12.5],[-8.1,1.55,2.35,-31.4]];
+const PRF=[[0,2.7,9.4,0],[6.9,1.95,4.7,18.8],[-6.9,1.95,4.7,-18.8]];
 // выдавленный скруглённый контур из полос без зазоров: прямые + грани углов (вершины на окружности, с нахлёстом)
 function outl(x0,y0,w,h,r,Nc,prof,B,deco,gl){
   let o='';const D=90/Nc,dr=Math.PI/180;
@@ -953,7 +958,7 @@ function walls(d,F){
     :s==='T'?'<i style="position:absolute;left:calc(50% + 18px);top:calc(50% - 1.2px);width:2.4px;height:2.4px;border-radius:50%;background:#05070a"></i>'
     :'<i style="position:absolute;left:11%;top:0;bottom:0;width:1.4px;background:rgba(0,0,0,.5);box-shadow:1px 0 0 rgba(255,255,255,.28)"></i><i style="position:absolute;right:11%;top:0;bottom:0;width:1.4px;background:rgba(0,0,0,.5);box-shadow:1px 0 0 rgba(255,255,255,.28)"></i>',
   bb=mx3(B,[38,42,54],.42),hot=[229,72,77];
-  let o=outl(L0,T0,W,H,R,6,PRF,B,dec,30);
+  let o=outl(L0,T0,W,H,R,4,PRF,B,dec,30);
   [[72,94.5],[102,136.5]].forEach(([a,b])=>o+=bx3d(2.5,5.9,a,b,-3.3,3.3,bb,22));
   o+=bx3d(144.3,147.6,96,144,-3.3,3.3,F.btn?hot:bb,22);
   return o}
@@ -967,9 +972,9 @@ function cam3(d,F,hn){
     glT=`radial-gradient(circle at 34% 30%,rgba(255,255,255,.9) 0 6%,rgba(255,255,255,0) 17%),radial-gradient(circle at 70% 75%,rgba(130,170,255,.65) 0 5%,rgba(130,170,255,0) 14%),radial-gradient(circle,#050812 0 14%,#2255b0 33%,#16306a 52%,#0b1632 74%,#04060d 100%)`;
   let o='',z0=0,hr=3.4,hg=.9;
   const lens3=(x,y,r)=>{const rg=r*.68;
-    return outl(x-r,y-r,2*r,2*r,r,4,[[z0+hr/2,0,hr+.3,0]],metal,0,40)
+    return outl(x-r,y-r,2*r,2*r,r,3,[[z0+hr/2,0,hr+.3,0]],metal,0,40)
      +disc3(x,y,r,z0+hr,lensT(r))
-     +outl(x-rg,y-rg,2*rg,2*rg,rg,3,[[z0+hr+hg/2,0,hg+.3,0]],glass,0,60)
+     
      +disc3(x,y,rg,z0+hr+hg,glT)};
   const ext=(x,y,w,h,r,Hh,Nc,col,ns)=>{const bv=.9;
     return (ns?'':top3(x-1,y-1,w+2,h+2,r+1,.04,'rgba(0,0,0,.001)','box-shadow:0 2px 7px rgba(0,0,0,.42)'))
@@ -978,7 +983,7 @@ function cam3(d,F,hn){
   let lenses,fl=null,mic=null;
   if(ip){
     const isl=pro?[22,20,88,90,22]:[22,20,76,76,20],Hh=3.4;
-    o+=ext(...isl.map(sc),Hh,5,ib);z0=Hh;hr=pro?2.7:2.4;
+    o+=ext(...isl.map(sc),Hh,3,ib);z0=Hh;hr=pro?2.7:2.4;
     lenses=pro?[[48,46,14],[48,84,14],[86,65,14]]:[[44,42,14],[72,72,14]];
     fl=pro?[90,34,4.5]:[76,36,4];mic=pro?[90,98,3.4]:null}
   else if(sg){z0=0;hr=3.8;hg=1;lenses=[[44,46,12],[44,82,12],[44,118,12]];fl=[72,46,4]}
@@ -988,10 +993,10 @@ function cam3(d,F,hn){
     lenses=[[78,87,15],[114,87,15]];fl=[146,87,5]}
   else{
     const isl=[22,20,78,78,18],Hh=3;
-    o+=ext(...isl.map(sc),Hh,5,ib);z0=Hh;hr=2;hg=.8;
+    o+=ext(...isl.map(sc),Hh,3,ib);z0=Hh;hr=2;hg=.8;
     lenses=[[46,44,11],[76,44,11],[60,76,11]]}
   lenses.forEach(([x,y,r])=>o+=lens3(sc(x),sc(y),sc(r)));
-  if(fl){const [x,y,r]=fl;o+=outl(sc(x-r),sc(y-r),sc(2*r),sc(2*r),sc(r),3,[[z0+.35,0,.8,0]],[236,226,170],0,30)+disc3(sc(x),sc(y),sc(r),z0+.7,'radial-gradient(circle at 40% 38%,#fffbe0,#f3e7a2 55%,#b7a55a)')}
+  if(fl){const [x,y,r]=fl;o+=disc3(sc(x),sc(y),sc(r),z0+.7,'radial-gradient(circle at 40% 38%,#fffbe0,#f3e7a2 55%,#b7a55a)')}
   if(mic){const [x,y,r]=mic;o+=disc3(sc(x),sc(y),sc(r),z0+.05,'radial-gradient(circle,#05070a 0 55%,#303542 60%,#14161d)')}
   const zt=z0+hr+hg+.5;
   if(F.cam||F.glass||hn==='Разбито стекло камеры'||hn==='Сломана камера'){
@@ -1038,8 +1043,8 @@ function vInsp(){
   return`<div class="ov" data-a="close"><div class="sh" data-a="stay"><div class="row"><h3>${nm(d)}</h3><span class="price">${f(l.price)}</span></div><div class="mut">${esc(l.who)} · ${kn?'диагностика проведена · стоит ~'+f(val(d)):'дефекты неизвестны'}</div>${vwBlock(d,kn)}${lst}${kn?'':`<button class="b" data-a="insp" data-i="${l.id}" style="width:100%;margin-top:8px">🔍 Провести диагностику ${f(cost)}</button>`}<div class="acts"><button class="b ok" data-a="buy" data-i="${l.id}">Купить за ${f(l.price)}</button><button class="b g" data-a="close">Закрыть</button></div></div></div>`}
 function vMarket(){
   const fl=[['a','🌐 Всё'],['p','📱 Телефоны'],['c','💻 Ноутбуки и ПК'],['r','🧩 Детали'],['t','📺 Приставки']];
-  const L=S.mk.filter(l=>S.flt==='a'||I[l.dev.key][2]===S.flt);
-  return nxB()+`<div class="flt">${fl.map(x=>`<span class="ch ${S.flt===x[0]?'on':''}" data-a="flt" data-i="${x[0]}">${x[1]}</span>`).join('')}</div>`+
+  const so=S.srt||'n',kv=l=>{const d=l.dev;return d.defs.length===0||d.defs[0].k?val(d)-l.price:0},L1=S.mk.filter(l=>S.flt==='a'||I[l.dev.key][2]===S.flt),L=so==='n'?L1:L1.slice().sort((a,b)=>so==='c'?a.price-b.price:so==='e'?b.price-a.price:kv(b)-kv(a));
+  return nxB()+`<div class="flt">${fl.map(x=>`<span class="ch ${S.flt===x[0]?'on':''}" data-a="flt" data-i="${x[0]}">${x[1]}</span>`).join('')}</div><div class="flt" style="padding-top:6px">${[['n','🕐 Новые'],['c','⬆ Дешевле'],['e','⬇ Дороже'],['v','📉 Выгода']].map(x=>`<span class="ch ${so===x[0]?'on':''}" data-a="srt" data-i="${x[0]}">${x[1]}</span>`).join('')}</div>`+
   (L.length?L.map(l=>{const d=l.dev,kn=d.defs.length===0||d.defs[0].k,hv=hasView(d.key),cost=Math.max(500,r100(l.price*.002)),below=kn&&l.price<val(d)*.95;
     const head=`<div class="row"><h3>${nm(d)}</h3><span class="price">${f(l.price)}</span></div><div class="mut" style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">${av(l.who,26)}<span>${l.who} · ур. ${I[d.key][3]}${kn?' · стоит ~'+f(val(d)):''}</span>${rb(l.who)}${tr(d.key)}</div><div class="chips">${chips(d)}${below?'<span class="ch ok">📉 Ниже рынка</span>':''}</div>`;
     return`<div class="c">${hv?`<div style="display:flex;gap:12px"><div class="th" data-a="look" data-i="${l.id}">${face(d,0,kn,null)}<span>👁</span></div><div style="flex:1;min-width:0">${head}</div></div>`:head}<div class="acts">${kn?(hv?`<button class="b g" data-a="look" data-i="${l.id}">👁 Осмотр</button>`:''):`<button class="b g" data-a="insp" data-i="${l.id}">🔍 Диагностика ${f(cost)}</button>`}<button class="b g" data-a="chat" data-i="${l.id}">💬${(S.chat[l.id]||[]).length?' '+S.chat[l.id].length:''}</button><button class="b" data-a="buy" data-i="${l.id}">Купить</button></div></div>`}).join(''):'<div class="empty">Тут пока пусто. Дождись обновления рынка.</div>');
@@ -1372,7 +1377,7 @@ document.addEventListener('click',e=>{
   const a=t.dataset.a,i=+t.dataset.i,j=+t.dataset.j;
   if(a==='stay')return;
   if(a==='tab'){S.tab=t.dataset.i;sheet=null}
-  else if(a==='flt')S.flt=t.dataset.i;
+  else if(a==='flt')S.flt=t.dataset.i;else if(a==='srt')S.srt=t.dataset.i;
   else if(a==='close')sheet=null;
   else if(a==='insp'){const l=S.mk.find(x=>x.id===i);if(l&&!lose(Math.max(500,r100(l.price*.002)))){l.dev.defs.forEach(x=>x.k=1);toast('Диагностика завершена');
     if(hasView(l.dev.key)){const s0=sheet&&sheet.t==='insp'&&sheet.id===i?sheet:{t:'insp',id:i,ang:0},fi=l.dev.defs.findIndex(x=>defSide(x)!=null);s0.hl=fi>=0?fi:null;
@@ -1471,7 +1476,7 @@ try{const sc=document.createElement('script');sc.src='https://telegram.org/js/te
 setInterval(pollCmd,10000);setInterval(fetchTop,30000);setTimeout(fetchTop,4000);setTimeout(pollCmd,2500);setInterval(trFlush,8000);setTimeout(trFlush,3000);
 let dg=null;
 document.addEventListener('pointerdown',e=>{const w=e.target.closest&&e.target.closest('.vw');if(!w||!sheet)return;const i=w.querySelector('.vi');dg={i,x:e.clientX,y:e.clientY,a:sheet.ang||0,r:sheet.rx||0,c:null,cx:0,p:w.classList.contains('p3')||w.classList.contains('p4')};i.classList.add('dr');try{w.setPointerCapture(e.pointerId)}catch(_){}});
-document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*.9;dg.cx=dg.p?Math.max(-75,Math.min(75,dg.r-(e.clientY-dg.y)*.6)):0;if(dg.raf)return;dg.raf=requestAnimationFrame(()=>{if(!dg)return;dg.raf=0;dg.i.style.transform='rotateX('+dg.cx+'deg) rotateY('+dg.c+'deg)'})});
+document.addEventListener('pointermove',e=>{if(!dg)return;dg.c=dg.a+(e.clientX-dg.x)*1.3;dg.cx=dg.p?Math.max(-75,Math.min(75,dg.r-(e.clientY-dg.y)*.8)):0;if(dg.raf)return;dg.raf=requestAnimationFrame(()=>{if(!dg)return;dg.raf=0;dg.i.style.transform='rotateX('+dg.cx+'deg) rotateY('+dg.c+'deg)'})});
 const dgEnd=()=>{if(!dg)return;const g=dg;dg=null;g.i.classList.remove('dr');if(g.p){if(g.c!=null){sheet.ang=g.c;sheet.rx=g.cx;sheet.from=null;g.i.style.transform='rotateX('+g.cx+'deg) rotateY('+g.c+'deg)'}}else if(g.c!=null&&Math.abs(g.c-g.a)>3){sheet.from=g.c;sheet.ang=Math.round(g.c/180)*180;render()}else g.i.style.transform='rotateY('+g.a+'deg)'};
 document.addEventListener('pointerup',dgEnd);document.addEventListener('pointercancel',dgEnd);
 /* ===== Интерактивный ремонт телефона: винты → крышка → замена деталей ===== */
