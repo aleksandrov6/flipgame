@@ -394,6 +394,7 @@ nav button:not(.on){opacity:.85}
 .vw.p3{background:radial-gradient(ellipse at 50% 26%,#ffffff 0,#dfe5f0 52%,#aab5ca 100%)}
 .vw.p3::after{content:"";position:absolute;left:50%;bottom:3px;width:128px;height:14px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(14,23,38,.42),rgba(14,23,38,0));pointer-events:none;z-index:0}
 .p3 .vi{z-index:1}
+.rgb{animation:rgbh 7s linear infinite}@keyframes rgbh{to{filter:hue-rotate(360deg)}}@media (prefers-reduced-motion:reduce){.rgb{animation:none}}
 </style>
 </head>
 <body>
@@ -865,6 +866,30 @@ function tvFace(d,side,F,hn){
 function face(d,side,kn,hl,c3){
   const F=dfl(d,kn),hd=kn&&hl!=null?d.defs[hl]:null,hn=hd&&!hd.fx?(hd.fake?'fake':hd.n):null;
   const k=kd(d.key);return k==='l'?lapFace(d,side,F,hn):k==='t'?tvFace(d,side,F,hn):k==='d'?pcFace(d,side,F,hn):phoneFace(d,side,F,hn,c3)}
+/* === Электроника: объём, блики, RGB-подсветка (ноутбуки, ПК, приставки) === */
+const exT=(s,df,pre,post)=>s.replace(/<svg[^>]*>/,m=>m+'<defs>'+df+'</defs>'+pre).replace(/<\/svg>\s*$/,post+'</svg>');
+const exG=(u,h,v)=>`<linearGradient id="${u}a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".2"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="${u}r" x1="0" y1="0" x2="${v?0:1}" y2="${v?1:0}"><stop offset="0" stop-color="#ff2bd6"/><stop offset=".5" stop-color="#18e0ff"/><stop offset="1" stop-color="#7dff3a"/></linearGradient><radialGradient id="${u}g"><stop offset="0" stop-color="hsl(${h},90%,60%)" stop-opacity=".6"/><stop offset="1" stop-color="hsl(${h},90%,60%)" stop-opacity="0"/></radialGradient><pattern id="${u}p" width="3" height="3" patternUnits="userSpaceOnUse"><path d="M0 1.5H3" stroke="#fff" stroke-opacity=".08"/></pattern>`;
+const exS=(cx,cy,rx)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="7" fill="#000" fill-opacity=".3"/>`;
+const _lf=lapFace;lapFace=function(d,side,F,hn){const s=_lf(d,side,F,hn),u='k'+(++SVU),nn=I[d.key][0],gm=/ROG|Razer|Alienware/.test(nn),h=hs(d.key)%360;let df=exG(u,h,0),pre=exS(160,236,150),post='';
+  if(!side){if(!F.off)pre+=`<rect x="26" y="0" width="268" height="186" rx="18" fill="url(#${u}g)" opacity=".28"/>`;
+    post=`<path d="M46 18H150L98 166H46Z" fill="url(#${u}a)"/><rect x="38" y="10" width="244" height="166" rx="10" fill="none" stroke="#fff" stroke-opacity=".14"/><rect x="40" y="174" width="240" height="4" rx="2" fill="#000" fill-opacity=".4"/><path d="M22 176H298L312 230Q313 238 304 238H16Q7 238 8 230Z" fill="url(#${u}a)" opacity=".5"/>`
+     +(gm?`<g class="rgb"><rect x="30" y="182" width="262" height="42" rx="6" fill="url(#${u}r)" opacity=".32" style="mix-blend-mode:screen"/></g>`:`<rect x="30" y="182" width="262" height="42" rx="6" fill="#fff" opacity=".04"/>`)
+     +(F.off?'':`<ellipse cx="160" cy="189" rx="118" ry="12" fill="url(#${u}g)" opacity=".5" style="mix-blend-mode:screen"/>`)}
+  else{df+=`<clipPath id="${u}c"><rect x="14" y="24" width="292" height="190" rx="16"/></clipPath>`;
+    post=`<g clip-path="url(#${u}c)"><rect x="14" y="24" width="292" height="190" fill="url(#${u}p)"/><ellipse cx="160" cy="118" rx="${gm?120:84}" ry="${gm?90:62}" fill="url(#${u}g)" opacity="${gm?.5:.2}" style="mix-blend-mode:screen"/><path d="M14 24H210L120 214H14Z" fill="url(#${u}a)"/></g><rect x="15.5" y="25.5" width="289" height="187" rx="15" fill="none" stroke="#fff" stroke-opacity=".28"/>`
+     +(gm?`<g class="rgb"><rect x="30" y="203" width="260" height="3" rx="1.5" fill="url(#${u}r)"/></g>`:'')}
+  return exT(s,df,pre,post)};
+const _pf=pcFace;pcFace=function(d,side,F,hn){const s=_pf(d,side,F,hn),u='k'+(++SVU),n=nm(d),mac=/Mac/.test(n),sl=mac||/сервер/.test(n),h=hs(d.key+d.id)%360;let df=exG(u,h,1),pre=exS(160,sl?186:234,sl?116:84),post='';
+  if(!sl){df+=`<clipPath id="${u}c"><rect x="104" y="24" width="112" height="192" rx="4"/></clipPath>`;
+    if(!side){if(!F.off)pre+=`<rect x="70" y="0" width="180" height="240" fill="url(#${u}g)" opacity=".3"/>`;
+      post=`<g clip-path="url(#${u}c)"><path d="M104 24H172L104 150Z" fill="url(#${u}a)"/><path d="M216 70V216H146Z" fill="url(#${u}a)" opacity=".6"/></g>`+(F.off?'':`<g class="rgb"><rect x="105" y="26" width="3" height="188" fill="url(#${u}r)" opacity=".9"/><rect x="105" y="211" width="110" height="3" fill="url(#${u}r)" opacity=".7"/></g>`)}
+    post+=`<rect x="92" y="10" width="136" height="220" rx="12" fill="none" stroke="#fff" stroke-opacity=".16"/><rect x="100" y="229" width="20" height="7" rx="2" fill="#0a0b0e"/><rect x="200" y="229" width="20" height="7" rx="2" fill="#0a0b0e"/>`}
+  else{df+=`<clipPath id="${u}c"><rect x="50" y="50" width="220" height="130" rx="${mac?30:12}"/></clipPath>`;post=`<g clip-path="url(#${u}c)"><path d="M50 50H190L130 180H50Z" fill="url(#${u}a)" opacity=".7"/></g><path d="M64 51.5H256" stroke="#fff" stroke-opacity=".45" stroke-linecap="round"/>`}
+  return exT(s,df,pre,post)};
+const _tf=tvFace;tvFace=function(d,side,F,hn){const s=_tf(d,side,F,hn),u='k'+(++SVU),c=F.off?'#666':F.brd?'#ff3b3b':'#4ade80',df=exG(u,0,0)+`<clipPath id="${u}c"><rect x="60" y="70" width="200" height="100" rx="20"/></clipPath><radialGradient id="${u}l"><stop offset="0" stop-color="${c}" stop-opacity=".6"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`;
+  let post=`<g clip-path="url(#${u}c)"><path d="M60 70H260V104Q160 124 60 104Z" fill="url(#${u}a)"/></g><rect x="61" y="71" width="198" height="98" rx="19" fill="none" stroke="#fff" stroke-opacity=".2"/>`;
+  if(!side&&!F.off)post+=`<ellipse cx="160" cy="148" rx="60" ry="14" fill="url(#${u}l)" style="mix-blend-mode:screen"/><path d="M84 168H236" stroke="${c}" stroke-opacity=".55" stroke-width="1.5" stroke-linecap="round"/>`;
+  return exT(s,df,'',post)};
 // данные для 3D-слоёв телефона (рамка, камера): те же дефекты и подсветка, что и на плоских гранях
 const ph3=(d,kn,hl)=>{const F=dfl(d,kn),hd=kn&&hl!=null?d.defs[hl]:null,hn=hd&&!hd.fx?(hd.fake?'fake':hd.n):null;return walls(d,F)+cam3(d,F,hn)}
 /* ===== 3D-корпус телефона: цельная рамка со скосами, кнопки, порты, объёмная камера ===== */
@@ -1532,12 +1557,12 @@ Object.assign(RDL,{rcpu:{cool:[4,4,92,18],chip:[28,26,44,48],conn:[4,26,20,48],v
  rssd:{chip:[3,8,36,84],cool:[41,8,18,84],vrm:[61,8,20,84],conn:[83,8,14,84]},
  rpsu:{cool:[4,4,40,60],vrm:[48,4,48,60],chip:[4,68,40,28],conn:[48,68,48,28]},
  rcase:{cool:[6,4,60,30],chip:[6,38,60,22],conn:[70,4,24,56],vrm:[6,64,88,30]}});
-const FAN='#06070a 0 58%,#7b8296 60% 68%,transparent 70%';
-const RCV={cpu:['linear-gradient(135deg,#e3e6ee,#8b93a6)','CPU','rgba(0,0,0,.5)'],
- gpu:[`radial-gradient(circle 46px at 25% 50%,${FAN}),radial-gradient(circle 46px at 75% 50%,${FAN}),linear-gradient(135deg,#2a2e3a,#0f1116)`,'','#fff'],
+const FAN='#000 0 10%,#1a1d27 11% 58%,#8b93aa 60% 66%,transparent 68%';
+const RCV={cpu:['linear-gradient(135deg,rgba(0,0,0,.55) 0 8%,transparent 8.3%),repeating-conic-gradient(from 20deg at 50% 50%,rgba(255,255,255,.22) 0 5deg,rgba(0,0,0,.05) 5deg 10deg),linear-gradient(135deg,#eef0f6,#8b93a6)','CPU','rgba(0,0,0,.5)'],
+ gpu:[`radial-gradient(circle 46px at 25% 50%,${FAN}),radial-gradient(circle 46px at 75% 50%,${FAN}),linear-gradient(90deg,#ff2bd6,#18e0ff,#7dff3a) 0 100%/100% 5px no-repeat,linear-gradient(135deg,#2a2e3a,#0f1116)`,'','#fff'],
  mb:['repeating-linear-gradient(90deg,#4a5062 0 6px,#383d4c 6px 12px)','MOTHERBOARD','#fff'],
- ram:['linear-gradient(180deg,#ff2bd6 0 7%,#18e0ff 7% 10%,#2b2f3a 10%)','DDR5','#fff'],
- ssd:['linear-gradient(135deg,#1c1f27,#0d0f14)','NVMe SSD','#7dd3fc'],
+ ram:['linear-gradient(0deg,#d6b24a 0 9%,transparent 9%),repeating-linear-gradient(90deg,transparent 0 14%,rgba(0,0,0,.45) 14% 15%),linear-gradient(180deg,#ff2bd6 0 7%,#18e0ff 7% 10%,#3a4052 10%,#232734)','DDR5','#fff'],
+ ssd:['linear-gradient(0deg,#d6b24a 0 8%,transparent 8%),linear-gradient(90deg,transparent 0 8%,rgba(125,211,252,.14) 8% 64%,transparent 64%),linear-gradient(135deg,#1c1f27,#0d0f14)','NVMe SSD','#7dd3fc'],
  psu:[`radial-gradient(circle 52px at 30% 50%,${FAN}),repeating-linear-gradient(0deg,#444a58 0 3px,#2a2e38 3px 6px)`,'','#fff'],
  case:['linear-gradient(135deg,rgba(120,160,255,.35),rgba(255,60,200,.25)),#10141c','GAMING','#fff']};
 function rcv(sl,d){const c=RCV[sl];return`<div style="position:absolute;inset:0;background:${c[0]};display:flex;flex-direction:column;align-items:center;justify-content:${sl==='psu'?'flex-end':'center'};padding:8px;text-align:center;font:800 ${sl==='cpu'?26:16}px system-ui,sans-serif;letter-spacing:2px;color:${c[2]}">${sl==='ram'?(nm(d).match(/DDR\d/)||['RAM'])[0]:c[1]}<small style="font:600 10px system-ui;letter-spacing:0;opacity:.8;margin-top:4px">${esc(nm(d).replace(/^\S+\s/,''))}</small></div>`}
